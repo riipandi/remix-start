@@ -1,0 +1,12 @@
+/.cache
+/public/build
+/build
+.DS_Store
+.DS_Store?
+.dockerignore
+Dockerfile
+node_modules
+npm-debug.log
+README.md
+*.log
+.env*
