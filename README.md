@@ -21,21 +21,9 @@ npx create-remix --template riipandi/prismix
 - Linting with [ESLint](https://eslint.org)
 - Static Types with [TypeScript](https://typescriptlang.org)
 
-Not a fan of bits of the stack? Fork it, change it, and use `npx create-remix --template your/repo`! Make it your own.
-
 ## Quickstart
 
-Click this button to create a [Gitpod](https://gitpod.io) workspace with the project set up and Fly pre-installed
-
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/from-referrer/)
-
-## Development
-
-- This step only applies if you've opted out of having the CLI install dependencies for you:
-
-  ```sh
-  npx remix init
-  ```
+### Up and running
 
 - Initial setup: _If you just generated this project, this step has been done for you._
 
@@ -85,17 +73,11 @@ Prior to your first deployment, you'll need to do a few things:
 - Create two apps on Fly, one for staging and one for production:
 
   ```sh
-  fly apps create prismix-3852
-  fly apps create prismix-3852-staging
+  fly apps create prismix
+  fly apps create prismix-staging
   ```
 
   > **Note:** Make sure this name matches the `app` set in your `fly.toml` file. Otherwise, you will not be able to deploy.
-
-  - Initialize Git.
-
-  ```sh
-  git init
-  ```
 
 - Create a new [GitHub Repository](https://repo.new), and then add it as the remote for your project. **Do not push your app yet!**
 
@@ -108,8 +90,8 @@ Prior to your first deployment, you'll need to do a few things:
 - Add a `SESSION_SECRET` to your fly app secrets, to do this you can run the following commands:
 
   ```sh
-  fly secrets set SESSION_SECRET=$(openssl rand -hex 32) --app prismix-3852
-  fly secrets set SESSION_SECRET=$(openssl rand -hex 32) --app prismix-3852-staging
+  fly secrets set SESSION_SECRET=$(openssl rand -hex 32) --app prismix
+  fly secrets set SESSION_SECRET=$(openssl rand -hex 32) --app prismix-staging
   ```
 
   If you don't have openssl installed, you can also use [1password](https://1password.com/password-generator/) to generate a random secret, just replace `$(openssl rand -hex 32)` with the generated secret.
@@ -117,8 +99,8 @@ Prior to your first deployment, you'll need to do a few things:
 - Create a persistent volume for the sqlite database for both your staging and production environments. Run the following:
 
   ```sh
-  fly volumes create data --size 1 --app prismix-3852
-  fly volumes create data --size 1 --app prismix-3852-staging
+  fly volumes create data --size 1 --app prismix
+  fly volumes create data --size 1 --app prismix-staging
   ```
 
 Now that everything is set up you can commit and push your changes to your repo. Every commit to your `main` branch will trigger a deployment to your production environment, and every commit to your `dev` branch will trigger a deployment to your staging environment.
