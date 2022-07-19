@@ -40,25 +40,27 @@ Click this button to create a [Gitpod](https://gitpod.io) workspace with the pro
 - Initial setup: _If you just generated this project, this step has been done for you._
 
   ```sh
-  npm run setup
+  yarn db:init
+  yarn db:setup
   ```
 
 - Start dev server:
 
   ```sh
-  npm run dev
+  yarn dev
   ```
 
 This starts your app in development mode, rebuilding assets on file changes.
 
 The database seed script creates a new user with some data you can use to get started:
 
-- Email: `rachel@remix.run`
-- Password: `racheliscool`
+- Email: `aris@duck.com`
+- Password: `passw0rd`
 
 ### Relevant code:
 
-This is a pretty simple note-taking app, but it's a good example of how you can build a full stack app with Prisma and Remix. The main functionality is creating users, logging in and out, and creating and deleting notes.
+This is a pretty simple note-taking app, but it's a good example of how you can build a full stack app with Prisma and Remix.
+The main functionality is creating users, logging in and out, and creating and deleting notes.
 
 - creating users, and logging in and out [./app/models/user.server.ts](./app/models/user.server.ts)
 - user sessions, and verifying them [./app/session.server.ts](./app/session.server.ts)
@@ -131,7 +133,7 @@ If you run into any issues deploying to Fly, make sure you've followed all of th
 
 ### Type Checking
 
-This project uses TypeScript. It's recommended to get TypeScript set up for your editor to get a really great in-editor experience with type checking and auto-complete. To run type checking across the whole project, run `npm run typecheck`.
+This project uses TypeScript. It's recommended to get TypeScript set up for your editor to get a really great in-editor experience with type checking and auto-complete. To run type checking across the whole project, run `yarn typecheck`.
 
 ### Linting
 
@@ -139,4 +141,4 @@ This project uses ESLint for linting. That is configured in `.eslintrc.js`.
 
 ### Formatting
 
-We use [Prettier](https://prettier.io/) for auto-formatting in this project. It's recommended to install an editor plugin (like the [VSCode Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)) to get auto-formatting on save. There's also a `npm run format` script you can run to format all files in the project.
+We use [Prettier](https://prettier.io/) for auto-formatting in this project. It's recommended to install an editor plugin (like the [VSCode Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)) to get auto-formatting on save. There's also a `yarn format` script you can run to format all files in the project.

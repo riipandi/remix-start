@@ -1,4 +1,4 @@
-app = "prismix-3852"
+app = "prismix"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]
@@ -6,7 +6,7 @@ processes = [ ]
 [experimental]
 allowed_public_ports = [ ]
 auto_rollback = true
-cmd = "start.sh"
+cmd = "entrypoint.sh"
 entrypoint = "sh"
 
 [mounts]
@@ -14,7 +14,7 @@ source = "data"
 destination = "/data"
 
 [[services]]
-internal_port = 8_080
+internal_port = 3080
 processes = [ "app" ]
 protocol = "tcp"
 script_checks = [ ]

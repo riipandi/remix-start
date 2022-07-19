@@ -1,61 +1,47 @@
-# base node image
-FROM node:16-bullseye-slim as base
+# -----------------------------------------------------------------------------
+# Build dependencies
+# -----------------------------------------------------------------------------
+FROM node:16-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# set for base and all layer that inherit from it
-ENV NODE_ENV production
-
-# Install openssl for Prisma
-RUN apt-get update && apt-get install -y openssl sqlite3
-
-# Install all node_modules, including dev dependencies
-FROM base as deps
-
-WORKDIR /myapp
-
-ADD package.json yarn.lock ./
-RUN npm install --production=false
-
-# Setup production node_modules
-FROM base as production-deps
-
-WORKDIR /myapp
-
-COPY --from=deps /myapp/node_modules /myapp/node_modules
-ADD package.json yarn.lock ./
-RUN npm prune --production
-
-# Build the app
-FROM base as build
-
-WORKDIR /myapp
-
-COPY --from=deps /myapp/node_modules /myapp/node_modules
-
-ADD prisma .
+# -----------------------------------------------------------------------------
+# Rebuild the source code only when needed
+# -----------------------------------------------------------------------------
+FROM node:16-alpine AS builder
+WORKDIR /app
+COPY . .
+COPY --from=deps /app/node_modules ./node_modules
 RUN npx prisma generate
+RUN yarn build
 
-ADD . .
-RUN npm run build
+# -----------------------------------------------------------------------------
+# Production image, copy all the files and run the application
+# -----------------------------------------------------------------------------
+FROM node:16-alpine AS runner
+LABEL org.opencontainers.image.source="https://github.com/riipandi/prismix"
 
-# Finally, build the production image with minimal footprint
-FROM base
-
-ENV DATABASE_URL=file:/data/sqlite.db
-ENV PORT="8080"
-ENV NODE_ENV="production"
+ENV DATABASE_URL="file:/data/sqlite.db"
+ENV NODE_ENV=production
+ENV PORT=3080
 
 # add shortcut for connecting to database CLI
 RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-cli && chmod +x /usr/local/bin/database-cli
 
-WORKDIR /myapp
+WORKDIR /app
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodeuser -u 1001
 
-COPY --from=production-deps /myapp/node_modules /myapp/node_modules
-COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
+COPY --from=builder --chown=nodeuser:nodejs /app/node_modules /app/node_modules
+COPY --from=builder --chown=nodeuser:nodejs /app/package.json /app/package.json
+COPY --from=builder --chown=nodeuser:nodejs /app/entrypoint.sh /app/entrypoint.sh
+COPY --from=builder --chown=nodeuser:nodejs /app/build /app/build
+COPY --from=builder --chown=nodeuser:nodejs /app/public /app/public
+COPY --from=builder --chown=nodeuser:nodejs /app/prisma /app/prisma
 
-COPY --from=build /myapp/build /myapp/build
-COPY --from=build /myapp/public /myapp/public
-COPY --from=build /myapp/package.json /myapp/package.json
-COPY --from=build /myapp/start.sh /myapp/start.sh
-COPY --from=build /myapp/prisma /myapp/prisma
+USER nodeuser
+EXPOSE $PORT
 
-ENTRYPOINT [ "./start.sh" ]
+ENTRYPOINT [ "./entrypoint.sh" ]
