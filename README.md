@@ -104,7 +104,13 @@ Prior to your first deployment, you'll need to do a few things:
   fly volumes create data --size 1 --app prismix-staging
   ```
 
-Now that everything is set up you can commit and push your changes to your repo. Every commit to your `main` branch will trigger a deployment to your production environment, and every commit to your `dev` branch will trigger a deployment to your staging environment.
+- Deploy the application by run the following:
+
+  ```sh
+  fly deploy
+  ```
+
+  The application will available at `https://prismix.fly.dev`.
 
 ### Connecting to your database
 

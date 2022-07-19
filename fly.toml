@@ -1,13 +1,16 @@
 app = "prismix"
 kill_signal = "SIGINT"
 kill_timeout = 5
-processes = [ ]
+processes = []
 
 [experimental]
-allowed_public_ports = [ ]
+allowed_public_ports = []
 auto_rollback = true
 cmd = "entrypoint.sh"
 entrypoint = "sh"
+
+[env]
+FLY_REGION = "lax"
 
 [mounts]
 source = "data"
@@ -17,7 +20,7 @@ destination = "/data"
 internal_port = 3080
 processes = [ "app" ]
 protocol = "tcp"
-script_checks = [ ]
+script_checks = []
 
   [services.concurrency]
   hard_limit = 25
