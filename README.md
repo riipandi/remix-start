@@ -5,7 +5,7 @@
 Learn more about [Remix Stacks](https://remix.run/stacks).
 
 ```
-npx create-remix --template riipandi/prismix
+yarn create remix --template riipandi/prismix
 ```
 
 ## What's in the stack
