@@ -5,7 +5,7 @@
 Learn more about [Remix Stacks](https://remix.run/stacks).
 
 ```
-yarn create remix --template riipandi/prismix
+yarn create remix --template riipandi/prismix <my_app>
 ```
 
 ## What's in the stack
