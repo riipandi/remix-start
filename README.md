@@ -28,6 +28,7 @@ yarn create remix --template riipandi/prismix <my_app>
 - Initial setup: _If you just generated this project, this step has been done for you._
 
   ```sh
+  cp .env.example .env
   yarn db:init
   yarn db:setup
   ```
