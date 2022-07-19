@@ -18,8 +18,10 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Remix Notes",
+  title: "Prismix",
   viewport: "width=device-width,initial-scale=1",
+  description:
+    "Minimal containerized Remix Stack with Tailwind CSS, SQLite, and Prisma ORM.",
 });
 
 export async function loader({ request }: LoaderArgs) {
