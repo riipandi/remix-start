@@ -120,14 +120,10 @@ The sqlite database lives at `/data/sqlite.db` in your deployed application. You
 
 If you run into any issues deploying to Fly, make sure you've followed all of the steps above and if you have, then post as many details about your deployment (including your app name) to [the Fly support community](https://community.fly.io). They're normally pretty responsive over there and hopefully can help resolve any of your deployment issues and questions.
 
-### Type Checking
+## Development
 
-This project uses TypeScript. It's recommended to get TypeScript set up for your editor to get a really great in-editor experience with type checking and auto-complete. To run type checking across the whole project, run `yarn typecheck`.
-
-### Linting
-
-This project uses ESLint for linting. That is configured in `.eslintrc.js`.
-
-### Formatting
-
-We use [Prettier](https://prettier.io/) for auto-formatting in this project. It's recommended to install an editor plugin (like the [VSCode Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)) to get auto-formatting on save. There's also a `yarn format` script you can run to format all files in the project.
+This project uses TypeScript for type checking, [ESLint](https://eslint.org/) for linting which
+is configured in `.eslintrc.js`, and [Prettier](https://prettier.io/) for auto-formatting in
+this project. It's recommended to get TypeScript set up for your editor and install an editor
+plugin (like the [VSCode Prettier plugin](https://s.id/vscode-prettier)) to get auto-formatting
+on saving and get a really great in-editor experience with type checking and auto-complete.
