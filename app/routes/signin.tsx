@@ -48,11 +48,11 @@ export async function action({ request }: ActionArgs) {
 
 export const meta: MetaFunction = () => {
   return {
-    title: 'Login',
+    title: 'Sign In',
   }
 }
 
-export default function LoginPage() {
+export default function SignInPage() {
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/notes'
   const actionData = useActionData<typeof action>()
@@ -122,7 +122,7 @@ export default function LoginPage() {
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
             type="submit"
-            className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+            className="w-full rounded bg-primary-500  py-2 px-4 text-white hover:bg-primary-600 focus:bg-primary-400"
           >
             Log in
           </button>
@@ -132,7 +132,7 @@ export default function LoginPage() {
                 id="remember"
                 name="remember"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
               <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">
                 Remember me
@@ -141,9 +141,9 @@ export default function LoginPage() {
             <div className="text-center text-sm text-gray-500">
               Don't have an account?{' '}
               <Link
-                className="text-blue-500 underline"
+                className="text-primary-500 underline"
                 to={{
-                  pathname: '/join',
+                  pathname: '/signup',
                   search: searchParams.toString(),
                 }}
               >
@@ -152,6 +152,9 @@ export default function LoginPage() {
             </div>
           </div>
         </Form>
+        <div className="mt-10 sm:mt-12 text-sm text-center">
+          <Link to="/">&larr; back to homepage</Link>
+        </div>
       </div>
     </div>
   )

@@ -61,7 +61,7 @@ export const meta: MetaFunction = () => {
   }
 }
 
-export default function Join() {
+export default function SignUpPage() {
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') ?? undefined
   const actionData = useActionData<typeof action>()
@@ -131,7 +131,7 @@ export default function Join() {
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
             type="submit"
-            className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+            className="w-full rounded bg-primary-500  py-2 px-4 text-white hover:bg-primary-600 focus:bg-primary-400"
           >
             Create Account
           </button>
@@ -139,17 +139,20 @@ export default function Join() {
             <div className="text-center text-sm text-gray-500">
               Already have an account?{' '}
               <Link
-                className="text-blue-500 underline"
+                className="text-primary-500 underline"
                 to={{
-                  pathname: '/login',
+                  pathname: '/signin',
                   search: searchParams.toString(),
                 }}
               >
-                Log in
+                Sign in
               </Link>
             </div>
           </div>
         </Form>
+        <div className="mt-10 sm:mt-12 text-sm text-center">
+          <Link to="/">&larr; back to homepage</Link>
+        </div>
       </div>
     </div>
   )

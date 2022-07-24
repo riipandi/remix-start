@@ -1,12 +1,27 @@
-# Remix Prisma Tailwind Stack
+<p align="center"><img src="./banner.svg" width="500" height="150" alt="Project Logo"></p>
+<p align="center">
+    <a href="https://github.com/riipandi/prismix/pulse">
+        <img src="https://img.shields.io/badge/Contributions-welcome-blue.svg?style=flat-square" alt="Contribution welcome">
+    </a>
+    <a href="https://github.com/riipandi/prismix">
+        <img src="https://img.shields.io/github/languages/top/riipandi/prismix?style=flat-square" alt="Top language">
+    </a>
+    <a href="https://aris.mit-license.org">
+        <img src="https://img.shields.io/github/license/riipandi/prismix?style=flat-square" alt="License">
+    </a>
+</p>
 
-![The Remix Stack](./public/banner.png)
+---
+
+Minimal containerized Remix Stack with Tailwind CSSS, SQLite, and Prisma ORM.
+
+```sh
+yarn create remix --template riipandi/prismix <my_app>
+```
 
 Learn more about [Remix Stacks](https://remix.run/stacks).
 
-```
-yarn create remix --template riipandi/prismix <my_app>
-```
+---
 
 ## What's in the stack
 
