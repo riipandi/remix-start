@@ -44,3 +44,10 @@ docker.logs:
 
 docker.shell:
 	docker exec -it $(APP_NAME) /bin/sh
+
+# ------------------------------------------------------------------------------
+# Deployment scripts
+# ------------------------------------------------------------------------------
+
+deploy.prod:
+	fly deploy -c $(PWD)/fly.toml
