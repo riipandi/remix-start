@@ -13,10 +13,10 @@ yarn create remix --template riipandi/prismix <my_app>
 - [Fly app deployment](https://fly.io) with [Docker](https://www.docker.com/)
 - Production-ready [SQLite Database](https://sqlite.org)
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
-- [GitHub Actions](https://github.com/features/actions) for deploy on merge to production and staging environments
 - Email/Password Authentication with [cookie-based sessions](https://remix.run/docs/en/v1/api/remix#createcookiesessionstorage)
 - Database ORM with [Prisma](https://prisma.io)
 - Styling with [Tailwind](https://tailwindcss.com/)
+- Tailwind linting and formatting with [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
 - Code formatting with [Prettier](https://prettier.io)
 - Linting with [ESLint](https://eslint.org)
 - Static Types with [TypeScript](https://typescriptlang.org)
@@ -57,8 +57,6 @@ The main functionality is creating users, logging in and out, and creating and d
 
 ## Deployment
 
-This Remix Stack comes with two GitHub Actions that handle automatically deploying your app to production and staging environments.
-
 Prior to your first deployment, you'll need to do a few things:
 
 - [Install Fly](https://fly.io/docs/getting-started/installing-flyctl/)
@@ -71,11 +69,10 @@ Prior to your first deployment, you'll need to do a few things:
 
   > **Note:** If you have more than one Fly account, ensure that you are signed into the same account in the Fly CLI as you are in the browser. In your terminal, run `fly auth whoami` and ensure the email matches the Fly account signed into the browser.
 
-- Create two apps on Fly, one for staging and one for production:
+- Create Fly application:
 
   ```sh
   fly apps create prismix
-  fly apps create prismix-staging
   ```
 
   > **Note:** Make sure this name matches the `app` set in your `fly.toml` file. Otherwise, you will not be able to deploy.
@@ -92,7 +89,6 @@ Prior to your first deployment, you'll need to do a few things:
 
   ```sh
   fly secrets set SESSION_SECRET=$(openssl rand -hex 32) --app prismix
-  fly secrets set SESSION_SECRET=$(openssl rand -hex 32) --app prismix-staging
   ```
 
   If you don't have openssl installed, you can also use [1password](https://1password.com/password-generator/) to generate a random secret, just replace `$(openssl rand -hex 32)` with the generated secret.
@@ -101,7 +97,6 @@ Prior to your first deployment, you'll need to do a few things:
 
   ```sh
   fly volumes create data --size 1 --app prismix
-  fly volumes create data --size 1 --app prismix-staging
   ```
 
 - Deploy the application by run the following:
