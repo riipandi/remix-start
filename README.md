@@ -15,29 +15,38 @@ yarn create remix --template riipandi/prismix <my_app>
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
 - Email/Password Authentication with [cookie-based sessions](https://remix.run/docs/en/v1/api/remix#createcookiesessionstorage)
 - Database ORM with [Prisma](https://prisma.io)
-- Styling with [Tailwind](https://tailwindcss.com/)
+- Styling with [Tailwind CSS](https://tailwindcss.com/)
 - Tailwind linting and formatting with [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
 - Code formatting with [Prettier](https://prettier.io)
 - Linting with [ESLint](https://eslint.org)
 - Static Types with [TypeScript](https://typescriptlang.org)
 
-## Quickstart
+## 🏁 Quickstart
+
+### Generate Secret Key
+
+Before you continue, you need to create `.env` file (you can duplicate `.env.example`) and
+fill the `application secret key` with some random string. To generate a secret key, use
+the following command:
+
+```sh
+openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
+```
+
+If you don't have openssl installed, you can also use [1password](https://1password.com/password-generator)
+to generate a random secret.
 
 ### Up and running
 
-- Initial setup: _If you just generated this project, this step has been done for you._
+```sh
+yarn install      # install the dependencies
+yarn db:init      # Prepare database migration
+yarn db:setup     # Populate database seeder
 
-  ```sh
-  cp .env.example .env
-  yarn db:init
-  yarn db:setup
-  ```
-
-- Start dev server:
-
-  ```sh
-  yarn dev
-  ```
+yarn dev          # serve with hot reload
+yarn build        # build for production
+yarn start        # launch generated build
+```
 
 This starts your app in development mode, rebuilding assets on file changes.
 
@@ -55,67 +64,64 @@ The main functionality is creating users, logging in and out, and creating and d
 - user sessions, and verifying them [./app/session.server.ts](./app/session.server.ts)
 - creating, and deleting notes [./app/models/note.server.ts](./app/models/note.server.ts)
 
-## Deployment
+## 🚀 Deployment to Fly.io
 
-Prior to your first deployment, you'll need to do a few things:
+Prior to your first deployment, you'll need to [Install Fly CLI](https://fly.io/docs/getting-started/installing-flyctl/).
 
-- [Install Fly](https://fly.io/docs/getting-started/installing-flyctl/)
+### Login to Fly
 
-- Sign up and log in to Fly
+```sh
+fly auth login
+```
 
-  ```sh
-  fly auth signup
-  ```
+> **Note:** If you have more than one Fly account, ensure that you are signed into the same
+> account in the Fly CLI as you are in the browser. In your terminal, run `fly auth whoami`
+> and ensure the email matches the Fly account signed into the browser.
 
-  > **Note:** If you have more than one Fly account, ensure that you are signed into the same account in the Fly CLI as you are in the browser. In your terminal, run `fly auth whoami` and ensure the email matches the Fly account signed into the browser.
+### Create Fly application
 
-- Create Fly application:
+```sh
+fly apps create --org personal --name prismix
+```
 
-  ```sh
-  fly apps create prismix
-  ```
+> **Note:** Make sure this name matches the `app` set in your `fly.toml` file.
+> Otherwise, you will not be able to deploy.
 
-  > **Note:** Make sure this name matches the `app` set in your `fly.toml` file. Otherwise, you will not be able to deploy.
+### Store the dotenv values
 
-- Create a new [GitHub Repository](https://repo.new), and then add it as the remote for your project. **Do not push your app yet!**
+```sh
+fly secrets -set $(cat .env | xargs -I %s echo %s)
+```
 
-  ```sh
-  git remote add origin <ORIGIN_URL>
-  ```
+### Create a persistent volume for the sqlite
 
-- Add a `FLY_API_TOKEN` to your GitHub repo. To do this, go to your user settings on Fly and create a new [token](https://web.fly.io/user/personal_access_tokens/new), then add it to [your repo secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) with the name `FLY_API_TOKEN`.
+```sh
+fly volumes create data --size 1 --app prismix
+```
 
-- Add a `SESSION_SECRET` to your fly app secrets, to do this you can run the following commands:
+### Deploy the application:
 
-  ```sh
-  fly secrets set SESSION_SECRET=$(openssl rand -hex 32) --app prismix
-  ```
+```sh
+fly deploy
+```
 
-  If you don't have openssl installed, you can also use [1password](https://1password.com/password-generator/) to generate a random secret, just replace `$(openssl rand -hex 32)` with the generated secret.
+The application will available at `https://prismix.fly.dev`.
 
-- Create a persistent volume for the sqlite database for both your staging and production environments. Run the following:
-
-  ```sh
-  fly volumes create data --size 1 --app prismix
-  ```
-
-- Deploy the application by run the following:
-
-  ```sh
-  fly deploy
-  ```
-
-  The application will available at `https://prismix.fly.dev`.
+Go to the [documentation](https://fly.io/docs/flyctl) for more information about Fly CLI.
 
 ### Connecting to your database
 
-The sqlite database lives at `/data/sqlite.db` in your deployed application. You can connect to the live database by running `fly ssh console -C database-cli`.
+The sqlite database lives at `/data/sqlite.db` in your deployed application. You can connect to
+the live database by running `fly ssh console -C database-cli`.
 
 ### Getting Help with Deployment
 
-If you run into any issues deploying to Fly, make sure you've followed all of the steps above and if you have, then post as many details about your deployment (including your app name) to [the Fly support community](https://community.fly.io). They're normally pretty responsive over there and hopefully can help resolve any of your deployment issues and questions.
+If you run into any issues deploying to Fly, make sure you've followed all of the steps above
+and if you have, then post as many details about your deployment (including your app name) to
+[the Fly support community](https://community.fly.io). They're normally pretty responsive over
+there and hopefully can help resolve any of your deployment issues and questions.
 
-## Development
+## 🧑🏻‍💻 Development
 
 This project uses TypeScript for type checking, [ESLint](https://eslint.org/) for linting which
 is configured in `.eslintrc.js`, and [Prettier](https://prettier.io/) for auto-formatting in
