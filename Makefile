@@ -49,5 +49,8 @@ docker.shell:
 # Deployment scripts
 # ------------------------------------------------------------------------------
 
-deploy.prod:
+fly.production:
 	fly deploy -c $(PWD)/fly.toml
+
+fly.console.production:
+	fly ssh -c $(PWD)/fly.toml console

@@ -2,10 +2,10 @@
 # Build dependencies
 # -----------------------------------------------------------------------------
 FROM node:16-alpine AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY . .
 RUN yarn install --frozen-lockfile
+RUN yarn build
 
 # -----------------------------------------------------------------------------
 # Rebuild the source code only when needed
@@ -13,9 +13,14 @@ RUN yarn install --frozen-lockfile
 FROM node:16-alpine AS builder
 WORKDIR /app
 COPY . .
+COPY --from=deps /app/yarn.lock ./yarn.lock
+COPY --from=deps /app/package.json ./package.json
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/prisma ./prisma
+COPY --from=deps /app/public ./public
+COPY --from=deps /app/build ./build
+RUN yarn install --production
 RUN yarn prisma generate
-RUN yarn build
 
 # -----------------------------------------------------------------------------
 # Production image, copy all the files and run the application
@@ -34,12 +39,12 @@ WORKDIR /app
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nodeuser -u 1001
 
+COPY --from=deps --chown=nodeuser:nodejs /app/entrypoint.sh /app/entrypoint.sh
 COPY --from=builder --chown=nodeuser:nodejs /app/node_modules /app/node_modules
 COPY --from=builder --chown=nodeuser:nodejs /app/package.json /app/package.json
-COPY --from=builder --chown=nodeuser:nodejs /app/entrypoint.sh /app/entrypoint.sh
-COPY --from=builder --chown=nodeuser:nodejs /app/build /app/build
-COPY --from=builder --chown=nodeuser:nodejs /app/public /app/public
 COPY --from=builder --chown=nodeuser:nodejs /app/prisma /app/prisma
+COPY --from=builder --chown=nodeuser:nodejs /app/public /app/public
+COPY --from=builder --chown=nodeuser:nodejs /app/build /app/build
 
 USER nodeuser
 EXPOSE $PORT
