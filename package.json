@@ -12,9 +12,11 @@
     "dev:remix": "cross-env NODE_ENV=development binode -- @remix-run/dev:remix dev",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "db:init": "prisma migrate dev --name initialize",
-    "db:setup": "prisma generate && prisma migrate deploy && prisma db seed",
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "db:setup": "prisma migrate deploy && prisma db seed",
+    "db:migrate": "prisma migrate deploy",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "postinstall": "prisma generate",
     "start": "remix-serve build",
     "typecheck": "tsc -b"
   },
