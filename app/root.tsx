@@ -1,9 +1,10 @@
 import type { LinksFunction, LoaderArgs, MetaFunction } from '@remix-run/node'
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from '@remix-run/react'
 import { json } from '@remix-run/node'
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
 
 import tailwindStylesheetUrl from './styles/tailwind.css'
-import { getUser } from './session.server'
+import { getUser } from './services/session.server'
+import { ErrorPage } from './components/ErrorPage'
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: tailwindStylesheetUrl }]
@@ -34,6 +35,24 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+      </body>
+    </html>
+  )
+}
+
+export function CatchBoundary() {
+  const caught = useCatch()
+
+  return (
+    <html className="h-full">
+      <head>
+        <title>{`${caught.status} ${caught.statusText}`}</title>
+        <Meta />
+        <Links />
+      </head>
+      <body className="h-full">
+        <ErrorPage status={caught.status} statusText={caught.statusText} />
+        <Scripts />
       </body>
     </html>
   )
