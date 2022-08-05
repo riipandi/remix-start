@@ -7,7 +7,11 @@ import { getUser } from './services/session.server'
 import { ErrorPage } from './components/ErrorPage'
 
 export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: tailwindStylesheetUrl }]
+  return [
+    // { rel: 'manifest', href: '/manifest.json' },
+    // { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+    { rel: 'stylesheet', href: tailwindStylesheetUrl },
+  ]
 }
 
 export const meta: MetaFunction = () => ({
