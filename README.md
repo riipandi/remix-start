@@ -105,13 +105,13 @@ fly apps create --org personal --name prismix
 ### Store the dotenv values
 
 ```sh
-fly secrets -set $(cat .env | xargs -I %s echo %s)
+fly secrets set $(cat .env | xargs -I %s echo %s)
 ```
 
 ### Create a persistent volume for the sqlite
 
 ```sh
-fly volumes create data --size 1 --app prismix
+fly volumes create data --size 1 --app prismix --region lax
 ```
 
 ### Deploy the application:

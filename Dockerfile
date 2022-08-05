@@ -28,7 +28,10 @@ RUN yarn prisma generate
 FROM node:16-alpine AS runner
 LABEL org.opencontainers.image.source="https://github.com/riipandi/prismix"
 
-ENV DATABASE_URL="file:/data/sqlite.db"
+ARG DATABASE_URL
+ARG SESSION_SECRET
+ENV DATABASE_URL $DATABASE_URL
+ENV SESSION_SECRET $SESSION_SECRET
 ENV NODE_ENV=production
 ENV PORT=3080
 
