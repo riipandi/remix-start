@@ -16,7 +16,7 @@
 Minimal containerized Remix Stack with Tailwind CSSS, SQLite, and Prisma ORM.
 
 ```sh
-yarn create remix --template riipandi/prismix <my_app>
+yarn create remix --template riipandi/prismix app_name
 ```
 
 Learn more about [Remix Stacks](https://remix.run/stacks).
