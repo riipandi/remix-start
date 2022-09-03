@@ -50,7 +50,6 @@ docker.shell:
 # ------------------------------------------------------------------------------
 
 fly.staging:
-	fly -c fly.staging.toml secrets set `cat .env.staging | xargs -I %s echo %s`
 	fly -c $(PWD)/fly.staging.toml deploy
 
 fly.migrate.staging:
@@ -67,7 +66,6 @@ fly.console.staging:
 # ------------------------------------------------------------------------------
 
 fly.production:
-	fly -c $(PWD)/fly.toml secrets set `cat .env | xargs -I %s echo %s`
 	fly -c $(PWD)/fly.toml deploy
 
 fly.migrate.production:
