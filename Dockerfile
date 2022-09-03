@@ -19,8 +19,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
 COPY --from=deps /app/public ./public
 COPY --from=deps /app/build ./build
-RUN pnpm install --production
-RUN pnpm run prisma generate
+RUN pnpm install --prod && pnpm run prisma generate
 
 # -----------------------------------------------------------------------------
 # Production image, copy all the files and run the application
