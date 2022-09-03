@@ -17,7 +17,7 @@ source = "data"
 destination = "/data"
 
 [[services]]
-internal_port = 3080
+internal_port = 3000
 processes = [ "app" ]
 protocol = "tcp"
 script_checks = []

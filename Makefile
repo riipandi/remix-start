@@ -28,7 +28,7 @@ docker.push:
 	docker image push $(CONTAINER_NAME):$(PACKAGE_VERSION)
 
 docker.run: docker.network
-	docker run --rm -d -p 3080:3080 \
+	docker run --rm -d -p 3000:3000 \
 		--network intranet \
 		--name $(APP_NAME) \
 		--env-file $(PWD)/.env \
@@ -46,11 +46,35 @@ docker.shell:
 	docker exec -it $(APP_NAME) /bin/sh
 
 # ------------------------------------------------------------------------------
-# Deployment scripts
+# Staging deployment scripts
+# ------------------------------------------------------------------------------
+
+fly.staging:
+	fly -c fly.staging.toml secrets set `cat .env.staging | xargs -I %s echo %s`
+	fly -c $(PWD)/fly.staging.toml deploy
+
+fly.migrate.staging:
+	mv $(PWD)/.env $(PWD)/.env.local && mv $(PWD)/.env.staging $(PWD)/.env
+	pnpm run db:migrate
+	mv $(PWD)/.env $(PWD)/.env.staging
+	mv $(PWD)/.env.local $(PWD)/.env
+
+fly.console.staging:
+	fly -c $(PWD)/fly.staging.toml ssh console
+
+# ------------------------------------------------------------------------------
+# Production deployment scripts
 # ------------------------------------------------------------------------------
 
 fly.production:
-	fly deploy -c $(PWD)/fly.toml
+	fly -c $(PWD)/fly.toml secrets set `cat .env | xargs -I %s echo %s`
+	fly -c $(PWD)/fly.toml deploy
+
+fly.migrate.production:
+	mv $(PWD)/.env $(PWD)/.env.local && mv $(PWD)/.env.production $(PWD)/.env
+	pnpm run db:migrate
+	mv $(PWD)/.env $(PWD)/.env.production
+	mv $(PWD)/.env.local $(PWD)/.env
 
 fly.console.production:
 	fly ssh -c $(PWD)/fly.toml console

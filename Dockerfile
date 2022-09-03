@@ -4,22 +4,24 @@
 FROM node:16-alpine AS deps
 WORKDIR /app
 COPY . .
-RUN pnpm install --frozen-lockfile
-RUN pnpm run build
+RUN npm config set fund false
+RUN npm install --prefer-offline --no-audit --progress=false \
+    && npm run build
 
 # -----------------------------------------------------------------------------
 # Rebuild the source code only when needed
 # -----------------------------------------------------------------------------
-FROM node:16-alpine AS builder
+FROM deps AS builder
 WORKDIR /app
 COPY . .
-COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=deps /app/package-lock.json ./package-lock.json
 COPY --from=deps /app/package.json ./package.json
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
 COPY --from=deps /app/public ./public
 COPY --from=deps /app/build ./build
-RUN pnpm install --prod && pnpm run prisma generate
+RUN npm ci --production --progress=false \
+    && npx prisma generate
 
 # -----------------------------------------------------------------------------
 # Production image, copy all the files and run the application
@@ -32,23 +34,24 @@ ARG SESSION_SECRET
 ENV DATABASE_URL $DATABASE_URL
 ENV SESSION_SECRET $SESSION_SECRET
 ENV NODE_ENV=production
-ENV PORT=3080
+ENV PORT=3000
 
-# add shortcut for connecting to database CLI
+# Add shortcut for connecting to database CLI. Remove this line if using PostgreSQL.
 RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-cli && chmod +x /usr/local/bin/database-cli
 
+RUN addgroup -g 1001 -S nodejs \
+    && adduser -S nodejs -u 1001
+
 WORKDIR /app
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodeuser -u 1001
+COPY --from=deps --chown=nodejs:nodejs /app/entrypoint.sh /app/entrypoint.sh
+COPY --from=builder --chown=nodejs:nodejs /app/package-lock.json ./package-lock.json
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules /app/node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/package.json /app/package.json
+COPY --from=builder --chown=nodejs:nodejs /app/prisma /app/prisma
+COPY --from=builder --chown=nodejs:nodejs /app/public /app/public
+COPY --from=builder --chown=nodejs:nodejs /app/build /app/build
 
-COPY --from=deps --chown=nodeuser:nodejs /app/entrypoint.sh /app/entrypoint.sh
-COPY --from=builder --chown=nodeuser:nodejs /app/node_modules /app/node_modules
-COPY --from=builder --chown=nodeuser:nodejs /app/package.json /app/package.json
-COPY --from=builder --chown=nodeuser:nodejs /app/prisma /app/prisma
-COPY --from=builder --chown=nodeuser:nodejs /app/public /app/public
-COPY --from=builder --chown=nodeuser:nodejs /app/build /app/build
-
-USER nodeuser
+USER nodejs
 EXPOSE $PORT
 
 ENTRYPOINT [ "./entrypoint.sh" ]
