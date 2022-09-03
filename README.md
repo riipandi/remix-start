@@ -16,7 +16,7 @@
 Minimal containerized Remix Stack with Tailwind CSSS, SQLite, and Prisma ORM.
 
 ```sh
-yarn create remix --template riipandi/prismix app_name
+pnpm create remix --template riipandi/prismix app_name
 ```
 
 Learn more about [Remix Stacks](https://remix.run/stacks).
@@ -54,13 +54,13 @@ to generate a random secret.
 ### Up and running
 
 ```sh
-yarn install      # install the dependencies
-yarn db:init      # Prepare database migration
-yarn db:setup     # Populate database seeder
+pnpm install          # install the dependencies
+pnpm run db:init      # Prepare database migration
+pnpm run db:setup     # Populate database seeder
 
-yarn dev          # serve with hot reload
-yarn build        # build for production
-yarn start        # launch generated build
+pnpm run dev          # serve with hot reload
+pnpm run build        # build for production
+pnpm run start        # launch generated build
 ```
 
 This starts your app in development mode, rebuilding assets on file changes.

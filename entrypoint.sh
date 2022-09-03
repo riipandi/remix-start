@@ -6,5 +6,5 @@
 # Learn more: https://community.fly.io/t/sqlite-not-getting-setup-properly/4386
 
 set -ex
-yarn prisma migrate deploy
-yarn start
+pnpm run prisma migrate deploy
+pnpm run start
