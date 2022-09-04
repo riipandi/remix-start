@@ -58,6 +58,9 @@ fly.migrate.staging:
 	mv $(PWD)/.env $(PWD)/.env.staging
 	mv $(PWD)/.env.local $(PWD)/.env
 
+fly.logs.staging:
+	fly -c $(PWD)/fly.staging.toml logs
+
 fly.console.staging:
 	fly -c $(PWD)/fly.staging.toml ssh console
 
@@ -73,6 +76,9 @@ fly.migrate.production:
 	pnpm run db:migrate
 	mv $(PWD)/.env $(PWD)/.env.production
 	mv $(PWD)/.env.local $(PWD)/.env
+
+fly.logs.production:
+	fly -c $(PWD)/fly.toml logs
 
 fly.console.production:
 	fly ssh -c $(PWD)/fly.toml console
