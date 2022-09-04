@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
+import { Form, Link, useActionData, useTransition, useSearchParams } from '@remix-run/react'
 import { json, redirect } from '@remix-run/node'
-import { Form, Link, useActionData, useSearchParams } from '@remix-run/react'
 import * as React from 'react'
 
 import { createUserSession, getUserId } from '~/services/session.server'
@@ -53,6 +53,7 @@ export const meta: MetaFunction = () => {
 }
 
 export default function SignInPage() {
+  const transition = useTransition()
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/notes'
   const actionData = useActionData<typeof action>()
@@ -70,7 +71,8 @@ export default function SignInPage() {
   return (
     <div className="flex min-h-full flex-col justify-center">
       <div className="mx-auto w-full max-w-md px-8">
-        <Form method="post" className="space-y-6">
+        <Form method="post" className="space-y-6" autoComplete="off">
+          <input type="hidden" name="redirectTo" value={redirectTo} />
           <div>
             <label htmlFor="email" className="block font-medium text-sm text-gray-700">
               Email address
@@ -83,7 +85,7 @@ export default function SignInPage() {
                 autoFocus={true}
                 name="email"
                 type="email"
-                autoComplete="email"
+                disabled={transition.state === 'submitting'}
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
                 className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
@@ -106,7 +108,7 @@ export default function SignInPage() {
                 ref={passwordRef}
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                disabled={transition.state === 'submitting'}
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"
                 className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
@@ -119,12 +121,12 @@ export default function SignInPage() {
             </div>
           </div>
 
-          <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
             type="submit"
             className="w-full rounded bg-primary-500  py-2 px-4 text-white hover:bg-primary-600 focus:bg-primary-400"
+            disabled={transition.state === 'submitting'}
           >
-            Log in
+            {transition.state === 'submitting' ? 'Processing...' : 'Continue'}
           </button>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
