@@ -1,40 +1,61 @@
 generator client {
-  provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity", "fullTextSearch"]
 }
 
 datasource db {
-  // provider = "postgresql"
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+    provider             = "sqlite" // postgresql
+    url                  = env("DATABASE_URL")
+    referentialIntegrity = "prisma"
 }
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  password  Password?
-  notes     Note[]
+    id              String    @id @default(uuid())
+    email           String    @unique
+    username        String?   @default(cuid())
+    firstName       String    @map("firstname")
+    lastName        String    @map("lastname")
+    avatarUrl       String?   @map("avatar_url")
+    emailVerifiedAt DateTime? @map("email_verified_at")
+    createdAt       DateTime  @default(now()) @map("created_at")
+    updatedAt       DateTime  @updatedAt @map("updated_at")
+    password        Password?
+    sessions        Session[]
+    notes           Note[]
 
-  @@map("users")
+    @@map("users")
 }
 
 model Password {
-  hash   String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @unique
+    hash   String
+    userId String @unique @map("user_id")
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@map("passwords")
+    @@map("passwords")
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique @map("session_token")
+    userId       String   @map("user_id")
+    expires      DateTime
+    userAgent    String   @map("user_agent")
+    ipAddress    String   @map("ip_address")
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@map("sessions")
 }
 
 model Note {
-  id        String   @id @default(cuid())
-  title     String
-  body      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId    String
+    id        String   @id @default(cuid())
+    userId    String   @map("user_id")
+    title     String
+    summary   String
+    body      String
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@map("notes")
+    @@map("notes")
 }

@@ -1,9 +1,9 @@
 import type { PrismaClient } from '@prisma/client'
-import { hash } from '@node-rs/bcrypt'
+import { hash as bcryptHash } from '@node-rs/bcrypt'
 
 export const DefaultUserSeeder = async (prisma: PrismaClient) => {
   const email = 'aris@duck.com'
-  const passwordHash = await hash('passw0rd', 10)
+  const hash = await bcryptHash('passw0rd', 10)
 
   // cleanup the existing database before seeding new user
   await prisma.user.delete({ where: { email } }).catch(() => {})
@@ -11,10 +11,12 @@ export const DefaultUserSeeder = async (prisma: PrismaClient) => {
   return await prisma.user.create({
     data: {
       email,
+      username: 'riipandi',
+      firstName: 'Aris',
+      lastName: 'Ripandi',
+      emailVerifiedAt: new Date(),
       password: {
-        create: {
-          hash: passwordHash,
-        },
+        create: { hash },
       },
     },
   })

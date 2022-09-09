@@ -16,7 +16,8 @@
     "db:migrate": "prisma migrate deploy",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "postinstall": "prisma generate",
+    "prebuild": "prisma generate",
+    "predev": "prisma generate",
     "start": "remix-serve build",
     "typecheck": "tsc -b"
   },
