@@ -1,10 +1,12 @@
 import { useRef } from 'react'
 import type { ActionArgs, ActionFunction, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
-import { Form, Link, useActionData, useTransition, useSearchParams, useLoaderData } from '@remix-run/react'
+import { Form, Link, useTransition, useSearchParams, useLoaderData } from '@remix-run/react'
+import { redirect } from '@remix-run/node'
 import { json } from '@remix-run/node'
 
-import { sessionStorage } from '@/modules/users/session.server'
+import { commitSession, getSession, sessionStorage } from '@/modules/users/session.server'
 import { authenticator } from '@/modules/users/auth.server'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   // If the user is already authenticated redirect to /notes directly
@@ -19,11 +21,20 @@ export const action: ActionFunction = async ({ request, context }: ActionArgs) =
   // we call the method with the name of the strategy we want to use and the
   // request object, optionally we pass an object with the URLs we want the user
   // to be redirected to after a success or a failure
-  return await authenticator.authenticate('user-pass', request, {
+  const user = await authenticator.authenticate('user-pass', request, {
     failureRedirect: `/auth/signin`,
     successRedirect: `/notes`,
     context, // optional
   })
+
+  // manually get the session, store the user data, and commit the session
+  const redirectTo = `/notes`
+  const session = await getSession(request.headers.get('Cookie'))
+  session.set(authenticator.sessionKey, user)
+
+  const headers = new Headers({ 'Set-Cookie': await commitSession(session) })
+
+  return redirect(redirectTo, { headers })
 }
 
 export const meta: MetaFunction = () => ({ title: 'Sign In' })
@@ -32,9 +43,8 @@ export default function SignInPage() {
   const transition = useTransition()
   const loaderData = useLoaderData<typeof loader>()
   const [searchParams] = useSearchParams()
-  const redirectTo = searchParams.get('redirectTo') || '/notes'
 
-  const actionData = useActionData<typeof action>()
+  const redirectTo = searchParams.get('redirectTo') || '/notes'
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
 
@@ -46,19 +56,7 @@ export default function SignInPage() {
             className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
             role="alert"
           >
-            <svg
-              aria-hidden="true"
-              className="mr-3 inline h-5 w-5 flex-shrink-0"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
             <span className="sr-only">Info</span>
             <div>{loaderData?.error.message}</div>
           </div>
