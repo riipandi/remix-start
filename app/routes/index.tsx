@@ -1,6 +1,9 @@
 import { Link } from '@remix-run/react'
+import type { MetaFunction } from '@remix-run/node'
 
 import { useOptionalUser } from '@/hooks/useOptionalUser'
+
+export const meta: MetaFunction = () => ({ title: 'Home - Prismix' })
 
 export default function Index() {
   const user = useOptionalUser()

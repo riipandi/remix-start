@@ -1,4 +1,4 @@
-import type { User } from '@/modules/users/user.server'
+import type { User } from '@prisma/client'
 
 const DEFAULT_REDIRECT = '/'
 

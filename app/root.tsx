@@ -4,8 +4,8 @@ import { json } from '@remix-run/node'
 import { Toaster } from 'react-hot-toast'
 
 import tailwindStylesheetUrl from './styles/tailwind.css'
-import { getUser } from './modules/users/session.server'
 import { ErrorPage } from './components/ErrorPage'
+import { authenticator } from './modules/users/auth.server'
 
 export const links: LinksFunction = () => {
   return [
@@ -13,6 +13,11 @@ export const links: LinksFunction = () => {
     // { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
     // { rel: 'icon', type: 'image/png', href: '/favicon.png' },
     { rel: 'shortcut icon', href: '/favicon.ico' },
+    { rel: 'preconnect', href: 'https://fonts.bunny.net' },
+    {
+      rel: 'stylesheet',
+      href: 'https://fonts.bunny.net/css?family=inter:100,200,300,400,500,600,700,800,900',
+    },
     { rel: 'stylesheet', href: tailwindStylesheetUrl },
   ]
 }
@@ -22,12 +27,14 @@ export const meta: MetaFunction = () => ({
   title: 'Prismix',
   viewport: 'width=device-width,initial-scale=1',
   description: 'Minimal containerized Remix Stack with Tailwind CSS, SQLite, and Prisma ORM.',
+  'msapplication-TileColor': '#0fa968',
+  'theme-color': '#0fa968',
 })
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
-  return json({
-    user: await getUser(request),
-  })
+  let user = await authenticator.isAuthenticated(request)
+
+  return json({ user })
 }
 
 export default function App() {

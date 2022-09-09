@@ -1,13 +1,15 @@
-import type { ActionArgs } from '@remix-run/node'
+import type { ActionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import * as React from 'react'
 
-import { createNote } from '@/modules/note.server'
-import { requireUserId } from '@/modules/users/session.server'
+import { createNote } from '@/modules/notes/note.server'
+import { authenticator } from '@/modules/users/auth.server'
 
 export async function action({ request }: ActionArgs) {
-  const userId = await requireUserId(request)
+  let { id: userId } = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/auth/signin',
+  })
 
   const formData = await request.formData()
   const title = formData.get('title')
@@ -25,6 +27,8 @@ export async function action({ request }: ActionArgs) {
 
   return redirect(`/notes/${note.id}`)
 }
+
+export const meta: MetaFunction = () => ({ title: 'New Note - Prismix' })
 
 export default function NewNotePage() {
   const actionData = useActionData<typeof action>()

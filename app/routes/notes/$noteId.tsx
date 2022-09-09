@@ -1,17 +1,20 @@
 import { useRef, useState } from 'react'
-import type { ActionArgs, LoaderArgs } from '@remix-run/node'
+import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { json, redirect } from '@remix-run/node'
 import { Form, useCatch, useLoaderData, useSubmit } from '@remix-run/react'
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog'
 
-import { deleteNote } from '@/modules/note.server'
-import { getNote } from '@/modules/note.server'
-import { requireUserId } from '@/modules/users/session.server'
+import { deleteNote } from '@/modules/notes/note.server'
+import { getNote } from '@/modules/notes/note.server'
 import { toast } from 'react-hot-toast'
+import { authenticator } from '@/modules/users/auth.server'
 
 export async function loader({ request, params }: LoaderArgs) {
-  const userId = await requireUserId(request)
+  let { id: userId } = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/auth/signin',
+  })
+
   invariant(params.noteId, 'noteId not found')
 
   const note = await getNote({ userId, id: params.noteId })
@@ -21,13 +24,18 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export async function action({ request, params }: ActionArgs) {
-  const userId = await requireUserId(request)
+  let user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/auth/signin',
+  })
+
   invariant(params.noteId, 'noteId not found')
 
-  await deleteNote({ userId, id: params.noteId })
+  await deleteNote({ userId: user.id, id: params.noteId })
 
   return redirect('/notes')
 }
+
+export const meta: MetaFunction = () => ({ title: 'Note - Prismix' })
 
 export default function NoteDetailsPage() {
   const data = useLoaderData<typeof loader>()

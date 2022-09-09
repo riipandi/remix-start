@@ -1,16 +1,22 @@
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, NavLink, Outlet, useLoaderData } from '@remix-run/react'
 
-import { requireUserId } from '@/modules/users/session.server'
-import { getNoteListItems } from '@/modules/note.server'
+import { getNoteListItems } from '@/modules/notes/note.server'
 import { useUser } from '@/hooks/useUser'
+import { authenticator } from '@/modules/users/auth.server'
 
 export async function loader({ request }: LoaderArgs) {
-  const userId = await requireUserId(request)
+  let { id: userId } = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/auth/signin',
+  })
+
   const noteListItems = await getNoteListItems({ userId })
+
   return json({ noteListItems })
 }
+
+export const meta: MetaFunction = () => ({ title: 'Notes - Prismix' })
 
 export default function NotesPage() {
   const data = useLoaderData<typeof loader>()

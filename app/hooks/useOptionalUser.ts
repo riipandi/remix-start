@@ -1,4 +1,4 @@
-import type { User } from '@/modules/users/user.server'
+import type { User } from '@prisma/client'
 import { useMatchesData } from './useMatchesData'
 import { isUser } from '@/utils/http'
 

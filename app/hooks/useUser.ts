@@ -1,4 +1,4 @@
-import type { User } from '@/modules/users/user.server'
+import type { User } from '@prisma/client'
 import { useOptionalUser } from './useOptionalUser'
 
 export function useUser(): User {
