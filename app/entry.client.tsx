@@ -1,13 +1,10 @@
 import * as React from 'react'
 import { RemixBrowser } from '@remix-run/react'
 import { hydrateRoot } from 'react-dom/client'
-import Plausible from 'plausible-tracker'
 
-import { plausibleConfig } from '~/constants/analytics'
+import { Plausible, plausibleConfig, trackPageview } from '@/utils/analytics'
 
 function hydrate() {
-  const { trackPageview } = Plausible(plausibleConfig)
-
   React.startTransition(() => {
     hydrateRoot(
       document,

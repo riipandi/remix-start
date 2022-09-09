@@ -4,7 +4,7 @@ import { json } from '@remix-run/node'
 import { Toaster } from 'react-hot-toast'
 
 import tailwindStylesheetUrl from './styles/tailwind.css'
-import { getUser } from './services/session.server'
+import { getUser } from './modules/users/session.server'
 import { ErrorPage } from './components/ErrorPage'
 
 export const links: LinksFunction = () => {

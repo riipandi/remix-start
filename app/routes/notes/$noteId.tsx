@@ -3,11 +3,11 @@ import type { ActionArgs, LoaderArgs } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { json, redirect } from '@remix-run/node'
 import { Form, useCatch, useLoaderData, useSubmit } from '@remix-run/react'
-import { ConfirmDialog } from '~/components/Dialog/ConfirmDialog'
+import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog'
 
-import { deleteNote } from '~/services/note.server'
-import { getNote } from '~/services/note.server'
-import { requireUserId } from '~/services/session.server'
+import { deleteNote } from '@/modules/note.server'
+import { getNote } from '@/modules/note.server'
+import { requireUserId } from '@/modules/users/session.server'
 import { toast } from 'react-hot-toast'
 
 export async function loader({ request, params }: LoaderArgs) {

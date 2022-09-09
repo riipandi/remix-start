@@ -3,10 +3,10 @@ import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react'
 import * as React from 'react'
 
-import { getUserId, createUserSession } from '~/services/session.server'
+import { getUserId, createUserSession } from '@/modules/users/session.server'
 
-import { createUser, getUserByEmail } from '~/services/user.server'
-import { safeRedirect, validateEmail } from '~/utils/auth-utils'
+import { createUser, getUserByEmail } from '@/modules/users/user.server'
+import { safeRedirect, validateEmail } from '@/utils/http'
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request)

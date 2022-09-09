@@ -1,5 +1,5 @@
 import { useNavigate } from '@remix-run/react'
-import { EmptyState } from '~/components/EmptyState'
+import { EmptyState } from '@/components/EmptyState'
 
 export default function NoteIndexPage() {
   const navigate = useNavigate()

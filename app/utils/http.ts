@@ -1,4 +1,4 @@
-import type { User } from '~/services/user.server'
+import type { User } from '@/modules/users/user.server'
 
 const DEFAULT_REDIRECT = '/'
 
