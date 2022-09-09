@@ -1,10 +1,11 @@
+// SET TIME ZONE 'UTC';
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["referentialIntegrity", "fullTextSearch"]
 }
 
 datasource db {
-    provider             = "sqlite" // postgresql
+    provider             = "postgresql"
     url                  = env("DATABASE_URL")
     referentialIntegrity = "prisma"
 }
@@ -35,14 +36,14 @@ model Password {
 }
 
 model Session {
-    id           String    @id @default(cuid())
-    sessionToken String    @unique @default(cuid()) @map("session_token")
-    userId       String    @map("user_id")
-    strategy     String?
-    expires      DateTime?
-    userAgent    String?   @map("user_agent")
-    ipAddress    String?   @map("ip_address")
-    user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id          String    @id
+    userId      String    @map("user_id")
+    sessionData Json      @map("session_data")
+    expires     Int?      @db.Integer
+    expiresAt   DateTime? @map("expires_at") @db.Timestamptz()
+    userAgent   String?   @map("user_agent")
+    ipAddress   String?   @map("ip_address")
+    user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@index([userId])
     @@map("sessions")

@@ -1,14 +1,16 @@
 -- CreateTable
 CREATE TABLE "users" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "username" TEXT,
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
     "avatar_url" TEXT,
-    "email_verified_at" DATETIME,
-    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" DATETIME NOT NULL
+    "email_verified_at" TIMESTAMP(3),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -19,24 +21,28 @@ CREATE TABLE "passwords" (
 
 -- CreateTable
 CREATE TABLE "sessions" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "session_token" TEXT NOT NULL,
+    "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "strategy" TEXT,
-    "expires" DATETIME,
+    "session_data" JSONB NOT NULL,
+    "expires" INTEGER,
+    "expires_at" TIMESTAMPTZ(0),
     "user_agent" TEXT,
-    "ip_address" TEXT
+    "ip_address" TEXT,
+
+    CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "notes" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "summary" TEXT NOT NULL,
     "body" TEXT NOT NULL,
-    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" DATETIME NOT NULL
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "notes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -44,9 +50,6 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "passwords_user_id_key" ON "passwords"("user_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "sessions_session_token_key" ON "sessions"("session_token");
 
 -- CreateIndex
 CREATE INDEX "sessions_user_id_idx" ON "sessions"("user_id");

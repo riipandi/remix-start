@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   // If the user is already authenticated redirect to /notes directly
   await authenticator.isAuthenticated(request, { successRedirect: '/' })
   const session = await sessionStorage.getSession(request.headers.get('Cookie'))
-  const error = session.get('sessionErrorKey')
+  const error = session.get('userErrSession')
 
   return json<any>({ error })
 }

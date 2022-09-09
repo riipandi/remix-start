@@ -19,6 +19,7 @@ specifiers:
   '@types/node': ^18.7.16
   '@types/react': ^18.0.18
   '@types/react-dom': ^18.0.6
+  '@upstash/redis': ^1.13.1
   '@vitejs/plugin-react': ^2.1.0
   autoprefixer: ^10.4.8
   binode: ^1.0.5
@@ -38,6 +39,7 @@ specifiers:
   prettier: 2.7.1
   prisma: ^4.3.1
   react: ^18.2.0
+  react-device-detect: ^2.2.2
   react-dom: ^18.2.0
   react-hot-toast: ^2.3.0
   remix-auth: ^3.2.2
@@ -59,9 +61,11 @@ dependencies:
   '@remix-run/react': 1.7.0_biqbaboplfbrettd7655fr4n2y
   '@remix-run/serve': 1.7.0_biqbaboplfbrettd7655fr4n2y
   '@remix-run/server-runtime': 1.7.0_biqbaboplfbrettd7655fr4n2y
+  '@upstash/redis': 1.13.1
   isbot: 3.5.3
   plausible-tracker: 0.3.8
   react: 18.2.0
+  react-device-detect: 2.2.2_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
   react-hot-toast: 2.3.0_vt6aeitzauirmcdhimiad2yjxy
   remix-auth: 3.2.2_iwkoj4i7onot5qamk6olkm5qze
@@ -2363,6 +2367,14 @@ packages:
       '@typescript-eslint/types': 5.36.1
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@upstash/redis/1.13.1:
+    resolution: {integrity: sha512-ZuwUFuAH4GP8jCdmLtTQkEOjtspxXIo52FzwL/DqkQuFzhReKKazxEQe9s4hBCd1s4YeynjBIrl0HaqLlSjBwA==}
+    dependencies:
+      isomorphic-fetch: 3.0.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
 
   /@vitejs/plugin-react/2.1.0_vite@3.1.0:
     resolution: {integrity: sha512-am6rPyyU3LzUYne3Gd9oj9c4Rzbq5hQnuGXSMT6Gujq45Il/+bunwq3lrB7wghLkiF45ygMwft37vgJ/NE8IAA==}
@@ -5483,6 +5495,15 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /isomorphic-fetch/3.0.0:
+    resolution: {integrity: sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==}
+    dependencies:
+      node-fetch: 2.6.7
+      whatwg-fetch: 3.6.2
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -6471,7 +6492,6 @@ packages:
         optional: true
     dependencies:
       whatwg-url: 5.0.0
-    dev: true
 
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
@@ -7097,6 +7117,17 @@ packages:
       http-errors: 2.0.0
       iconv-lite: 0.4.24
       unpipe: 1.0.0
+
+  /react-device-detect/2.2.2_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-zSN1gIAztUekp5qUT/ybHwQ9fmOqVT1psxpSlTn1pe0CO+fnJHKRLOWWac5nKxOxvOpD/w84hk1I+EydrJp7SA==}
+    peerDependencies:
+      react: '>= 0.14.0'
+      react-dom: '>= 0.14.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      ua-parser-js: 1.0.2
+    dev: false
 
   /react-dom/18.2.0_react@18.2.0:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
@@ -8143,7 +8174,6 @@ packages:
 
   /tr46/0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
-    dev: true
 
   /trough/2.1.0:
     resolution: {integrity: sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==}
@@ -8254,6 +8284,10 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
+
+  /ua-parser-js/1.0.2:
+    resolution: {integrity: sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==}
+    dev: false
 
   /unbox-primitive/1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
@@ -8536,7 +8570,6 @@ packages:
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
-    dev: true
 
   /webidl-conversions/7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -8550,6 +8583,10 @@ packages:
       iconv-lite: 0.6.3
     dev: true
 
+  /whatwg-fetch/3.6.2:
+    resolution: {integrity: sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==}
+    dev: false
+
   /whatwg-mimetype/3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
     engines: {node: '>=12'}
@@ -8560,7 +8597,6 @@ packages:
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
-    dev: true
 
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}

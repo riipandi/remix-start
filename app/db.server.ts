@@ -1,4 +1,9 @@
+import invariant from 'tiny-invariant'
 import { PrismaClient } from '@prisma/client'
+import { Redis } from '@upstash/redis'
+
+invariant(process.env.UPSTASH_REDIS_URL, 'UPSTASH_REDIS_URL must be set')
+invariant(process.env.UPSTASH_REDIS_TOKEN, 'UPSTASH_REDIS_TOKEN must be set')
 
 let prisma: PrismaClient
 
@@ -20,4 +25,10 @@ if (process.env.NODE_ENV === 'production') {
   prisma.$connect()
 }
 
-export { prisma }
+// initiate Upstash Redis instance
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_URL,
+  token: process.env.UPSTASH_REDIS_TOKEN,
+})
+
+export { prisma, redis }
