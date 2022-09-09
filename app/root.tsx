@@ -55,20 +55,46 @@ export default function App() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.error('ERROR', error)
 
   return (
     <html className="h-full">
       <head>
-        <title>{`${caught.status} ${caught.statusText}`}</title>
+        <title>Something wrong!</title>
         <Meta />
         <Links />
       </head>
       <body className="h-full">
-        <ErrorPage status={caught.status} statusText={caught.statusText} />
+        <ErrorPage code={500} title="Something wrong" description={`An unexpected error occurred: ${error.message}`} />
         <Scripts />
       </body>
     </html>
   )
+}
+
+export function CatchBoundary() {
+  const caught = useCatch()
+
+  if (caught.status === 404) {
+    return (
+      <html className="h-full">
+        <head>
+          <title>{`${caught.status} ${caught.statusText}`}</title>
+          <Meta />
+          <Links />
+        </head>
+        <body className="h-full">
+          <ErrorPage
+            code={caught.status}
+            title="Sorry, we can’t find that page."
+            description="Check that you typed the address correctly, or try using our site search to find something specific."
+          />
+          <Scripts />
+        </body>
+      </html>
+    )
+  }
+
+  throw new Error(`Unexpected caught response with status: ${caught.status}`)
 }
