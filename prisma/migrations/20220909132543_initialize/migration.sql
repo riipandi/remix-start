@@ -22,9 +22,10 @@ CREATE TABLE "sessions" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "session_token" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "expires" DATETIME NOT NULL,
-    "user_agent" TEXT NOT NULL,
-    "ip_address" TEXT NOT NULL
+    "strategy" TEXT,
+    "expires" DATETIME,
+    "user_agent" TEXT,
+    "ip_address" TEXT
 );
 
 -- CreateTable

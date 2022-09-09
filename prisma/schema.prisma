@@ -35,13 +35,14 @@ model Password {
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique @map("session_token")
-    userId       String   @map("user_id")
-    expires      DateTime
-    userAgent    String   @map("user_agent")
-    ipAddress    String   @map("ip_address")
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id           String    @id @default(cuid())
+    sessionToken String    @unique @default(cuid()) @map("session_token")
+    userId       String    @map("user_id")
+    strategy     String?
+    expires      DateTime?
+    userAgent    String?   @map("user_agent")
+    ipAddress    String?   @map("ip_address")
+    user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@index([userId])
     @@map("sessions")
