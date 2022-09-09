@@ -7,7 +7,7 @@ const prisma: PrismaClient = new PrismaClient()
 async function seed() {
   const user = await DefaultUserSeeder(prisma)
   await SampleNoteSeeder(prisma, user)
-  console.log(`Database has been seeded. 🌱`)
+  console.info(`Database has been seeded. 🌱`)
 }
 
 seed()

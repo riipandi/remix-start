@@ -11,8 +11,9 @@ import { toast } from 'react-hot-toast'
 import { authenticator } from '@/modules/users/auth.server'
 
 export async function loader({ request, params }: LoaderArgs) {
+  const { pathname } = new URL(request.url)
   let { id: userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: `/auth/signin?redirectTo=${pathname}`,
   })
 
   invariant(params.noteId, 'noteId not found')

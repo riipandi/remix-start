@@ -7,8 +7,9 @@ import { createNote } from '@/modules/notes/note.server'
 import { authenticator } from '@/modules/users/auth.server'
 
 export async function action({ request }: ActionArgs) {
+  const { pathname } = new URL(request.url)
   let { id: userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: `/auth/signin?redirectTo=${pathname}`,
   })
 
   const formData = await request.formData()

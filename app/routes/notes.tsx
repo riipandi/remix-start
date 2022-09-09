@@ -7,8 +7,9 @@ import { useUser } from '@/hooks/useUser'
 import { authenticator } from '@/modules/users/auth.server'
 
 export async function loader({ request }: LoaderArgs) {
+  const { pathname } = new URL(request.url)
   let { id: userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: `/auth/signin?redirectTo=${pathname}`,
   })
 
   const noteListItems = await getNoteListItems({ userId })
