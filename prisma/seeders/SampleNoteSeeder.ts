@@ -2,7 +2,7 @@ import type { PrismaClient, User } from '@prisma/client'
 
 const notes = [
   {
-    title: 'Hello World',
+    title: 'Hello World 1',
     body: 'This is my first note',
   },
   {

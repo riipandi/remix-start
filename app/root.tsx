@@ -1,6 +1,7 @@
 import type { LinksFunction, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from '@remix-run/react'
 import { json } from '@remix-run/node'
+import { Toaster } from 'react-hot-toast'
 
 import tailwindStylesheetUrl from './styles/tailwind.css'
 import { getUser } from './services/session.server'
@@ -39,6 +40,7 @@ export default function App() {
       <body className="h-full">
         <Outlet />
         <ScrollRestoration />
+        <Toaster position="bottom-right" reverseOrder={true} containerClassName="mt-16 text-sm" />
         <Scripts />
         <LiveReload />
       </body>

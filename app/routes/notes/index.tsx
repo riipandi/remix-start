@@ -1,12 +1,12 @@
-import { Link } from '@remix-run/react'
+import { useNavigate } from '@remix-run/react'
+import { EmptyState } from '~/components/EmptyState'
 
 export default function NoteIndexPage() {
+  const navigate = useNavigate()
+
   return (
-    <p>
-      No note selected. Select a note on the left, or{' '}
-      <Link to="new" className="text-primary-500 underline">
-        create a new note.
-      </Link>
-    </p>
+    <div>
+      <EmptyState action={() => navigate('new')} />
+    </div>
   )
 }

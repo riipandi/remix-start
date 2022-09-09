@@ -23,7 +23,7 @@ export default function NotesPage() {
           <Link to=".">Notes</Link>
         </h1>
         <p>{user.email}</p>
-        <Form action="/signout" method="post">
+        <Form action="/auth/signout" method="post">
           <button
             type="submit"
             className="rounded bg-slate-600 py-2 px-4 text-primary-100 hover:bg-primary-500 active:bg-primary-600"
