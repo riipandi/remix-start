@@ -5,6 +5,11 @@ import { prisma } from '@/db.server'
 
 import { epochToUTC, expiresToSeconds, getSessionId } from '@/modules/sessions/session.server'
 
+/**
+ * TODO: fix this. still unstable when sign in
+ * @param param0
+ * @returns
+ */
 export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions }) {
   return createSessionStorage({
     cookie,
