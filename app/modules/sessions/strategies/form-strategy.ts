@@ -18,9 +18,6 @@ async function login(email: User['email'], password: Password['hash']): Promise<
   if (!isValid) return null
 
   // Limit the result for session security.
-  // const { password: _password, ...userWithoutPassword } = user
-  // return userWithoutPassword
-
   const result = {
     accessToken: null,
     refreshToken: null,

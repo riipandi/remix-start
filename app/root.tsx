@@ -3,20 +3,19 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch }
 import { json } from '@remix-run/node'
 import { Toaster } from 'react-hot-toast'
 
-// import type { UserSession } from '@/modules/users/auth.server'
+import type { UserSession } from '@/modules/users/auth.server'
 import { authenticator } from '@/modules/users/auth.server'
 import tailwindStylesheetUrl from '@/styles/tailwind.css'
 import { ErrorPage } from '@/components/ErrorPage'
 
-// interface LoaderData {
-//   user: Awaited<UserSession | null>
-// }
+interface LoaderData {
+  userSession: Awaited<UserSession | null>
+}
 
 export async function loader({ request }: LoaderArgs) {
   let userSession = await authenticator.isAuthenticated(request)
-  let user = userSession?.user
 
-  return json({ user })
+  return json<LoaderData>({ userSession })
 }
 
 export const links: LinksFunction = () => {
