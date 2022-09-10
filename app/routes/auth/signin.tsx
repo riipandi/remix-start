@@ -1,14 +1,14 @@
 import { useRef } from 'react'
-import type { ActionArgs, ActionFunction, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
+import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { Form, Link, useTransition, useSearchParams, useLoaderData } from '@remix-run/react'
 import { redirect } from '@remix-run/node'
 import { json } from '@remix-run/node'
 
-import { commitSession, getSession, sessionStorage } from '@/modules/users/session.server'
+import { commitSession, getSession, sessionStorage } from '@/modules/sessions/session.server'
 import { authenticator } from '@/modules/users/auth.server'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+export async function loader({ request }: LoaderArgs) {
   // If the user is already authenticated redirect to /notes directly
   await authenticator.isAuthenticated(request, { successRedirect: '/' })
   const session = await sessionStorage.getSession(request.headers.get('Cookie'))
@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   return json<any>({ error })
 }
 
-export const action: ActionFunction = async ({ request, context }: ActionArgs) => {
+export async function action({ request, context }: ActionArgs) {
   // we call the method with the name of the strategy we want to use and the
   // request object, optionally we pass an object with the URLs we want the user
   // to be redirected to after a success or a failure

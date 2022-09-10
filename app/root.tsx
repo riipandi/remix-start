@@ -1,11 +1,11 @@
-import type { LinksFunction, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
+import type { LinksFunction, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import { Toaster } from 'react-hot-toast'
 
-import tailwindStylesheetUrl from './styles/tailwind.css'
-import { ErrorPage } from './components/ErrorPage'
-import { authenticator } from './modules/users/auth.server'
+import { authenticator } from '@/modules/users/auth.server'
+import tailwindStylesheetUrl from '@/styles/tailwind.css'
+import { ErrorPage } from '@/components/ErrorPage'
 
 export const links: LinksFunction = () => {
   return [
@@ -31,7 +31,7 @@ export const meta: MetaFunction = () => ({
   'theme-color': '#0fa968',
 })
 
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+export async function loader({ request }: LoaderArgs) {
   let user = await authenticator.isAuthenticated(request)
 
   return json({ user })

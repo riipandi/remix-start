@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client'
-import { useMatchesData } from './useMatchesData'
+import { useMatchesData } from '@/hooks/useMatchesData'
 import { isUser } from '@/utils/http'
 
 export function useOptionalUser(): User | undefined {

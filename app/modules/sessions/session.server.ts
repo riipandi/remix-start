@@ -3,8 +3,8 @@ import invariant from 'tiny-invariant'
 import type { CookieOptions } from '@remix-run/server-runtime'
 import { createCookie, createCookieSessionStorage } from '@remix-run/node'
 
-import { createDatabaseSessionStorage } from '@/modules/sesions/dbsession.server'
-import { createUpstashSessionStorage } from '@/modules/sesions/upstash.server'
+import { createDatabaseSessionStorage } from '@/modules/sessions/dbsession.server'
+import { createUpstashSessionStorage } from '@/modules/sessions/upstash.server'
 
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set')
 invariant(process.env.SESSION_STORAGE, 'SESSION_STORAGE must be set')
@@ -44,7 +44,7 @@ const sessionCookie: CookieOptions = createCookie('__session', {
   secrets: [`${process.env.SESSION_SECRET}`], // replace this with an actual secret
   secure: process.env.NODE_ENV === 'production', // enable this in prod only
   expires: new Date(Date.now() + 86_400), // expires in seconds
-  //   maxAge: 60,
+  maxAge: 604_800, // one week
 })
 
 export const getSessionStorage = () => {

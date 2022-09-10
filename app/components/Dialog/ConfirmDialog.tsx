@@ -1,7 +1,7 @@
 import { useRef, type FC } from 'react'
 import { Dialog } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { DialogTransition } from './DialogTransition'
+import { DialogTransition } from '@/components/Dialog/DialogTransition'
 
 interface IConfirmDialog {
   children: React.ReactNode
