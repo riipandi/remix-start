@@ -7,10 +7,10 @@ import { googleStrategy } from '@/modules/sessions/strategies/google-strategy'
 import { spotifyStrategy } from '@/modules/sessions/strategies/spotify-strategy'
 
 export interface UserSession {
-  accessToken?: string
-  refreshToken?: string
-  expiresAt?: number
-  tokenType?: string
+  accessToken?: string | null
+  refreshToken?: string | null
+  expiresAt?: number | null
+  tokenType?: string | null
 
   user: {
     id: string

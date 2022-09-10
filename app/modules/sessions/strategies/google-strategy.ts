@@ -30,7 +30,7 @@ export const googleStrategy = new GoogleStrategy(
       provider: profile.provider,
       providerAccountId: profile._json.sub,
       refreshToken: refreshToken || null,
-      tokenType: extraParams.tokenType,
+      tokenType: extraParams.token_type,
       expiresAt,
     }
 
