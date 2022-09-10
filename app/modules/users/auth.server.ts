@@ -4,7 +4,7 @@ import { formStrategy } from '@/modules/sessions/strategies/form-strategy'
 import { SESSION_ERROR_KEY, SESSION_KEY } from '@/modules/sessions/constants.server'
 
 import { googleStrategy } from '@/modules/sessions/strategies/google-strategy'
-// import { spotifyStrategy } from '@/modules/sessions/strategies/spotify-strategy'
+import { spotifyStrategy } from '@/modules/sessions/strategies/spotify-strategy'
 
 export interface UserSession {
   id: string
@@ -25,4 +25,4 @@ export const authenticator = new Authenticator<UserSession | null>(sessionStorag
 // Register the authentication strategies
 authenticator.use(formStrategy, 'user-pass')
 authenticator.use(googleStrategy)
-// authenticator.use(spotifyStrategy)
+authenticator.use(spotifyStrategy)
