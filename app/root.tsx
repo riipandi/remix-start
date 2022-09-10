@@ -3,9 +3,20 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch }
 import { json } from '@remix-run/node'
 import { Toaster } from 'react-hot-toast'
 
+import type { UserSession } from '@/modules/users/auth.server'
 import { authenticator } from '@/modules/users/auth.server'
 import tailwindStylesheetUrl from '@/styles/tailwind.css'
 import { ErrorPage } from '@/components/ErrorPage'
+
+interface LoaderData {
+  user: Awaited<UserSession | null>
+}
+
+export async function loader({ request }: LoaderArgs) {
+  let user = await authenticator.isAuthenticated(request)
+
+  return json<LoaderData>({ user })
+}
 
 export const links: LinksFunction = () => {
   return [
@@ -30,12 +41,6 @@ export const meta: MetaFunction = () => ({
   'msapplication-TileColor': '#0fa968',
   'theme-color': '#0fa968',
 })
-
-export async function loader({ request }: LoaderArgs) {
-  let user = await authenticator.isAuthenticated(request)
-
-  return json({ user })
-}
 
 export default function App() {
   return (

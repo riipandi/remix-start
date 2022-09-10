@@ -4,7 +4,7 @@ import { Form, Link, useTransition, useSearchParams, useLoaderData } from '@remi
 import { redirect } from '@remix-run/node'
 import { json } from '@remix-run/node'
 
-import { commitSession, getSession, sessionStorage } from '@/modules/sessions/session.server'
+import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/modules/sessions/session.server'
 import { authenticator } from '@/modules/users/auth.server'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
@@ -17,24 +17,25 @@ export async function loader({ request }: LoaderArgs) {
   return json<any>({ error })
 }
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request }: ActionArgs) {
   // we call the method with the name of the strategy we want to use and the
   // request object, optionally we pass an object with the URLs we want the user
   // to be redirected to after a success or a failure
   const user = await authenticator.authenticate('user-pass', request, {
     failureRedirect: `/auth/signin`,
-    successRedirect: `/notes`,
-    context, // optional
   })
 
   // manually get the session, store the user data, and commit the session
-  const redirectTo = `/notes`
   const session = await getSession(request.headers.get('Cookie'))
   session.set(authenticator.sessionKey, user)
 
-  const headers = new Headers({ 'Set-Cookie': await commitSession(session) })
+  const headers = new Headers({
+    'Set-Cookie': await commitSession(session, {
+      expires: setCookieExpires(),
+    }),
+  })
 
-  return redirect(redirectTo, { headers })
+  return redirect(`/notes`, { headers })
 }
 
 export const meta: MetaFunction = () => ({ title: 'Sign In' })

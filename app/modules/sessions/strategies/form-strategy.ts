@@ -1,24 +1,33 @@
 import type { Password, User } from '@prisma/client'
-import { FormStrategy } from 'remix-auth-form'
-import bcrypt from '@node-rs/bcrypt'
-import { prisma } from '@/db.server'
 import { AuthorizationError } from 'remix-auth'
+import { FormStrategy } from 'remix-auth-form'
+import { verify } from '@node-rs/bcrypt'
+import { prisma } from '@/db.server'
+import type { UserSession } from '@/modules/users/auth.server'
 
-async function login(email: User['email'], password: Password['hash']) {
-  const userWithPassword = await prisma.user.findUnique({
+async function login(email: User['email'], password: Password['hash']): Promise<UserSession | null> {
+  const user = await prisma.user.findUnique({
     include: { password: true },
     where: { email },
   })
 
-  if (!userWithPassword || !userWithPassword.password) return null
+  if (!user || !user.password) return null
 
-  const isValid = await bcrypt.verify(password, userWithPassword.password.hash)
+  const isValid = await verify(password, user.password.hash)
 
   if (!isValid) return null
 
-  const { password: _password, ...userWithoutPassword } = userWithPassword
+  // Limit the result for session security.
+  // const { password: _password, ...userWithoutPassword } = user
+  // return userWithoutPassword
 
-  return userWithoutPassword
+  return {
+    id: user.id,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    avatarUrl: user.avatarUrl,
+  }
 }
 
 export const formStrategy = new FormStrategy(async (request) => {

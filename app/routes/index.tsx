@@ -7,6 +7,7 @@ export const meta: MetaFunction = () => ({ title: 'Home - Prismix' })
 
 export default function Index() {
   const user = useOptionalUser()
+
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
       <div className="relative sm:pb-16 sm:pt-8">
@@ -28,7 +29,7 @@ export default function Index() {
                     to="/notes"
                     className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-primary-700 shadow-sm hover:bg-primary-50 sm:px-8"
                   >
-                    View Notes for {user.email}
+                    View Notes for {`${user.firstName} ${user.lastName}`}
                   </Link>
                 ) : (
                   <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">

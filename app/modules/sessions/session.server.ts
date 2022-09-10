@@ -10,7 +10,7 @@ invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set')
 invariant(process.env.SESSION_STORAGE, 'SESSION_STORAGE must be set')
 
 // Session expiration in seconds.
-const SESSION_EXPIRES = 3600
+export const SESSION_EXPIRES = 3600
 
 // `expires` is a Date after which the data should be considered
 // invalid. You could use it to invalidate the data somehow or
@@ -20,6 +20,15 @@ export const expiresToSeconds = (expires: Date): number => {
   let epochTime = utcTimeStamp.getTime() / 1000.0
 
   return Math.floor(epochTime + SESSION_EXPIRES)
+}
+
+export const setCookieExpires = () => {
+  let utcTimeStamp = new Date()
+  let epochTime = utcTimeStamp.getTime() / 1000.0
+  let timestamp = Math.floor(epochTime + SESSION_EXPIRES)
+  let expires = new Date(timestamp * 1000)
+
+  return expires
 }
 
 export function epochToUTC(datetime: number): string {
@@ -43,7 +52,7 @@ const sessionCookie: CookieOptions = createCookie('__session', {
   httpOnly: true, // for security reasons, make this cookie http only
   secrets: [`${process.env.SESSION_SECRET}`], // replace this with an actual secret
   secure: process.env.NODE_ENV === 'production', // enable this in prod only
-  expires: new Date(Date.now() + 86_400), // expires in seconds
+  // expires: new Date(Date.now() + 86_400), // expires in seconds
   maxAge: 604_800, // one week
 })
 

@@ -1,17 +1,16 @@
 import type { CookieOptions } from '@remix-run/server-runtime'
-import { createSessionStorage } from '@remix-run/node'
+import { json, createSessionStorage } from '@remix-run/node'
+import { AuthorizationError } from 'remix-auth'
 import { prisma } from '@/db.server'
 
 import { epochToUTC, expiresToSeconds, getSessionId } from '@/modules/sessions/session.server'
-import { AuthorizationError } from 'remix-auth'
 
 export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions }) {
   return createSessionStorage({
     cookie,
     async createData(data, expires: any) {
       const id = getSessionId()
-      const sessionExp: any = expiresToSeconds(expires)
-      console.log('DEBUG', data)
+      const sessionExp = expiresToSeconds(expires)
 
       try {
         await prisma.session.create({
@@ -25,17 +24,16 @@ export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions
             expiresAt: epochToUTC(sessionExp),
           },
         })
+
+        return id
       } catch (error) {
         // Because redirects work by throwing a Response, you need to check if the
         // caught error is a response and return it or throw it again
-        if (error instanceof Response) return error
-        if (error instanceof AuthorizationError) {
-          // here the error is related to the authentication process
+        if (error instanceof Response || error instanceof AuthorizationError) {
+          return error
         }
-        // here the error is a generic error that another reason may throw
+        return undefined
       }
-
-      return id
     },
     async readData(id) {
       try {
@@ -45,14 +43,23 @@ export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions
         return null
       }
     },
-    async updateData(id, _data, expires) {
-      await prisma.session.update({
-        where: { id },
-        data: { expires },
-      })
+    async updateData(id, _data, expires: any) {
+      try {
+        const sessionExp: any = expiresToSeconds(expires)
+        await prisma.session.update({
+          data: { expires: sessionExp, expiresAt: epochToUTC(sessionExp) },
+          where: { id },
+        })
+      } catch (error) {
+        return undefined
+      }
     },
     async deleteData(id) {
-      await prisma.session.delete({ where: { id } })
+      try {
+        await prisma.session.delete({ where: { id } })
+      } catch (error) {
+        return undefined
+      }
     },
   })
 }
