@@ -24,6 +24,12 @@ export function safeRedirect(
   return to
 }
 
+export function getRedirectTo(request: Request): string {
+  const url = new URL(request.clone().url)
+  const redirectToParam = url.searchParams.get('redirectTo')
+  return safeRedirect(redirectToParam)
+}
+
 export function isUser(user: any): user is User {
   return user && typeof user === 'object' && typeof user.email === 'string'
 }

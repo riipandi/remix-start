@@ -25,11 +25,19 @@ export function createUpstashSessionStorage({ cookie }: { cookie: CookieOptions 
       }
     },
     async updateData(id, data, expires: any) {
-      const ex = expiresToSeconds(expires)
-      await redis.set(id, data, { ex })
+      try {
+        const ex = expiresToSeconds(expires)
+        await redis.set(id, data, { ex })
+      } catch (error) {
+        return undefined
+      }
     },
     async deleteData(id) {
-      await redis.del(id)
+      try {
+        await redis.del(id)
+      } catch (error) {
+        return undefined
+      }
     },
   })
 }

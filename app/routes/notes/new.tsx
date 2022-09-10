@@ -3,13 +3,14 @@ import { json, redirect } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import * as React from 'react'
 
+import { LOGIN_URL } from '@/modules/sessions/constants.server'
 import { createNote } from '@/modules/notes/note.server'
 import { authenticator } from '@/modules/users/auth.server'
 
 export async function action({ request }: ActionArgs) {
   const { pathname } = new URL(request.url)
   let { id: userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: `/auth/signin?redirectTo=${pathname}`,
+    failureRedirect: `${LOGIN_URL}?redirectTo=${pathname}`,
   })
 
   const formData = await request.formData()

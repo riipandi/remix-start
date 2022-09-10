@@ -38,9 +38,9 @@ model Password {
 model Session {
     id          String    @id
     userId      String    @map("user_id")
-    sessionData Json      @map("session_data")
+    sessionData Json      @map("session_data") @db.Json
     expires     Int?      @db.Integer
-    expiresAt   DateTime? @map("expires_at") @db.Timestamptz()
+    expiresAt   DateTime? @map("expires_at") @db.Timestamptz
     userAgent   String?   @map("user_agent")
     ipAddress   String?   @map("ip_address")
     user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)

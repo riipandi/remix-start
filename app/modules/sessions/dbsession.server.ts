@@ -1,5 +1,5 @@
 import type { CookieOptions } from '@remix-run/server-runtime'
-import { json, createSessionStorage } from '@remix-run/node'
+import { createSessionStorage } from '@remix-run/node'
 import { AuthorizationError } from 'remix-auth'
 import { prisma } from '@/db.server'
 
@@ -11,13 +11,12 @@ export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions
     async createData(data, expires: any) {
       const id = getSessionId()
       const sessionExp = expiresToSeconds(expires)
-
       try {
         await prisma.session.create({
           data: {
             id,
             sessionData: data,
-            userId: data.userSession.id,
+            userId: data.user.id,
             userAgent: `Google Chrome`,
             ipAddress: '127.0.0.1',
             expires: sessionExp,
@@ -27,6 +26,7 @@ export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions
 
         return id
       } catch (error) {
+        console.log('ERROR', error)
         // Because redirects work by throwing a Response, you need to check if the
         // caught error is a response and return it or throw it again
         if (error instanceof Response || error instanceof AuthorizationError) {
@@ -40,14 +40,17 @@ export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions
         const { sessionData }: any = await prisma.session.findUnique({ where: { id } })
         return sessionData
       } catch (error) {
+        console.log('ERROR', error)
+        if (error instanceof Response || error instanceof AuthorizationError) {
+          return error
+        }
         return null
       }
     },
-    async updateData(id, _data, expires: any) {
+    async updateData(id, data, _expires) {
       try {
-        const sessionExp: any = expiresToSeconds(expires)
         await prisma.session.update({
-          data: { expires: sessionExp, expiresAt: epochToUTC(sessionExp) },
+          data: { sessionData: data },
           where: { id },
         })
       } catch (error) {

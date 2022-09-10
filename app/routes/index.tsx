@@ -1,6 +1,7 @@
 import { Link } from '@remix-run/react'
 import type { MetaFunction } from '@remix-run/node'
 
+import { LOGIN_URL } from '@/modules/sessions/constants.server'
 import { useOptionalUser } from '@/hooks/useOptionalUser'
 
 export const meta: MetaFunction = () => ({ title: 'Home - Prismix' })
@@ -40,7 +41,7 @@ export default function Index() {
                       Sign up
                     </Link>
                     <Link
-                      to="/auth/signin"
+                      to={LOGIN_URL}
                       className="flex items-center justify-center rounded-md bg-primary-500 px-4 py-3 font-medium text-white hover:bg-primary-600  "
                     >
                       Sign In

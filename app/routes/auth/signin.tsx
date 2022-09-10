@@ -1,28 +1,33 @@
 import { useRef } from 'react'
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { Form, Link, useTransition, useSearchParams, useLoaderData } from '@remix-run/react'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { redirect } from '@remix-run/node'
 import { json } from '@remix-run/node'
 
+import { LOGIN_URL, SESSION_ERROR_KEY } from '@/modules/sessions/constants.server'
 import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/modules/sessions/session.server'
 import { authenticator } from '@/modules/users/auth.server'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { getRedirectTo } from '@/utils/http'
 
 export async function loader({ request }: LoaderArgs) {
   // If the user is already authenticated redirect to /notes directly
   await authenticator.isAuthenticated(request, { successRedirect: '/' })
   const session = await sessionStorage.getSession(request.headers.get('Cookie'))
-  const error = session.get('userErrSession')
+  const error = session.get(SESSION_ERROR_KEY)
 
   return json<any>({ error })
 }
 
 export async function action({ request }: ActionArgs) {
+  const redirectTo = getRedirectTo(request)
+  console.log('REDIRECT', redirectTo)
+
   // we call the method with the name of the strategy we want to use and the
   // request object, optionally we pass an object with the URLs we want the user
   // to be redirected to after a success or a failure
   const user = await authenticator.authenticate('user-pass', request, {
-    failureRedirect: `/auth/signin`,
+    failureRedirect: `${LOGIN_URL}`,
   })
 
   // manually get the session, store the user data, and commit the session
@@ -35,7 +40,7 @@ export async function action({ request }: ActionArgs) {
     }),
   })
 
-  return redirect(`/notes`, { headers })
+  return redirect(redirectTo, { headers })
 }
 
 export const meta: MetaFunction = () => ({ title: 'Sign In' })

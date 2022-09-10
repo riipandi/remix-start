@@ -23,9 +23,9 @@ CREATE TABLE "passwords" (
 CREATE TABLE "sessions" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "session_data" JSONB NOT NULL,
+    "session_data" JSON NOT NULL,
     "expires" INTEGER,
-    "expires_at" TIMESTAMPTZ(0),
+    "expires_at" TIMESTAMPTZ,
     "user_agent" TEXT,
     "ip_address" TEXT,
 

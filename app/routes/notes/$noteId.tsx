@@ -1,19 +1,20 @@
+import invariant from 'tiny-invariant'
 import { useRef, useState } from 'react'
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
-import invariant from 'tiny-invariant'
-import { json, redirect } from '@remix-run/node'
 import { Form, useCatch, useLoaderData, useSubmit } from '@remix-run/react'
-import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog'
+import { json, redirect } from '@remix-run/node'
+import { toast } from 'react-hot-toast'
 
+import { LOGIN_URL } from '@/modules/sessions/constants.server'
 import { deleteNote } from '@/modules/notes/note.server'
 import { getNote } from '@/modules/notes/note.server'
-import { toast } from 'react-hot-toast'
 import { authenticator } from '@/modules/users/auth.server'
+import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog'
 
 export async function loader({ request, params }: LoaderArgs) {
   const { pathname } = new URL(request.url)
   let { id: userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: `/auth/signin?redirectTo=${pathname}`,
+    failureRedirect: `${LOGIN_URL}?redirectTo=${pathname}`,
   })
 
   invariant(params.noteId, 'noteId not found')
@@ -26,7 +27,7 @@ export async function loader({ request, params }: LoaderArgs) {
 
 export async function action({ request, params }: ActionArgs) {
   let user = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: LOGIN_URL,
   })
 
   invariant(params.noteId, 'noteId not found')
