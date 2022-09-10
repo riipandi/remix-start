@@ -11,16 +11,17 @@ datasource db {
 }
 
 model User {
-    id              String    @id @default(uuid())
-    email           String    @unique
-    username        String?   @default(cuid())
-    firstName       String    @map("firstname")
-    lastName        String    @map("lastname")
-    avatarUrl       String?   @map("avatar_url")
-    emailVerifiedAt DateTime? @map("email_verified_at")
-    createdAt       DateTime  @default(now()) @map("created_at")
-    updatedAt       DateTime  @updatedAt @map("updated_at")
+    id              String          @id @default(uuid())
+    email           String          @unique
+    username        String?         @unique
+    firstName       String          @map("firstname")
+    lastName        String          @map("lastname")
+    avatarUrl       String?         @map("avatar_url")
+    emailVerifiedAt DateTime?       @map("email_verified_at")
+    createdAt       DateTime        @default(now()) @map("created_at")
+    updatedAt       DateTime        @updatedAt @map("updated_at")
     password        Password?
+    socialAccounts  SocialAccount[]
     sessions        Session[]
     notes           Note[]
 
@@ -47,6 +48,29 @@ model Session {
 
     @@index([userId])
     @@map("sessions")
+}
+
+model SocialAccount {
+    id                    String  @id @default(cuid())
+    userId                String  @map("user_id")
+    accountType           String  @map("account_type")
+    provider              String
+    providerAccountId     String  @map("provider_account_id")
+    refreshToken          String? @map("refresh_token")
+    refreshTokenExpiresIn Int?    @map("refresh_token_expires_in")
+    accessToken           String? @map("access_token")
+    expiresAt             Int?    @map("expires_at")
+    tokenType             String? @map("token_type")
+    scope                 String?
+    idToken               String? @map("id_token")
+    sessionState          String? @map("session_state")
+    oAuthTokenSecret      String? @map("oauth_token_secret")
+    oAuthToken            String? @map("oauth_token")
+    user                  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@index([userId])
+    @@map("social_accounts")
 }
 
 model Note {

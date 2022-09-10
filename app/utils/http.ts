@@ -1,6 +1,14 @@
+import invariant from 'tiny-invariant'
 import type { User } from '@prisma/client'
 
 const DEFAULT_REDIRECT = '/'
+
+invariant(process.env.APP_URL, 'APP_URL must be set')
+
+export const appUrl = (optionalPath = ''): string => {
+  const baseUrl = process.env.APP_URL || 'http://localhost:3000'
+  return optionalPath || optionalPath! !== '' ? `${baseUrl}${optionalPath}` : optionalPath
+}
 
 /**
  * This should be used any time the redirect path is user-provided

@@ -31,7 +31,6 @@ export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions
 
         return id
       } catch (error) {
-        console.log('ERROR', error)
         // Because redirects work by throwing a Response, you need to check if the
         // caught error is a response and return it or throw it again
         if (error instanceof Response || error instanceof AuthorizationError) {
@@ -45,7 +44,6 @@ export function createDatabaseSessionStorage({ cookie }: { cookie: CookieOptions
         const { sessionData }: any = await prisma.session.findUnique({ where: { id } })
         return sessionData
       } catch (error) {
-        console.log('ERROR', error)
         if (error instanceof Response || error instanceof AuthorizationError) {
           return error
         }
