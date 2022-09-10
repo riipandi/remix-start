@@ -1,11 +1,9 @@
 import type { LoaderArgs, LoaderFunction } from '@remix-run/node'
-import type { SocialsProvider } from 'remix-auth-socials'
-
 import { LOGIN_URL } from '@/modules/sessions/constants.server'
 import { authenticator } from '@/modules/users/auth.server'
 
 export let loader: LoaderFunction = ({ request, params }: LoaderArgs) => {
-  const { provider } = params as { provider: SocialsProvider }
+  const { provider } = params as { provider: string }
 
   return authenticator.authenticate(provider, request, {
     successRedirect: '/auth/redirect',

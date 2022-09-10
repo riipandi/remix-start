@@ -17,22 +17,24 @@ export async function createOrUpdateSocialConnection(email: User['email'], provi
   return userAccount
 }
 
-export async function createUserFromOAuth(userData: any) {
+export async function createUserFromOAuth(data: any) {
   return await prisma.user.create({
     data: {
-      email: userData.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      username: userData.username,
-      avatarUrl: userData.imageUrl,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      username: data.username,
+      avatarUrl: data.imageUrl,
       emailVerifiedAt: new Date(),
       socialAccounts: {
         create: {
-          providerAccountId: userData.providerAccountId,
-          refreshToken: userData.refreshToken,
-          accessToken: userData.accessToken,
-          accountType: userData.accountType,
-          provider: userData.provider,
+          providerAccountId: data.providerAccountId,
+          refreshToken: data.refreshToken,
+          accessToken: data.accessToken,
+          accountType: data.accountType,
+          expiresAt: data.expiresAt,
+          tokenType: data.tokenType,
+          provider: data.provider,
         },
       },
     },

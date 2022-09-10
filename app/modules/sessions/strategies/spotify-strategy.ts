@@ -28,6 +28,7 @@ export const spotifyStrategy = new SpotifyStrategy(
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
     const user = await findUserByEmail(profile.emails[0].value)
+    const expiresAt = Date.now() + extraParams.expiresIn * 1000
 
     const socialAccount = {
       accountType: 'oauth',
@@ -35,12 +36,14 @@ export const spotifyStrategy = new SpotifyStrategy(
       accessToken: accessToken,
       providerAccountId: profile.id,
       provider: profile.provider,
+      tokenType: extraParams.tokenType,
+      expiresAt,
     }
 
     const result = {
       accessToken,
       refreshToken,
-      expiresAt: Date.now() + extraParams.expiresIn * 1000,
+      expiresAt,
       tokenType: extraParams.tokenType,
     }
 
