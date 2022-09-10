@@ -1,13 +1,8 @@
 import type { FC } from 'react'
 import { Form } from '@remix-run/react'
-import { SocialsProvider } from 'remix-auth-socials'
-
-enum ExtendedSocialsProvider {
-  SPOTIFY = 'spotify',
-}
 
 interface SocialButtonProps {
-  provider: SocialsProvider | ExtendedSocialsProvider
+  provider: 'google' | 'spotify'
   label: string
   className?: string
 }
@@ -34,12 +29,8 @@ export enum AuthLabel {
 export const SocialAuth: FC<{ label: AuthLabel }> = ({ label }) => {
   return (
     <>
-      <SocialButton provider={SocialsProvider.GOOGLE} label={label} />
-      <SocialButton provider={ExtendedSocialsProvider.SPOTIFY} label={label} />
-      {/* <SocialButton provider={SocialsProvider.GITHUB} label={label} /> */}
-      {/* <SocialButton provider={SocialsProvider.FACEBOOK} label={label} /> */}
-      {/* <SocialButton provider={SocialsProvider.MICROSOFT} label={label} /> */}
-      {/* <SocialButton provider={SocialsProvider.DISCORD} label={label} /> */}
+      <SocialButton provider="google" label={label} />
+      <SocialButton provider="spotify" label={label} />
     </>
   )
 }

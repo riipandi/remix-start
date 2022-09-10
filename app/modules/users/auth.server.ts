@@ -7,11 +7,18 @@ import { googleStrategy } from '@/modules/sessions/strategies/google-strategy'
 import { spotifyStrategy } from '@/modules/sessions/strategies/spotify-strategy'
 
 export interface UserSession {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
-  avatarUrl?: string | null
+  accessToken?: string
+  refreshToken?: string
+  expiresAt?: number
+  tokenType?: string
+
+  user: {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    avatarUrl?: string | null
+  }
 }
 
 // Create an instance of the authenticator, pass a generic with
@@ -21,6 +28,11 @@ export const authenticator = new Authenticator<UserSession | null>(sessionStorag
   sessionErrorKey: SESSION_ERROR_KEY, // keep in sync
   throwOnError: false,
 })
+
+// export const authenticator = new Authenticator(sessionStorage, {
+//   sessionKey: spotifyStrategy.sessionKey,
+//   sessionErrorKey: spotifyStrategy.sessionErrorKey,
+// })
 
 // Register the authentication strategies
 authenticator.use(formStrategy, 'user-pass')

@@ -40,7 +40,7 @@
     "react-hot-toast": "^2.3.0",
     "remix-auth": "^3.2.2",
     "remix-auth-form": "^1.2.0",
-    "remix-auth-socials": "^1.0.2",
+    "remix-auth-google": "^1.1.0",
     "remix-auth-spotify": "^1.2.5",
     "remix-utils": "^3.3.0",
     "tiny-invariant": "^1.2.0"

@@ -1,6 +1,5 @@
 import invariant from 'tiny-invariant'
-import { SocialsProvider } from 'remix-auth-socials'
-import { GoogleStrategy } from 'remix-auth-socials'
+import { GoogleStrategy } from 'remix-auth-google'
 
 import { createOrUpdateSocialConnection } from '@/modules/users/oauth.server'
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
@@ -19,42 +18,51 @@ export const googleStrategy = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: appUrl(`/auth/${SocialsProvider.GOOGLE}/callback`),
+    callbackURL: appUrl(`/auth/google/callback`),
   },
-  async ({ accessToken, refreshToken, profile }) => {
-    const { _json: userProfile } = profile
-    const user = await findUserByEmail(userProfile.email)
+  async ({ accessToken, refreshToken, extraParams, profile }) => {
+    const user = await findUserByEmail(profile.emails[0].value)
+    const expiresAt = Date.now() + extraParams.expires_in * 1000
 
     const socialAccount = {
-      providerAccountId: userProfile.sub,
-      refreshToken: refreshToken || null,
       accessToken: accessToken,
       accountType: 'oauth',
-      provider: 'google',
+      provider: profile.provider,
+      providerAccountId: profile._json.sub,
+      refreshToken: refreshToken || null,
+      tokenType: extraParams.tokenType,
+      expiresAt,
+    }
+
+    const result = {
+      accessToken,
+      refreshToken,
+      expiresAt,
+      tokenType: extraParams.tokenType,
     }
 
     // If user exists but doesn't have a google account, create one
     if (user) {
-      await createOrUpdateSocialConnection(userProfile.email, 'google', socialAccount)
+      await createOrUpdateSocialConnection(profile._json.email, 'google', socialAccount)
     }
 
     if (!user) {
-      const username = await generateUsernameFromEmail(userProfile.email)
+      const username = await generateUsernameFromEmail(profile._json.email)
       const userData = {
-        email: userProfile.email,
-        firstName: userProfile.given_name,
-        lastName: userProfile.family_name,
-        imageUrl: userProfile.picture,
+        email: profile._json.email,
+        firstName: profile._json.given_name,
+        lastName: profile._json.family_name,
+        imageUrl: profile._json.picture,
         username,
       }
       const newUser = await createUserFromOAuth({ ...userData, ...socialAccount })
 
       // Send email notification to user
-      // await sendEmail(newUser.email, 'Welcome to Stream Page', `Hello, ${userProfile.given_name}!`)
+      // await sendEmail(newUser.email, 'Welcome to Stream Page', `Hello, ${profile._json.given_name}!`)
 
-      return newUser
+      return { ...result, user: newUser }
     }
 
-    return user
+    return { ...result, user }
   },
 )

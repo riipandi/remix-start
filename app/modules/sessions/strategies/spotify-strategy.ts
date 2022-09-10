@@ -31,11 +31,11 @@ export const spotifyStrategy = new SpotifyStrategy(
     const expiresAt = Date.now() + extraParams.expiresIn * 1000
 
     const socialAccount = {
-      accountType: 'oauth',
-      refreshToken: refreshToken || null,
       accessToken: accessToken,
-      providerAccountId: profile.id,
+      accountType: 'oauth',
       provider: profile.provider,
+      providerAccountId: profile.id,
+      refreshToken: refreshToken || null,
       tokenType: extraParams.tokenType,
       expiresAt,
     }
