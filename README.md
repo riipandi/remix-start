@@ -28,8 +28,12 @@ Learn more about [Remix Stacks](https://remix.run/stacks).
 - [Fly app deployment](https://fly.io) with [Docker](https://www.docker.com/)
 - Production-ready [SQLite Database](https://sqlite.org)
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
-- Email/Password Authentication with [cookie-based sessions](https://remix.run/docs/en/v1/api/remix#createcookiesessionstorage)
+- Email/Password Authentication with [remix-auth-form](https://github.com/sergiodxa/remix-auth-form)
+- Google authentication with [remix-auth-google](https://github.com/pbteja1998/remix-auth-google)
+- Spotify authentication with [remix-auth-oauth2](https://github.com/sergiodxa/remix-auth-oauth2)
+- Simple React forms validation with [react-hook-form](https://react-hook-form.com)
 - Database ORM with [Prisma](https://prisma.io)
+- Optional Redis session storage with [Upstash](https://upstash.com/blog/redis-with-remix)
 - Styling with [Tailwind CSS](https://tailwindcss.com/)
 - Tailwind linting and formatting with [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
 - Code formatting with [Prettier](https://prettier.io)
@@ -69,15 +73,6 @@ The database seed script creates a new user with some data you can use to get st
 
 - Email: `aris@duck.com`
 - Password: `passw0rd`
-
-### Relevant code:
-
-This is a pretty simple note-taking app, but it's a good example of how you can build a full stack app with Prisma and Remix.
-The main functionality is creating users, logging in and out, and creating and deleting notes.
-
-- creating users, and logging in and out [./app/models/user.server.ts](./app/models/user.server.ts)
-- user sessions, and verifying them [./app/session.server.ts](./app/session.server.ts)
-- creating, and deleting notes [./app/models/note.server.ts](./app/models/note.server.ts)
 
 ## 🚀 Deployment
 
