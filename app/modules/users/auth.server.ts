@@ -29,16 +29,11 @@ export interface UserSession {
 
 // Create an instance of the authenticator, pass a generic with
 // what strategies will return and will store in the session.
-export const authenticator = new Authenticator<AuthSession | null>(sessionStorage, {
+export const authenticator = new Authenticator<AuthSession>(sessionStorage, {
   sessionKey: SESSION_KEY, // keep in sync
   sessionErrorKey: SESSION_ERROR_KEY, // keep in sync
   throwOnError: false,
 })
-
-// export const authenticator = new Authenticator(sessionStorage, {
-//   sessionKey: spotifyStrategy.sessionKey,
-//   sessionErrorKey: spotifyStrategy.sessionErrorKey,
-// })
 
 // Register the authentication strategies
 authenticator.use(formStrategy, 'user-pass')

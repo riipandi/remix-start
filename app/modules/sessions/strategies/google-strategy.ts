@@ -3,7 +3,6 @@ import { GoogleStrategy } from 'remix-auth-google'
 
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
 import { generateUsernameFromEmail } from '@/modules/users/user.server'
-
 import { appUrl } from '@/utils/http'
 
 // Validate envars value.
@@ -32,9 +31,9 @@ export const googleStrategy = new GoogleStrategy(
       accessToken: accessToken, // optional
       expiresAt: expiresAt, // optional
       tokenType: extraParams.token_type, // optional
-      scope: extraParams.scope, // optional
+      scopes: extraParams.scope, // optional
       idToken: extraParams.id_token, // optional
-      // sessionState: data.sessionState, // optional
+      sessionState: null, // optional
       avatarUrl: profile._json.picture, // optional
     }
 
@@ -44,7 +43,6 @@ export const googleStrategy = new GoogleStrategy(
         firstName: profile._json.given_name,
         lastName: profile._json.family_name,
         avatarUrl: profile._json.picture,
-        emailVerifiedAt: new Date(),
         username,
       },
       socialAccount,
@@ -54,6 +52,8 @@ export const googleStrategy = new GoogleStrategy(
 
     // Send email notification to user
     // await sendEmail(newUser.email, 'Welcome to Stream Page', `Hello, ${profile._json.given_name}!`)
+
+    // Returns Auth Session from database.
     return { ...user, subscription: [] }
   },
 )

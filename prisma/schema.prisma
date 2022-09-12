@@ -36,6 +36,27 @@ model Password {
     @@map("passwords")
 }
 
+model SocialAccount {
+    id                String  @id @default(cuid())
+    userId            String  @map("user_id") @db.Uuid
+    type              String
+    provider          String
+    providerAccountId String  @map("provider_account_id")
+    refreshToken      String? @map("refresh_token") @db.Text
+    accessToken       String? @map("access_token") @db.Text
+    expiresAt         Int?    @map("expires_at")
+    tokenType         String? @map("token_type")
+    scopes            String?
+    idToken           String? @map("id_token") @db.Text
+    sessionState      String? @map("session_state")
+    avatarUrl         String? @map("avatar_url")
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@index([userId])
+    @@map("social_accounts")
+}
+
 model Session {
     id          String    @id
     userId      String    @map("user_id") @db.Uuid
@@ -57,27 +78,6 @@ model VerificationToken {
 
     @@unique([identifier, token])
     @@map("verification_tokens")
-}
-
-model SocialAccount {
-    id                String  @id @default(cuid())
-    userId            String  @map("user_id") @db.Uuid
-    type              String
-    provider          String
-    providerAccountId String  @map("provider_account_id")
-    refreshToken      String? @map("refresh_token") @db.Text
-    accessToken       String? @map("access_token") @db.Text
-    expiresAt         Int?    @map("expires_at")
-    tokenType         String? @map("token_type")
-    scope             String?
-    idToken           String? @map("id_token") @db.Text
-    sessionState      String? @map("session_state")
-    avatarUrl         String? @map("avatar_url")
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@unique([provider, providerAccountId])
-    @@index([userId])
-    @@map("social_accounts")
 }
 
 model Note {

@@ -18,7 +18,7 @@ export async function createOrUpdateSocialConnection(email: User['email'], provi
   return userAccount
 }
 
-export async function createUserFromOAuth(user: User, socialAccount: SocialAccount) {
+export async function createUserFromOAuth(user: any, socialAccount: any) {
   const existUser = await findUserByEmail(user.email)
 
   if (existUser) {
@@ -27,7 +27,7 @@ export async function createUserFromOAuth(user: User, socialAccount: SocialAccou
     return existUser
   }
 
-  const newUser = await prisma.user.create({ data: user })
+  const newUser = await prisma.user.create({ data: { ...user, emailVerifiedAt: new Date() } })
   const socialConnection = await createOrUpdateSocialConnection(user.email, socialAccount.provider, socialAccount)
   if (!socialConnection) throw new Error('Unable to create social connection.')
 

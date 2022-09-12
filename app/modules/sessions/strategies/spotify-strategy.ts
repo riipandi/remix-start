@@ -3,9 +3,10 @@ import { SpotifyStrategy } from 'remix-auth-spotify'
 import { sessionStorage } from '@/modules/sessions/session.server'
 import { parseFullName } from 'parse-full-name'
 
-import { createOrUpdateSocialConnection, createUserFromOAuth } from '@/modules/users/oauth.server'
-import { findUserByEmail, generateUsernameFromEmail } from '@/modules/users/user.server'
+import { createUserFromOAuth } from '@/modules/users/oauth.server'
+import { generateUsernameFromEmail } from '@/modules/users/user.server'
 import { appUrl } from '@/utils/http'
+import type { SocialAccount } from '@prisma/client'
 
 // Validate envars value.
 invariant(process.env.SPOTIFY_CLIENT_ID, 'SPOTIFY_CLIENT_ID must be set')
@@ -27,53 +28,44 @@ export const spotifyStrategy = new SpotifyStrategy(
     sessionStorage,
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
-    const user = await findUserByEmail(profile.emails[0].value)
+    console.log('profile', profile)
     const expiresAt = Date.now() + extraParams.expiresIn * 1000
 
     const socialAccount = {
-      accessToken: accessToken,
-      accountType: 'oauth',
+      type: 'oauth',
       provider: profile.provider,
       providerAccountId: profile.id,
-      refreshToken: refreshToken || null,
-      tokenType: extraParams.tokenType,
-      expiresAt,
+      refreshToken: refreshToken || null, // optional
+      accessToken: accessToken, // optional
+      expiresAt: expiresAt, // optional
+      tokenType: extraParams.tokenType, // optional
+      scopes: scopes, // optional
+      idToken: extraParams.id_token, // optional
+      sessionState: null, // optional
+      avatarUrl: profile.__json.images?.[0].url, // optional
     }
 
-    const result = {
-      accessToken,
-      refreshToken,
-      expiresAt,
-      tokenType: extraParams.tokenType,
-    }
+    const generatedUsername = await generateUsernameFromEmail(profile.emails[0].value)
+    const username = profile.id || generatedUsername
+    const fullName = parseFullName(profile.displayName)
 
-    // If user exists but doesn't have a google account, create one
-    if (user) {
-      await createOrUpdateSocialConnection(profile.emails[0].value, profile.provider, socialAccount)
-    }
+    const user = await createUserFromOAuth(
+      {
+        email: profile.emails[0].value,
+        firstName: fullName.first,
+        lastName: fullName.last,
+        avatarUrl: profile.__json.images?.[0].url,
+        username,
+      },
+      socialAccount,
+    )
 
-    if (!user) {
-      const generatedUsername = await generateUsernameFromEmail(profile.emails[0].value)
-      const username = profile.id || generatedUsername
-      const fullName = parseFullName(profile.displayName)
+    if (!user) throw new Error('Unable to create user.')
 
-      const newUser = await createUserFromOAuth({
-        userData: {
-          email: profile.emails[0].value,
-          firstName: fullName.first,
-          lastName: fullName.last,
-          imageUrl: profile.__json.images?.[0].url,
-          username,
-        },
-        ...socialAccount,
-      })
-
-      if (!newUser) throw new Error('Unable to create user.')
-
-      return { ...newUser, subscription: [] }
-    }
+    // Send email notification to user
+    // await sendEmail(newUser.email, 'Welcome to Stream Page', `Hello, ${profile._json.given_name}!`)
 
     // Returns Auth Session from database.
-    return { ...user }
+    return { ...user, subscription: [] }
   },
 )

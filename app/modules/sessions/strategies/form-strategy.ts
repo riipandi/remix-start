@@ -18,21 +18,9 @@ async function login(email: User['email'], password: Password['hash']): Promise<
   if (!isValid) return null
 
   // Limit the result for session security.
-  //   const result = {
-  //     accessToken: null,
-  //     refreshToken: null,
-  //     expiresAt: null,
-  //     tokenType: null,
-  //     user: {
-  //       id: user.id,
-  //       email: user.email,
-  //       firstName: user.firstName,
-  //       lastName: user.lastName,
-  //       avatarUrl: user.avatarUrl,
-  //     },
-  //   }
+  const { password: _password, ...userWithoutPassword } = user
 
-  return { ...user }
+  return userWithoutPassword
 }
 
 export const formStrategy = new FormStrategy(async (request) => {

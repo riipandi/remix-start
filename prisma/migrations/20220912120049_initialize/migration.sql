@@ -50,7 +50,7 @@ CREATE TABLE "social_accounts" (
     "access_token" TEXT,
     "expires_at" INTEGER,
     "token_type" TEXT,
-    "scope" TEXT,
+    "scopes" TEXT,
     "id_token" TEXT,
     "session_state" TEXT,
     "avatar_url" TEXT,
@@ -65,8 +65,8 @@ CREATE TABLE "notes" (
     "title" TEXT NOT NULL,
     "summary" TEXT NOT NULL,
     "body" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
 
     CONSTRAINT "notes_pkey" PRIMARY KEY ("id")
 );
