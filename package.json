@@ -31,6 +31,8 @@
     "@remix-run/serve": "^1.7.0",
     "@remix-run/server-runtime": "^1.7.0",
     "@upstash/redis": "^1.13.1",
+    "clsx": "^1.2.1",
+    "date-fns": "^2.29.2",
     "isbot": "^3.5.3",
     "parse-full-name": "^1.2.6",
     "plausible-tracker": "^0.3.8",

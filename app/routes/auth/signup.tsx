@@ -1,55 +1,49 @@
-import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
-import { Form, Link, useTransition, useSearchParams, useLoaderData, useSubmit } from '@remix-run/react'
-import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
+import { Form, Link, useActionData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
 import { json, redirect } from '@remix-run/node'
+import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 import { useForm } from 'react-hook-form'
 import clsx from 'clsx'
 
-import { LOGIN_URL, SESSION_ERROR_KEY } from '@/modules/sessions/constants.server'
-import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/modules/sessions/session.server'
 import { authenticator } from '@/modules/users/auth.server'
-import { getRedirectTo } from '@/utils/http'
+import { createVerificationToken, findUserByEmail, registerUser } from '@/modules/users/user.server'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
 
-export async function loader({ request }: LoaderArgs) {
-  // If the user is already authenticated redirect to /notes directly
-  await authenticator.isAuthenticated(request, { successRedirect: '/' })
-  const session = await sessionStorage.getSession(request.headers.get('Cookie'))
-  const error = session.get(SESSION_ERROR_KEY)
-
-  return json<any>({ error })
+export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+  const user = await authenticator.isAuthenticated(request)
+  if (user) return redirect('/')
+  return json({})
 }
 
 export async function action({ request }: ActionArgs) {
-  const redirectTo = getRedirectTo(request)
+  const formData: any = await request.formData()
+  const userExists = await findUserByEmail(formData.get('email'))
 
-  // we call the method with the name of the strategy we want to use and the
-  // request object, optionally we pass an object with the URLs we want the user
-  // to be redirected to after a success or a failure
-  const user = await authenticator.authenticate('user-pass', request, {
-    failureRedirect: `${LOGIN_URL}?redirectTo=${redirectTo}`,
+  if (userExists) {
+    return json({ error: { message: 'User already registered!' } }, { status: 400 })
+  }
+
+  const user = await registerUser({
+    email: formData.get('email'),
+    firstName: formData.get('firstname'),
+    lastName: formData.get('lastname'),
+    password: formData.get('password'),
   })
 
-  // manually get the session, store the user data, and commit the session
-  const session = await getSession(request.headers.get('Cookie'))
-  session.set(authenticator.sessionKey, user)
+  const verify = await createVerificationToken(user.id)
+  // const verifyLink = appUrl(`/auth/verification?id=${verify.id}&token=${verify.token}`)
 
-  const headers = new Headers({
-    'Set-Cookie': await commitSession(session, {
-      expires: setCookieExpires(),
-    }),
-  })
-
-  return redirect(redirectTo, { headers })
+  return redirect(`/auth/verify?id=${verify.id}`)
 }
 
-export const meta: MetaFunction = () => ({ title: 'Sign In' })
+export const meta: MetaFunction = () => ({ title: 'Sign Up' })
 
-export default function SignInPage() {
+export default function SignUp() {
   const transition = useTransition()
-  const loaderData = useLoaderData<typeof loader>()
   const [searchParams] = useSearchParams()
-  const redirectTo = searchParams.get('redirectTo') || '/notes'
+  const actionData = useActionData<typeof action>()
+  const redirectTo = searchParams.get('redirectTo') ?? undefined
+
   const {
     register,
     handleSubmit,
@@ -63,7 +57,7 @@ export default function SignInPage() {
     <main className="bg-white pt-6 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
       <div className="pb-0">
         <div className="mt-4">
-          <SocialAuth label={AuthLabel.SIGNIN} />
+          <SocialAuth label={AuthLabel.SIGNUP} />
         </div>
         <div className="relative p-2 mt-4">
           <div className="absolute inset-0 flex items-center">
@@ -75,19 +69,76 @@ export default function SignInPage() {
         </div>
       </div>
 
-      {loaderData?.error && (
+      <div className="hidden relative -mt-5 -mb-3 p-6">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-b border-gray-300" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-white px-4 text-sm text-gray-500">or signup with</span>
+        </div>
+      </div>
+
+      {actionData?.error?.message && (
         <div
           className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{loaderData?.error.message}</div>
+          <div>{actionData?.error.message}</div>
         </div>
       )}
 
       <Form method="post" className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <input type="hidden" name="redirectTo" value={redirectTo} />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="firstname" className="sr-only">
+              First name
+            </label>
+            <div className="mt-1">
+              <input
+                type="text"
+                autoFocus={true}
+                {...register('firstname', { required: true })}
+                disabled={transition.state === 'submitting'}
+                aria-invalid={errors.firstname ? true : undefined}
+                aria-describedby="firstname-error"
+                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                placeholder="First name"
+              />
+            </div>
+            {errors.firstname && (
+              <span className="pt-1 text-red-700 text-xs" id="firstname-error">
+                First name is required
+              </span>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="lastname" className="sr-only">
+              Last name
+            </label>
+            <div className="mt-1">
+              <input
+                type="text"
+                autoFocus={true}
+                {...register('lastname', { required: true })}
+                disabled={transition.state === 'submitting'}
+                aria-invalid={errors.lastname ? true : undefined}
+                aria-describedby="lastname-error"
+                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                placeholder="Last name"
+              />
+            </div>
+            {errors.lastname && (
+              <span className="pt-1 text-red-700 text-xs" id="lastname-error">
+                Last name is required
+              </span>
+            )}
+          </div>
+        </div>
+
         <div>
           <label htmlFor="email" className="sr-only">
             Email address
@@ -133,31 +184,40 @@ export default function SignInPage() {
           )}
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
+        <div>
+          <label htmlFor="invitecode" className="sr-only">
+            Invite Code
+          </label>
+          <div className="mt-1">
             <input
-              id="remember-me"
-              name="remember-me"
-              type="checkbox"
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              type="text"
+              autoFocus={true}
+              {...register('invitecode', { required: true })}
               disabled={transition.state === 'submitting'}
+              aria-invalid={errors.email ? true : undefined}
+              aria-describedby="invitecode-error"
+              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              placeholder="Invite code"
             />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-              Remember
-            </label>
           </div>
+          {errors.invitecode && (
+            <span className="pt-1 text-red-700 text-xs" id="invitecode-error">
+              Email is required
+            </span>
+          )}
+        </div>
 
-          <div className="text-sm">
-            <Link
-              className="font-medium text-primary-500 hover:text-primary-600"
-              to={{
-                pathname: '/auth/recovery',
-                search: searchParams.toString(),
-              }}
-            >
-              Forgot password?
-            </Link>
-          </div>
+        <p className="mt-4 px-0.5 text-gray-500 text-sm leading-6">
+          You currently need an invite code to sign up.
+          <br />
+          Don&rsquo;t have invite code?{' '}
+          <Link to="/waitlist" className="text-primary-500 font-medium hover:underline">
+            Get one here &rarr;
+          </Link>
+        </p>
+
+        <div className="py-1">
+          <div className="border-t border-dashed border-gray-300" />
         </div>
 
         <div>
@@ -192,17 +252,16 @@ export default function SignInPage() {
           </div>
         </div>
       </Form>
-
       <div className="mt-8 text-sm text-center text-gray-500">
-        Don't have an account?{' '}
+        Already have an account?{' '}
         <Link
           className="text-primary-500 font-medium hover:underline"
           to={{
-            pathname: '/auth/signup',
+            pathname: '/auth/signin',
             search: searchParams.toString(),
           }}
         >
-          Sign up
+          Sign in
         </Link>
       </div>
     </main>

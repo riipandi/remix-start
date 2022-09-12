@@ -25,17 +25,10 @@ async function login(email: User['email'], password: Password['hash']): Promise<
 export const formStrategy = new FormStrategy(async (request) => {
   let identity = request.form.get('email') as string
   let password = request.form.get('password') as string
-
-  // Validate credentials input
-  if (!identity || identity?.length === 0) throw new AuthorizationError('Email required!')
-  if (typeof identity !== 'string') throw new AuthorizationError('Email must be string!')
-
-  if (!password || password?.length === 0) throw new AuthorizationError('Password required!')
-  if (typeof password !== 'string') throw new AuthorizationError('Password must be string!')
-
   let user = await login(identity, password)
 
   if (!user) throw new AuthorizationError('Invalid credentials')
+  if (user && !user.emailVerifiedAt) throw new AuthorizationError('Your email not verified!')
 
   return { ...user }
 })

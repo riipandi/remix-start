@@ -24,9 +24,11 @@ specifiers:
   '@vitejs/plugin-react': ^2.1.0
   autoprefixer: ^10.4.8
   binode: ^1.0.5
+  clsx: ^1.2.1
   cookie: ^0.5.0
   cross-env: ^7.0.3
   csstype: ^3.1.0
+  date-fns: ^2.29.2
   eslint: ^8.23.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-tailwindcss: ^3.6.1
@@ -66,6 +68,8 @@ dependencies:
   '@remix-run/serve': 1.7.0_biqbaboplfbrettd7655fr4n2y
   '@remix-run/server-runtime': 1.7.0_biqbaboplfbrettd7655fr4n2y
   '@upstash/redis': 1.13.1
+  clsx: 1.2.1
+  date-fns: 2.29.2
   isbot: 3.5.3
   parse-full-name: 1.2.6
   plausible-tracker: 0.3.8
@@ -3104,6 +3108,11 @@ packages:
     engines: {node: '>=0.8'}
     dev: true
 
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
+
   /collection-visit/1.0.0:
     resolution: {integrity: sha512-lNkKvzEeMBBjUGHZ+q6z9pSJla0KWAQPvtzhEV9+iGyQYG+pBpl7xKDhxoNSOZH2hhv0v5k0y2yAM4o4SjoSkw==}
     engines: {node: '>=0.10.0'}
@@ -3299,6 +3308,11 @@ packages:
   /data-uri-to-buffer/3.0.1:
     resolution: {integrity: sha512-WboRycPNsVw3B3TL559F7kuBUM4d8CgMEvk6xEJlOp7OBPjt6G7z8WMWlD2rOFZLk6OYfFIUGsCOWzcQH9K2og==}
     engines: {node: '>= 6'}
+
+  /date-fns/2.29.2:
+    resolution: {integrity: sha512-0VNbwmWJDS/G3ySwFSJA3ayhbURMTJLtwM2DTxf9CWondCnh6DTNlO9JgRSq6ibf4eD0lfMJNBxUdEAHHix+bA==}
+    engines: {node: '>=0.11'}
+    dev: false
 
   /deasync/0.1.28:
     resolution: {integrity: sha512-QqLF6inIDwiATrfROIyQtwOQxjZuek13WRYZ7donU5wJPLoP67MnYxA6QtqdvdBy2mMqv5m3UefBVdJjvevOYg==}

@@ -72,11 +72,12 @@ model Session {
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+    id      String   @id @default(cuid())
+    userId  String   @map("user_id") @db.Uuid
+    token   String   @unique
+    expires DateTime @db.Timestamptz
 
-    @@unique([identifier, token])
+    @@unique([userId, token])
     @@map("verification_tokens")
 }
 

@@ -53,9 +53,12 @@ CREATE TABLE "sessions" (
 
 -- CreateTable
 CREATE TABLE "verification_tokens" (
-    "identifier" TEXT NOT NULL,
+    "id" TEXT NOT NULL,
+    "user_id" UUID NOT NULL,
     "token" TEXT NOT NULL,
-    "expires" TIMESTAMP(3) NOT NULL
+    "expires" TIMESTAMPTZ NOT NULL,
+
+    CONSTRAINT "verification_tokens_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -93,4 +96,4 @@ CREATE INDEX "sessions_user_id_idx" ON "sessions"("user_id");
 CREATE UNIQUE INDEX "verification_tokens_token_key" ON "verification_tokens"("token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "verification_tokens_identifier_token_key" ON "verification_tokens"("identifier", "token");
+CREATE UNIQUE INDEX "verification_tokens_user_id_token_key" ON "verification_tokens"("user_id", "token");
