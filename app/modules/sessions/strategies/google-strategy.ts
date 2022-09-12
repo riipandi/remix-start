@@ -3,6 +3,7 @@ import { GoogleStrategy } from 'remix-auth-google'
 
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
 import { generateUsernameFromEmail } from '@/modules/users/user.server'
+// import { sendWelcomeEmail } from '@/services/mailer/welcome-email.server'
 import { appUrl } from '@/utils/http'
 
 // Validate envars value.
@@ -50,8 +51,9 @@ export const googleStrategy = new GoogleStrategy(
 
     if (!user) throw new Error('Unable to create user.')
 
-    // Send email notification to user
-    // await sendEmail(newUser.email, 'Welcome to Prismix', `Hello, ${profile._json.given_name}!`)
+    // Send email notification to user.
+    // const loginLink = appUrl(`/auth/signin`)
+    // await sendWelcomeEmail(user.email, user.firstName, loginLink)
 
     // Returns Auth Session from database.
     return { ...user }

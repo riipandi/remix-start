@@ -4,6 +4,7 @@ import { parseFullName } from 'parse-full-name'
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
 import { SpotifyStrategy } from '@/modules/sessions/strategies/spotify-oauth'
 import { generateUsernameFromEmail } from '@/modules/users/user.server'
+// import { sendWelcomeEmail } from '@/services/mailer/welcome-email.server'
 import { appUrl } from '@/utils/http'
 
 // Validate envars value.
@@ -58,7 +59,8 @@ export const spotifyStrategy = new SpotifyStrategy(
     if (!user) throw new Error('Unable to create user.')
 
     // Send email notification to user
-    // await sendEmail(newUser.email, 'Welcome to Prismix', `Hello, ${profile._json.given_name}!`)
+    // const loginLink = appUrl(`/auth/signin`)
+    // await sendWelcomeEmail(user.email, user.firstName, loginLink)
 
     // Returns Auth Session from database.
     return { ...user }

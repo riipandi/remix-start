@@ -3,10 +3,10 @@ import { Form, Link, useActionData, useLoaderData } from '@remix-run/react'
 import { CheckCircleIcon, ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { json, redirect } from '@remix-run/node'
 
-import { findUserById, findVerificationTokenById } from '@/modules/users/user.server'
-import { authenticator } from '@/modules/users/auth.server'
-import { sendEmail } from '@/services/mailer/mailer.server'
 import { appUrl } from '@/utils/http'
+import { authenticator } from '@/modules/users/auth.server'
+import { findUserById, findVerificationTokenById } from '@/modules/users/user.server'
+import { sendVerificationEmail } from '@/services/mailer/verification-email.server'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -38,7 +38,7 @@ export async function action({ request }: ActionArgs) {
     return json({ error: { message: 'User not registered!' } }, { status: 400 })
   }
 
-  await sendEmail(user.email, 'Welcome to Prismix', `Hello, ${verifyLink}`)
+  await sendVerificationEmail(user.email, user.firstName, verifyLink)
 
   return json({ success: { message: 'Verification email sent!' } }, { status: 200 })
 }
