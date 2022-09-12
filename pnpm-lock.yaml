@@ -43,6 +43,7 @@ specifiers:
   react: ^18.2.0
   react-device-detect: ^2.2.2
   react-dom: ^18.2.0
+  react-hook-form: ^7.35.0
   react-hot-toast: ^2.3.0
   remix-auth: ^3.2.2
   remix-auth-form: ^1.2.0
@@ -71,6 +72,7 @@ dependencies:
   react: 18.2.0
   react-device-detect: 2.2.2_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
+  react-hook-form: 7.35.0_react@18.2.0
   react-hot-toast: 2.3.0_vt6aeitzauirmcdhimiad2yjxy
   remix-auth: 3.2.2_iwkoj4i7onot5qamk6olkm5qze
   remix-auth-form: 1.2.0_iwkoj4i7onot5qamk6olkm5qze
@@ -7168,6 +7170,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+
+  /react-hook-form/7.35.0_react@18.2.0:
+    resolution: {integrity: sha512-9CYdOed+Itbiu5VMVxW0PK9mBR3f0gDGJcZEyUSm0eJbDymQ913TRs2gHcQZZmfTC+rtxyDFRuelMxx/+xwMcw==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /react-hot-toast/2.3.0_vt6aeitzauirmcdhimiad2yjxy:
     resolution: {integrity: sha512-/RxV+bfjld7tSJR1SCLzMAXgFuNW7fCpK6+vbYqfmbGSWcqTMz2rizrvfWKvtcPH5HK0NqxmBaC5SrAy1F42zA==}

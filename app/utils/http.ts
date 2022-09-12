@@ -44,7 +44,3 @@ export function getRedirectTo(request: Request): string {
   const redirectToParam = url.searchParams.get('redirectTo')
   return safeRedirect(redirectToParam)
 }
-
-export function validateEmail(email: unknown): email is string {
-  return typeof email === 'string' && email.length > 3 && email.includes('@')
-}

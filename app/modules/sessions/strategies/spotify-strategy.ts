@@ -25,12 +25,10 @@ export const spotifyStrategy = new SpotifyStrategy(
     scope: scopes,
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
-    console.log('ACCESS_TOKEN', accessToken)
-    console.log('REFRESH_TOKEN', refreshToken)
-    console.log('EXTRA_PARAMS', extraParams)
-    console.log('PROFILE', profile)
-
     const expiresAt = Date.now() + extraParams.expiresIn * 1000
+    const fullName = parseFullName(profile.displayName)
+    const generatedUsername = await generateUsernameFromEmail(profile.emails[0].value)
+    const username = profile.id || generatedUsername
 
     const socialAccount = {
       type: 'oauth',
@@ -45,10 +43,6 @@ export const spotifyStrategy = new SpotifyStrategy(
       sessionState: null, // optional
       avatarUrl: profile.__json.images?.[0].url, // optional
     }
-
-    const generatedUsername = await generateUsernameFromEmail(profile.emails[0].value)
-    const username = profile.id || generatedUsername
-    const fullName = parseFullName(profile.displayName)
 
     const user = await createUserFromOAuth(
       {

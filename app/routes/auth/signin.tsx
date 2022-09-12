@@ -1,9 +1,8 @@
-import { useRef } from 'react'
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
-import { Form, Link, useTransition, useSearchParams, useLoaderData } from '@remix-run/react'
+import { Form, Link, useTransition, useSearchParams, useLoaderData, useSubmit } from '@remix-run/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { redirect } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
+import { useForm } from 'react-hook-form'
 
 import { LOGIN_URL, SESSION_ERROR_KEY } from '@/modules/sessions/constants.server'
 import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/modules/sessions/session.server'
@@ -27,7 +26,7 @@ export async function action({ request }: ActionArgs) {
   // request object, optionally we pass an object with the URLs we want the user
   // to be redirected to after a success or a failure
   const user = await authenticator.authenticate('user-pass', request, {
-    failureRedirect: `${LOGIN_URL}`,
+    failureRedirect: `${LOGIN_URL}?redirectTo=${redirectTo}`,
   })
 
   // manually get the session, store the user data, and commit the session
@@ -50,9 +49,16 @@ export default function SignInPage() {
   const loaderData = useLoaderData<typeof loader>()
   const [searchParams] = useSearchParams()
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+  const submit = useSubmit()
+
+  const onSubmit = (data: any) => submit(data, { method: 'post' })
+
   const redirectTo = searchParams.get('redirectTo') || '/notes'
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
 
   return (
     <div className="mx-auto w-full max-w-md px-8">
@@ -69,7 +75,7 @@ export default function SignInPage() {
         </div>
       )}
 
-      <Form method="post" className="space-y-6" autoComplete="off">
+      <Form method="post" className="space-y-6" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div>
           <label htmlFor="email" className="block font-medium text-sm text-gray-700">
@@ -77,20 +83,16 @@ export default function SignInPage() {
           </label>
           <div className="mt-1">
             <input
-              ref={emailRef}
-              id="email"
-              required
               autoFocus={true}
-              name="email"
-              type="email"
+              {...register('email', { required: true })}
               disabled={transition.state === 'submitting'}
-              aria-invalid={loaderData?.error?.identity ? true : undefined}
+              aria-invalid={errors.identity ? true : undefined}
               aria-describedby="email-error"
               className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
             />
-            {loaderData?.error?.identity && (
-              <span className="pt-1 text-red-700" id="identity-error">
-                {loaderData.errors.identity}
+            {errors.email && (
+              <span className="pt-1 text-red-700" id="email-error">
+                Email is required
               </span>
             )}
           </div>
@@ -102,18 +104,16 @@ export default function SignInPage() {
           </label>
           <div className="mt-1">
             <input
-              id="password"
-              ref={passwordRef}
-              name="password"
               type="password"
+              {...register('password', { required: true })}
               disabled={transition.state === 'submitting'}
-              aria-invalid={loaderData?.error?.password ? true : undefined}
+              aria-invalid={errors.password ? true : undefined}
               aria-describedby="password-error"
               className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
             />
-            {loaderData?.error?.password && (
+            {errors.password && (
               <span className="pt-1 text-red-700" id="password-error">
-                {loaderData.errors.password}
+                Password is required
               </span>
             )}
           </div>
