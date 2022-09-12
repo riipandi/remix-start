@@ -9,11 +9,11 @@ import { useUser } from '@/hooks/useUser'
 
 export async function loader({ request }: LoaderArgs) {
   const { pathname } = new URL(request.url)
-  let { id: userId } = await authenticator.isAuthenticated(request, {
+  let user = await authenticator.isAuthenticated(request, {
     failureRedirect: `${LOGIN_URL}?redirectTo=${pathname}`,
   })
 
-  const noteListItems = await getNoteListItems({ userId })
+  const noteListItems = await getNoteListItems({ userId: user.id })
 
   return json({ noteListItems })
 }

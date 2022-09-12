@@ -18,8 +18,8 @@ model User {
     lastName        String          @map("lastname")
     avatarUrl       String?         @map("avatar_url")
     emailVerifiedAt DateTime?       @map("email_verified_at")
-    createdAt       DateTime        @default(now()) @map("created_at")
-    updatedAt       DateTime        @updatedAt @map("updated_at")
+    createdAt       DateTime?       @default(now()) @map("created_at")
+    updatedAt       DateTime?       @updatedAt @map("updated_at")
     password        Password?
     socialAccounts  SocialAccount[]
     sessions        Session[]
@@ -30,7 +30,7 @@ model User {
 
 model Password {
     hash   String
-    userId String @unique @map("user_id")
+    userId String @unique @map("user_id") @db.Uuid
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
     @@map("passwords")
@@ -38,7 +38,7 @@ model Password {
 
 model Session {
     id          String    @id
-    userId      String    @map("user_id")
+    userId      String    @map("user_id") @db.Uuid
     sessionData Json      @map("session_data") @db.Json
     expires     Int?      @db.Integer
     expiresAt   DateTime? @map("expires_at") @db.Timestamptz
@@ -50,23 +50,30 @@ model Session {
     @@map("sessions")
 }
 
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+    @@map("verification_tokens")
+}
+
 model SocialAccount {
-    id                    String  @id @default(cuid())
-    userId                String  @map("user_id")
-    accountType           String  @map("account_type")
-    provider              String
-    providerAccountId     String  @map("provider_account_id")
-    refreshToken          String? @map("refresh_token")
-    refreshTokenExpiresIn Int?    @map("refresh_token_expires_in")
-    accessToken           String? @map("access_token")
-    expiresAt             Int?    @map("expires_at")
-    tokenType             String? @map("token_type")
-    scope                 String?
-    idToken               String? @map("id_token")
-    sessionState          String? @map("session_state")
-    oAuthTokenSecret      String? @map("oauth_token_secret")
-    oAuthToken            String? @map("oauth_token")
-    user                  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id                String  @id @default(cuid())
+    userId            String  @map("user_id") @db.Uuid
+    type              String
+    provider          String
+    providerAccountId String  @map("provider_account_id")
+    refreshToken      String? @map("refresh_token") @db.Text
+    accessToken       String? @map("access_token") @db.Text
+    expiresAt         Int?    @map("expires_at")
+    tokenType         String? @map("token_type")
+    scope             String?
+    idToken           String? @map("id_token") @db.Text
+    sessionState      String? @map("session_state")
+    avatarUrl         String? @map("avatar_url")
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
     @@index([userId])
@@ -74,14 +81,14 @@ model SocialAccount {
 }
 
 model Note {
-    id        String   @id @default(cuid())
-    userId    String   @map("user_id")
+    id        String    @id @default(cuid())
+    userId    String    @map("user_id") @db.Uuid
     title     String
     summary   String
     body      String
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt DateTime? @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt @map("updated_at")
+    user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
     @@map("notes")
 }

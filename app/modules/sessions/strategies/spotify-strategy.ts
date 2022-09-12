@@ -68,10 +68,12 @@ export const spotifyStrategy = new SpotifyStrategy(
         ...socialAccount,
       })
 
-      return { ...result, user: newUser }
+      if (!newUser) throw new Error('Unable to create user.')
+
+      return { ...newUser, subscription: [] }
     }
 
-    // Taken from original sample.
-    return { ...result, user }
+    // Returns Auth Session from database.
+    return { ...user }
   },
 )

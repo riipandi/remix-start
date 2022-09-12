@@ -1,7 +1,8 @@
-import type { User, SocialAccount } from '@prisma/client'
 import { prisma } from '@/db.server'
+import type { User, SocialAccount } from '@prisma/client'
+import { findUserByEmail } from '@/modules/users/user.server'
 
-export async function createOrUpdateSocialConnection(email: User['email'], provider: string, socialAccountData: any) {
+export async function createOrUpdateSocialConnection(email: User['email'], provider: string, socialAccount: any) {
   const user = (await prisma.user.findFirst({ where: { email } })) as User
   const userAccount = (await prisma.socialAccount.findFirst({ where: { provider, userId: user.id } })) as SocialAccount
 
@@ -9,7 +10,7 @@ export async function createOrUpdateSocialConnection(email: User['email'], provi
     return await prisma.socialAccount.create({
       data: {
         user: { connect: { id: user.id } },
-        ...socialAccountData,
+        ...socialAccount,
       },
     })
   }
@@ -17,26 +18,18 @@ export async function createOrUpdateSocialConnection(email: User['email'], provi
   return userAccount
 }
 
-export async function createUserFromOAuth(data: any) {
-  return await prisma.user.create({
-    data: {
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      username: data.username,
-      avatarUrl: data.imageUrl,
-      emailVerifiedAt: new Date(),
-      socialAccounts: {
-        create: {
-          providerAccountId: data.providerAccountId,
-          refreshToken: data.refreshToken,
-          accessToken: data.accessToken,
-          accountType: data.accountType,
-          expiresAt: data.expiresAt,
-          tokenType: data.tokenType,
-          provider: data.provider,
-        },
-      },
-    },
-  })
+export async function createUserFromOAuth(user: User, socialAccount: SocialAccount) {
+  const existUser = await findUserByEmail(user.email)
+
+  if (existUser) {
+    // If user exists but doesn't have a social account, create one.
+    await createOrUpdateSocialConnection(user.email, socialAccount.provider, socialAccount)
+    return existUser
+  }
+
+  const newUser = await prisma.user.create({ data: user })
+  const socialConnection = await createOrUpdateSocialConnection(user.email, socialAccount.provider, socialAccount)
+  if (!socialConnection) throw new Error('Unable to create social connection.')
+
+  return newUser
 }
