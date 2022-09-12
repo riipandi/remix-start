@@ -51,6 +51,10 @@ export async function createVerificationToken(userId: User['id']) {
   })
 }
 
+export async function findVerificationTokenById(id: VerificationToken['id']) {
+  return prisma.verificationToken.findUnique({ where: { id } })
+}
+
 export async function findVerificationToken(id: VerificationToken['id'], token: VerificationToken['token']) {
   return prisma.verificationToken.findFirst({
     where: { AND: [{ id }, { token }] },

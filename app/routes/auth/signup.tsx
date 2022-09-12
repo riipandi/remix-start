@@ -8,6 +8,8 @@ import clsx from 'clsx'
 import { authenticator } from '@/modules/users/auth.server'
 import { createVerificationToken, findUserByEmail, registerUser } from '@/modules/users/user.server'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
+import { sendEmail } from '@/services/mailer/mailer.server'
+import { appUrl } from '@/utils/http'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const user = await authenticator.isAuthenticated(request)
@@ -31,7 +33,10 @@ export async function action({ request }: ActionArgs) {
   })
 
   const verify = await createVerificationToken(user.id)
-  // const verifyLink = appUrl(`/auth/verification?id=${verify.id}&token=${verify.token}`)
+  const verifyLink = appUrl(`/auth/verification?id=${verify.id}&token=${verify.token}`)
+
+  // Send email notification to user.
+  await sendEmail(user.email, 'Welcome to Prismix', `Hello, ${verifyLink}`)
 
   return redirect(`/auth/verify?id=${verify.id}`)
 }

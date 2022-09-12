@@ -17,6 +17,7 @@ specifiers:
   '@tailwindcss/typography': ^0.5.7
   '@types/eslint': ^8.4.6
   '@types/node': ^18.7.16
+  '@types/nodemailer': ^6.4.5
   '@types/parse-full-name': ^1.2.2
   '@types/react': ^18.0.18
   '@types/react-dom': ^18.0.6
@@ -36,6 +37,7 @@ specifiers:
   husky: ^8.0.1
   isbot: ^3.5.3
   lint-staged: ^13.0.3
+  nodemailer: ^6.7.8
   npm-run-all: ^4.1.5
   parse-full-name: ^1.2.6
   plausible-tracker: ^0.3.8
@@ -71,6 +73,7 @@ dependencies:
   clsx: 1.2.1
   date-fns: 2.29.2
   isbot: 3.5.3
+  nodemailer: 6.7.8
   parse-full-name: 1.2.6
   plausible-tracker: 0.3.8
   react: 18.2.0
@@ -94,6 +97,7 @@ devDependencies:
   '@tailwindcss/typography': 0.5.7_tailwindcss@3.1.8
   '@types/eslint': 8.4.6
   '@types/node': 18.7.16
+  '@types/nodemailer': 6.4.5
   '@types/parse-full-name': 1.2.2
   '@types/react': 18.0.18
   '@types/react-dom': 18.0.6
@@ -2215,6 +2219,12 @@ packages:
 
   /@types/node/8.10.66:
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
+    dev: true
+
+  /@types/nodemailer/6.4.5:
+    resolution: {integrity: sha512-zuP3nBRQHI6M2PkXnGGy1Ww4VB+MyYHGgnfV2T+JR9KLkeWqPJuyVUgLpKXuFnA/b7pZaIDFh2sV4759B7jK1g==}
+    dependencies:
+      '@types/node': 18.7.16
     dev: true
 
   /@types/parse-full-name/1.2.2:
@@ -6539,6 +6549,11 @@ packages:
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
     dev: true
+
+  /nodemailer/6.7.8:
+    resolution: {integrity: sha512-2zaTFGqZixVmTxpJRCFC+Vk5eGRd/fYtvIR+dl5u9QXLTQWGIf48x/JXvo58g9sa0bU6To04XUv554Paykum3g==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /normalize-package-data/2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}

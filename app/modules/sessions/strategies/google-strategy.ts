@@ -51,7 +51,7 @@ export const googleStrategy = new GoogleStrategy(
     if (!user) throw new Error('Unable to create user.')
 
     // Send email notification to user
-    // await sendEmail(newUser.email, 'Welcome to Stream Page', `Hello, ${profile._json.given_name}!`)
+    // await sendEmail(newUser.email, 'Welcome to Prismix', `Hello, ${profile._json.given_name}!`)
 
     // Returns Auth Session from database.
     return { ...user }
