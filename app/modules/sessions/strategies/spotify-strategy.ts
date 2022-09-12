@@ -1,12 +1,10 @@
 import invariant from 'tiny-invariant'
-import { SpotifyStrategy } from 'remix-auth-spotify'
-import { sessionStorage } from '@/modules/sessions/session.server'
 import { parseFullName } from 'parse-full-name'
 
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
+import { SpotifyStrategy } from '@/modules/sessions/strategies/spotify-oauth'
 import { generateUsernameFromEmail } from '@/modules/users/user.server'
 import { appUrl } from '@/utils/http'
-import type { SocialAccount } from '@prisma/client'
 
 // Validate envars value.
 invariant(process.env.SPOTIFY_CLIENT_ID, 'SPOTIFY_CLIENT_ID must be set')
@@ -25,10 +23,13 @@ export const spotifyStrategy = new SpotifyStrategy(
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     callbackURL: appUrl(`/auth/spotify/callback`),
     scope: scopes,
-    sessionStorage,
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
-    console.log('profile', profile)
+    console.log('ACCESS_TOKEN', accessToken)
+    console.log('REFRESH_TOKEN', refreshToken)
+    console.log('EXTRA_PARAMS', extraParams)
+    console.log('PROFILE', profile)
+
     const expiresAt = Date.now() + extraParams.expiresIn * 1000
 
     const socialAccount = {
@@ -66,6 +67,6 @@ export const spotifyStrategy = new SpotifyStrategy(
     // await sendEmail(newUser.email, 'Welcome to Stream Page', `Hello, ${profile._json.given_name}!`)
 
     // Returns Auth Session from database.
-    return { ...user, subscription: [] }
+    return { ...user }
   },
 )

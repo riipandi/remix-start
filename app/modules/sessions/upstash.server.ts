@@ -7,7 +7,7 @@ import { expiresToSeconds, getSessionId } from '@/modules/sessions/session.serve
 export function createUpstashSessionStorage({ cookie }: { cookie: CookieOptions }) {
   return createSessionStorage({
     cookie,
-    async createData(data, expires: any) {
+    async createData(data, expires) {
       const id = getSessionId()
 
       // Call Upstash Redis HTTP API. Set expiration according to the cookie `expired property.
@@ -24,7 +24,7 @@ export function createUpstashSessionStorage({ cookie }: { cookie: CookieOptions 
         return null
       }
     },
-    async updateData(id, data, expires: any) {
+    async updateData(id, data, expires) {
       try {
         const ex = expiresToSeconds(expires)
         await redis.set(id, data, { ex })

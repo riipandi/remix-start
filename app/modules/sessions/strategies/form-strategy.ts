@@ -3,9 +3,8 @@ import { AuthorizationError } from 'remix-auth'
 import { FormStrategy } from 'remix-auth-form'
 import { verify } from '@node-rs/bcrypt'
 import { prisma } from '@/db.server'
-import type { AuthSession } from '@/modules/users/auth.server'
 
-async function login(email: User['email'], password: Password['hash']): Promise<AuthSession | null> {
+async function login(email: User['email'], password: Password['hash']): Promise<User | null> {
   const user = await prisma.user.findUnique({
     include: { password: true },
     where: { email },

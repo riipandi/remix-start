@@ -20,6 +20,25 @@ CREATE TABLE "passwords" (
 );
 
 -- CreateTable
+CREATE TABLE "social_accounts" (
+    "id" TEXT NOT NULL,
+    "user_id" UUID NOT NULL,
+    "type" TEXT NOT NULL,
+    "provider" TEXT NOT NULL,
+    "provider_account_id" TEXT NOT NULL,
+    "refresh_token" TEXT,
+    "access_token" TEXT,
+    "expires_at" INTEGER,
+    "token_type" TEXT,
+    "scopes" TEXT,
+    "id_token" TEXT,
+    "session_state" TEXT,
+    "avatar_url" TEXT,
+
+    CONSTRAINT "social_accounts_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "sessions" (
     "id" TEXT NOT NULL,
     "user_id" UUID NOT NULL,
@@ -37,25 +56,6 @@ CREATE TABLE "verification_tokens" (
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "social_accounts" (
-    "id" TEXT NOT NULL,
-    "user_id" UUID NOT NULL,
-    "type" TEXT NOT NULL,
-    "provider" TEXT NOT NULL,
-    "provider_account_id" TEXT NOT NULL,
-    "refresh_token" TEXT,
-    "access_token" TEXT,
-    "expires_at" INTEGER,
-    "token_type" TEXT,
-    "scopes" TEXT,
-    "id_token" TEXT,
-    "session_state" TEXT,
-    "avatar_url" TEXT,
-
-    CONSTRAINT "social_accounts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -81,6 +81,12 @@ CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 CREATE UNIQUE INDEX "passwords_user_id_key" ON "passwords"("user_id");
 
 -- CreateIndex
+CREATE INDEX "social_accounts_user_id_idx" ON "social_accounts"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "social_accounts_provider_provider_account_id_key" ON "social_accounts"("provider", "provider_account_id");
+
+-- CreateIndex
 CREATE INDEX "sessions_user_id_idx" ON "sessions"("user_id");
 
 -- CreateIndex
@@ -88,9 +94,3 @@ CREATE UNIQUE INDEX "verification_tokens_token_key" ON "verification_tokens"("to
 
 -- CreateIndex
 CREATE UNIQUE INDEX "verification_tokens_identifier_token_key" ON "verification_tokens"("identifier", "token");
-
--- CreateIndex
-CREATE INDEX "social_accounts_user_id_idx" ON "social_accounts"("user_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "social_accounts_provider_provider_account_id_key" ON "social_accounts"("provider", "provider_account_id");

@@ -12,24 +12,9 @@ export interface AuthSession extends User {
   //   subscription: Subscription[]
 }
 
-export interface UserSession {
-  accessToken?: string | null
-  refreshToken?: string | null
-  expiresAt?: number | null
-  tokenType?: string | null
-
-  user: {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-    avatarUrl?: string | null
-  }
-}
-
 // Create an instance of the authenticator, pass a generic with
 // what strategies will return and will store in the session.
-export const authenticator = new Authenticator<AuthSession>(sessionStorage, {
+export const authenticator = new Authenticator<AuthSession | null>(sessionStorage, {
   sessionKey: SESSION_KEY, // keep in sync
   sessionErrorKey: SESSION_ERROR_KEY, // keep in sync
   throwOnError: false,
@@ -37,5 +22,5 @@ export const authenticator = new Authenticator<AuthSession>(sessionStorage, {
 
 // Register the authentication strategies
 authenticator.use(formStrategy, 'user-pass')
-authenticator.use(googleStrategy)
-authenticator.use(spotifyStrategy)
+authenticator.use(googleStrategy, 'google')
+authenticator.use(spotifyStrategy, 'spotify')

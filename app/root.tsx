@@ -14,7 +14,6 @@ interface LoaderData {
 
 export async function loader({ request }: LoaderArgs) {
   let user = await authenticator.isAuthenticated(request)
-  console.log('ROOT', user)
 
   return json<LoaderData>({ user })
 }

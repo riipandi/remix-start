@@ -47,7 +47,7 @@ specifiers:
   remix-auth: ^3.2.2
   remix-auth-form: ^1.2.0
   remix-auth-google: ^1.1.0
-  remix-auth-spotify: ^1.2.5
+  remix-auth-oauth2: ^1.3.0
   remix-utils: ^3.3.0
   tailwindcss: ^3.1.8
   tiny-invariant: ^1.2.0
@@ -75,7 +75,7 @@ dependencies:
   remix-auth: 3.2.2_iwkoj4i7onot5qamk6olkm5qze
   remix-auth-form: 1.2.0_iwkoj4i7onot5qamk6olkm5qze
   remix-auth-google: 1.1.0_uisoknjrubkchd3ceqmxoc4lha
-  remix-auth-spotify: 1.2.5_iwkoj4i7onot5qamk6olkm5qze
+  remix-auth-oauth2: 1.3.0_iwkoj4i7onot5qamk6olkm5qze
   remix-utils: 3.3.0_hbxl3cbfqotzsbyfw2evmj44wu
   tiny-invariant: 1.2.0
 
@@ -7410,19 +7410,6 @@ packages:
       debug: 4.3.4
       remix-auth: 3.2.2_iwkoj4i7onot5qamk6olkm5qze
       uuid: 8.3.2
-    transitivePeerDependencies:
-      - '@remix-run/react'
-      - supports-color
-    dev: false
-
-  /remix-auth-spotify/1.2.5_iwkoj4i7onot5qamk6olkm5qze:
-    resolution: {integrity: sha512-7UnUIwVoQhVf0UKrXLK43u5lh8KTopUwQfSxoFQh+aqwP6PNT0YASXKA9voAl1hmR/UPmT162b4WHO5vZEeuPw==}
-    peerDependencies:
-      '@remix-run/server-runtime': ^1.1.3
-    dependencies:
-      '@remix-run/server-runtime': 1.7.0_biqbaboplfbrettd7655fr4n2y
-      remix-auth: 3.2.2_iwkoj4i7onot5qamk6olkm5qze
-      remix-auth-oauth2: 1.3.0_iwkoj4i7onot5qamk6olkm5qze
     transitivePeerDependencies:
       - '@remix-run/react'
       - supports-color

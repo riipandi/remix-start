@@ -54,6 +54,6 @@ export const googleStrategy = new GoogleStrategy(
     // await sendEmail(newUser.email, 'Welcome to Stream Page', `Hello, ${profile._json.given_name}!`)
 
     // Returns Auth Session from database.
-    return { ...user, subscription: [] }
+    return { ...user }
   },
 )

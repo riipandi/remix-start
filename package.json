@@ -41,7 +41,7 @@
     "remix-auth": "^3.2.2",
     "remix-auth-form": "^1.2.0",
     "remix-auth-google": "^1.1.0",
-    "remix-auth-spotify": "^1.2.5",
+    "remix-auth-oauth2": "^1.3.0",
     "remix-utils": "^3.3.0",
     "tiny-invariant": "^1.2.0"
   },
