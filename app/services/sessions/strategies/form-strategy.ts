@@ -1,11 +1,11 @@
-import { verify } from '@node-rs/bcrypt'
+import bcrypt from '@node-rs/bcrypt'
 import type { Password, User } from '@prisma/client'
 import { AuthorizationError } from 'remix-auth'
 import { FormStrategy } from 'remix-auth-form'
 
 import { prisma } from '@/services/db.server'
 
-async function login(email: User['email'], password: Password['hash']): Promise<User | null> {
+export async function login(email: User['email'], password: Password['hash']): Promise<User | null> {
   const user = await prisma.user.findUnique({
     include: { password: true },
     where: { email },
@@ -13,7 +13,7 @@ async function login(email: User['email'], password: Password['hash']): Promise<
 
   if (!user || !user.password) return null
 
-  const isValid = await verify(password, user.password.hash)
+  const isValid = await bcrypt.compare(password, user.password.hash)
 
   if (!isValid) return null
 
@@ -23,9 +23,9 @@ async function login(email: User['email'], password: Password['hash']): Promise<
   return userWithoutPassword
 }
 
-export const formStrategy = new FormStrategy(async (request) => {
-  let identity = request.form.get('email') as string
-  let password = request.form.get('password') as string
+export const formStrategy = new FormStrategy(async ({ form }) => {
+  let identity = form.get('email') as string
+  let password = form.get('password') as string
   let user = await login(identity, password)
 
   if (!user) throw new AuthorizationError('Invalid credentials')

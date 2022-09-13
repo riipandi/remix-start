@@ -1,24 +1,25 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+// import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, useLoaderData, useSearchParams } from '@remix-run/react'
-import { withYup } from '@remix-validated-form/with-yup'
+import { withZod } from '@remix-validated-form/with-zod'
 import { ValidatedForm, validationError } from 'remix-validated-form'
-import * as yup from 'yup'
+import { z } from 'zod'
 
 import { authenticator } from '@/modules/users/auth.server'
 import { LOGIN_URL, SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
 import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/services/sessions/session.server'
+import { login } from '@/services/sessions/strategies/form-strategy'
 
 import { SubmitButton } from '@/components/Buttons'
 import { EmailInput, PasswordInput } from '@/components/Input'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
 
-// Using yup in this example, but you can use anything
-const validator = withYup(
-  yup.object({
-    email: yup.string().email().label('Email').required(),
-    password: yup.string().label('Password').required(),
+// Using zod in this example, but you can use anything
+export const validator = withZod(
+  z.object({
+    email: z.string().min(1, { message: 'Email is required' }).email('Must be a valid email'),
+    password: z.string().min(1, { message: 'Password is required' }),
   }),
 )
 
@@ -37,15 +38,16 @@ export async function action({ request }: ActionArgs) {
   if (fieldValues.error) return validationError(fieldValues.error)
 
   // Do something with correctly typed values;
-  console.log('ACTION', fieldValues.data)
+  const { email, password } = fieldValues.data
+  const user = await login(email, password)
   const redirectTo = '/'
 
   // we call the method with the name of the strategy we want to use and the
   // request object, optionally we pass an object with the URLs we want the user
   // to be redirected to after a success or a failure
-  const user = await authenticator.authenticate('user-pass', request, {
-    failureRedirect: `${LOGIN_URL}?redirectTo=${redirectTo}`,
-  })
+  //   const user = await authenticator.authenticate('user-pass', request, {
+  //     failureRedirect: `${LOGIN_URL}?redirectTo=${redirectTo}`,
+  //   })
 
   // manually get the session, store the user data, and commit the session
   const session = await getSession(request.headers.get('Cookie'))
@@ -117,7 +119,6 @@ export default function SignInPage() {
               name="remember-me"
               type="checkbox"
               className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              //   disabled={isSubmitting}
             />
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
               Remember
