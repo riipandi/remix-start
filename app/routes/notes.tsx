@@ -2,7 +2,7 @@ import type { LoaderArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, NavLink, Outlet, useLoaderData } from '@remix-run/react'
 
-import { LOGIN_URL } from '@/modules/sessions/constants.server'
+import { LOGIN_URL } from '@/services/sessions/constants.server'
 import { getNoteListItems } from '@/modules/notes/note.server'
 import { authenticator } from '@/modules/users/auth.server'
 import { useUser } from '@/hooks/useUser'

@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs } from '@remix-run/node'
 import { authenticator } from '@/modules/users/auth.server'
-import { LOGIN_URL } from '@/modules/sessions/constants.server'
+import { LOGIN_URL } from '@/services/sessions/constants.server'
 
 export async function action({ request }: ActionArgs) {
   await authenticator.logout(request, { redirectTo: LOGIN_URL })

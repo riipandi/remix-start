@@ -3,9 +3,9 @@ import { redirect } from '@remix-run/node'
 import { Form, useSubmit } from '@remix-run/react'
 import { useForm } from 'react-hook-form'
 
-import { LOGIN_URL } from '@/modules/sessions/constants.server'
-import { createNote } from '@/modules/notes/note.server'
+import { LOGIN_URL } from '@/services/sessions/constants.server'
 import { authenticator } from '@/modules/users/auth.server'
+import { createNote } from '@/modules/notes/note.server'
 
 export async function action({ request }: ActionArgs) {
   const { pathname } = new URL(request.url)
@@ -37,7 +37,7 @@ export default function NewNotePage() {
   const onSubmit = (data: any) => submit(data, { method: 'post' })
 
   return (
-    <Form method="post" className="flex flex-col gap-4 w-full" onSubmit={handleSubmit(onSubmit)}>
+    <Form method="post" reloadDocument className="flex flex-col gap-4 w-full" onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label className="flex w-full flex-col gap-1">
           <span>Title: </span>

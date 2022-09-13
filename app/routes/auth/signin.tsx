@@ -5,8 +5,8 @@ import { json, redirect } from '@remix-run/node'
 import { useForm } from 'react-hook-form'
 import clsx from 'clsx'
 
-import { LOGIN_URL, SESSION_ERROR_KEY } from '@/modules/sessions/constants.server'
-import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/modules/sessions/session.server'
+import { LOGIN_URL, SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
+import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/services/sessions/session.server'
 import { authenticator } from '@/modules/users/auth.server'
 import { getRedirectTo } from '@/utils/http'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
@@ -86,7 +86,7 @@ export default function SignInPage() {
         </div>
       )}
 
-      <Form method="post" className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <Form method="post" reloadDocument className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div>
           <label htmlFor="email" className="sr-only">

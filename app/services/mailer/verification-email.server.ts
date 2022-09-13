@@ -32,18 +32,19 @@ const mailMessage = (name: string, verifyLink: string) => {
 }
 
 export async function sendVerificationEmail(to: string, name: string, verifyLink: string) {
-  const mailOptions = {
-    to,
-    from: MAIL_FROM,
-    subject: 'Verify Your Email',
-    html: mailMessage(name, verifyLink),
-  }
-
-  return transport.sendMail(mailOptions, (err: any, _res: any) => {
-    if (err) {
-      console.error(err)
-    } else {
-      console.info('The email was sent successfully')
-    }
-  })
+  return transport.sendMail(
+    {
+      to,
+      from: MAIL_FROM,
+      subject: 'Verify Your Email',
+      html: mailMessage(name, verifyLink),
+    },
+    (err: any, _res: any) => {
+      if (err) {
+        console.error(err)
+      } else {
+        console.info('The email was sent successfully')
+      }
+    },
+  )
 }

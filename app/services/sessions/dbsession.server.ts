@@ -3,7 +3,7 @@ import { createSessionStorage } from '@remix-run/node'
 import { AuthorizationError } from 'remix-auth'
 import { prisma } from '@/db.server'
 
-import { epochToUTC, expiresToSeconds, getSessionId } from '@/modules/sessions/session.server'
+import { epochToUTC, expiresToSeconds, getSessionId } from '@/services/sessions/session.server'
 
 /**
  * TODO: fix this. still unstable when sign in

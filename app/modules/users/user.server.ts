@@ -67,9 +67,22 @@ export async function verifyUserEmail(token: VerificationToken['token'], id: Use
     where: { id },
   })
 
-  await prisma.verificationToken.delete({ where: { token } })
+  await deleteVerificationToken(token)
 
   return user
+}
+
+export async function updateUserPassword(userId: User['id'], password: string) {
+  const hash = await bcrypt.hash(password, 10)
+  await prisma.password.update({
+    where: { userId },
+    data: { hash },
+  })
+
+  return await findUserById(userId)
+}
+export async function deleteVerificationToken(token: VerificationToken['token']) {
+  return await prisma.verificationToken.delete({ where: { token } })
 }
 
 export async function deleteUserByEmail(email: User['email']) {

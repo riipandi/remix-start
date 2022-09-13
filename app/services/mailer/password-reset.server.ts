@@ -15,12 +15,12 @@ const mailMessage = (name: string, loginLink: string) => {
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Hello, ${name}!</h3>
                     <div class="mt-2 w-full text-gray-600">
                         <p>
-                            Welcome to Prismix. You can sign in to dashboard by clicking on the link bellow.
+                            Your password has been changed.
                         </p>
                     </div>
                     <div class="mt-4 text-sm">
                         <a href="${loginLink}" class="font-medium text-blue-700 hover:text-blue-600">
-                            Click here to continue to your account
+                            Click here to reset your password
                             <span aria-hidden="true"> &rarr;</span>
                         </a>
                     </div>
@@ -31,12 +31,12 @@ const mailMessage = (name: string, loginLink: string) => {
     </html>`
 }
 
-export async function sendWelcomeEmail(to: string, name: string, loginLink: string) {
+export async function sendPasswordResetEmail(to: string, name: string, loginLink: string) {
   return transport.sendMail(
     {
       to,
       from: MAIL_FROM,
-      subject: 'Welcome to Prismix',
+      subject: 'Password Changed',
       html: mailMessage(name, loginLink),
     },
     (err: any, _res: any) => {

@@ -94,7 +94,7 @@ export default function SignUp() {
         </div>
       )}
 
-      <Form method="post" className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <Form method="post" reloadDocument className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div className="grid grid-cols-2 gap-4">
           <div>

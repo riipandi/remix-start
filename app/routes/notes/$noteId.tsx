@@ -5,7 +5,7 @@ import { Form, useCatch, useLoaderData, useSubmit } from '@remix-run/react'
 import { json, redirect } from '@remix-run/node'
 import { toast } from 'react-hot-toast'
 
-import { LOGIN_URL } from '@/modules/sessions/constants.server'
+import { LOGIN_URL } from '@/services/sessions/constants.server'
 import { deleteNote } from '@/modules/notes/note.server'
 import { getNote } from '@/modules/notes/note.server'
 import { authenticator } from '@/modules/users/auth.server'

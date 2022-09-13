@@ -2,9 +2,9 @@ import * as crypto from 'crypto'
 import type { CookieOptions } from '@remix-run/server-runtime'
 import { createCookie, createCookieSessionStorage } from '@remix-run/node'
 
-import { SESSION_MAX_AGE, SESSION_SECRET } from '@/modules/sessions/constants.server'
-import { createDatabaseSessionStorage } from '@/modules/sessions/dbsession.server'
-import { createUpstashSessionStorage } from '@/modules/sessions/upstash.server'
+import { SESSION_MAX_AGE, SESSION_SECRET } from '@/services/sessions/constants.server'
+import { createDatabaseSessionStorage } from '@/services/sessions/dbsession.server'
+import { createUpstashSessionStorage } from '@/services/sessions/upstash.server'
 
 // Session expiration in seconds.
 export const SESSION_EXPIRES = 3600

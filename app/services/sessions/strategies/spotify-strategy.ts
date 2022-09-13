@@ -2,7 +2,7 @@ import invariant from 'tiny-invariant'
 import { parseFullName } from 'parse-full-name'
 
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
-import { SpotifyStrategy } from '@/modules/sessions/strategies/spotify-oauth'
+import { SpotifyStrategy } from '@/services/sessions/strategies/spotify-oauth'
 import { generateUsernameFromEmail } from '@/modules/users/user.server'
 // import { sendWelcomeEmail } from '@/services/mailer/welcome-email.server'
 import { appUrl } from '@/utils/http'
