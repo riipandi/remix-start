@@ -1,7 +1,6 @@
-import { useForm } from 'react-hook-form'
 import type { ActionArgs, MetaFunction } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
-import { Form, useSubmit } from '@remix-run/react'
+import { Form } from '@remix-run/react'
 
 import { createNote } from '@/modules/notes/note.server'
 import { authenticator } from '@/modules/users/auth.server'
@@ -27,17 +26,8 @@ export async function action({ request }: ActionArgs) {
 export const meta: MetaFunction = () => ({ title: 'New Note - Prismix' })
 
 export default function NewNotePage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm()
-  const submit = useSubmit()
-
-  const onSubmit = (data: any) => submit(data, { method: 'post' })
-
   return (
-    <Form method="post" reloadDocument className="flex flex-col gap-4 w-full" onSubmit={handleSubmit(onSubmit)}>
+    <Form method="post" className="flex flex-col gap-4 w-full">
       <div>
         <label className="flex w-full flex-col gap-1">
           <span>Title: </span>

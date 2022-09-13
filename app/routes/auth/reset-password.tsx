@@ -1,9 +1,7 @@
-import { useForm } from 'react-hook-form'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { yupResolver } from '@hookform/resolvers/yup'
 import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, Link, useActionData, useLoaderData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
+import { Form, Link, useActionData, useLoaderData, useSearchParams, useTransition } from '@remix-run/react'
 import * as Yup from 'yup'
 
 import { authenticator } from '@/modules/users/auth.server'
@@ -56,19 +54,6 @@ export default function ResetPasswordPage() {
   const verifyId = searchParams.get('id')
   const verifyToken = searchParams.get('token')
 
-  const formSchema = Yup.object().shape({
-    password: Yup.string().required('Password is required').min(3, 'Password must be at 3 char long'),
-    confirmPassword: Yup.string()
-      .required('Password confirmation is required')
-      .oneOf([Yup.ref('password')], 'Passwords does not match'),
-  })
-
-  const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(formSchema) })
-  const { errors } = formState
-  const submit = useSubmit()
-
-  const onSubmit = (data: any) => submit(data, { method: 'post' })
-
   if (!verifyId || !verifyToken) {
     return (
       <main className="bg-white py-6 px-4 shadow sm:rounded-lg sm:px-10">
@@ -94,7 +79,7 @@ export default function ResetPasswordPage() {
     <main className="bg-white py-6 px-4 shadow sm:rounded-lg sm:px-10">
       {actionData?.message && <AlertDanger title="Information" message={actionData?.message} />}
 
-      <Form method="post" className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <Form method="post" className="space-y-4" autoComplete="off">
         <input type="hidden" name="verifyId" value={loaderData.verifyId} />
         <input type="hidden" name="verifyToken" value={loaderData.verifyToken} />
         <div>

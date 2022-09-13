@@ -1,28 +1,44 @@
-import { useForm } from 'react-hook-form'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, Link, useLoaderData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
+import { Link, useLoaderData, useSearchParams } from '@remix-run/react'
+import { withYup } from '@remix-validated-form/with-yup'
+import { ValidatedForm, validationError } from 'remix-validated-form'
+import * as yup from 'yup'
 
 import { authenticator } from '@/modules/users/auth.server'
 import { LOGIN_URL, SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
 import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/services/sessions/session.server'
-import { getRedirectTo } from '@/utils/http'
 
 import { SubmitButton } from '@/components/Buttons'
+import { EmailInput, PasswordInput } from '@/components/Input'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
 
+// Using yup in this example, but you can use anything
+const validator = withYup(
+  yup.object({
+    email: yup.string().email().label('Email').required(),
+    password: yup.string().label('Password').required(),
+  }),
+)
+
 export async function loader({ request }: LoaderArgs) {
-  // If the user is already authenticated redirect to /notes directly
+  // If the user is already authenticated redirect to the protected page directly.
   await authenticator.isAuthenticated(request, { successRedirect: '/' })
   const session = await sessionStorage.getSession(request.headers.get('Cookie'))
   const error = session.get(SESSION_ERROR_KEY)
 
-  return json<any>({ error })
+  return json({ error, defaultValues: { email: '', password: '' } })
 }
 
 export async function action({ request }: ActionArgs) {
-  const redirectTo = getRedirectTo(request)
+  // Validate the forms before submitted
+  const fieldValues = await validator.validate(await request.formData())
+  if (fieldValues.error) return validationError(fieldValues.error)
+
+  // Do something with correctly typed values;
+  console.log('ACTION', fieldValues.data)
+  const redirectTo = '/'
 
   // we call the method with the name of the strategy we want to use and the
   // request object, optionally we pass an object with the URLs we want the user
@@ -47,18 +63,9 @@ export async function action({ request }: ActionArgs) {
 export const meta: MetaFunction = () => ({ title: 'Sign In' })
 
 export default function SignInPage() {
-  const transition = useTransition()
-  const loaderData = useLoaderData<typeof loader>()
   const [searchParams] = useSearchParams()
+  const { defaultValues } = useLoaderData<typeof loader>()
   const redirectTo = searchParams.get('redirectTo') || '/notes'
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm()
-  const submit = useSubmit()
-
-  const onSubmit = (data: any) => submit(data, { method: 'post' })
 
   return (
     <main className="bg-white pt-6 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
@@ -76,7 +83,7 @@ export default function SignInPage() {
         </div>
       </div>
 
-      {loaderData?.message && (
+      {/* {loaderData?.message && (
         <div
           className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
@@ -85,53 +92,22 @@ export default function SignInPage() {
           <span className="sr-only">Info</span>
           <div>{loaderData?.message}</div>
         </div>
-      )}
+      )} */}
 
-      <Form method="post" className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <ValidatedForm
+        method="post"
+        validator={validator}
+        defaultValues={defaultValues}
+        className="space-y-4"
+        autoComplete="off"
+        id="signin-form"
+      >
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div>
-          <label htmlFor="email" className="sr-only">
-            Email address
-          </label>
-          <div className="mt-1">
-            <input
-              type="text"
-              autoFocus={true}
-              {...register('email', { required: true })}
-              disabled={transition.state === 'submitting'}
-              aria-invalid={errors.email ? true : undefined}
-              aria-describedby="email-error"
-              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-              placeholder="Email address"
-            />
-          </div>
-          {errors.email && (
-            <span className="pt-1 text-red-700 text-xs" id="email-error">
-              Email is required
-            </span>
-          )}
+          <EmailInput name="email" label="Email address" autoFocus={false} />
         </div>
-
         <div>
-          <label htmlFor="password" className="sr-only">
-            Password
-          </label>
-          <div className="mt-1">
-            <input
-              type="password"
-              {...register('password', { required: true })}
-              disabled={transition.state === 'submitting'}
-              aria-invalid={errors.password ? true : undefined}
-              aria-describedby="password-error"
-              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-              placeholder="Password"
-            />
-          </div>
-          {errors.password && (
-            <span className="pt-1 text-red-700 text-xs" id="password-error">
-              Password is required
-            </span>
-          )}
+          <PasswordInput name="password" label="Password" />
         </div>
 
         <div className="flex items-center justify-between">
@@ -141,7 +117,7 @@ export default function SignInPage() {
               name="remember-me"
               type="checkbox"
               className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              disabled={transition.state === 'submitting'}
+              //   disabled={isSubmitting}
             />
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
               Remember
@@ -162,9 +138,9 @@ export default function SignInPage() {
         </div>
 
         <div>
-          <SubmitButton transition={transition} idleText="Continue" submitText="Processing..." />
+          <SubmitButton label="Continue" submitLabel="Processing..." />
         </div>
-      </Form>
+      </ValidatedForm>
 
       <div className="mt-8 text-sm text-center text-gray-500">
         Don't have an account?{' '}

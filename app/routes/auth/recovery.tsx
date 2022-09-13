@@ -1,8 +1,7 @@
-import { useForm } from 'react-hook-form'
 import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, Link, useActionData, useSubmit, useTransition } from '@remix-run/react'
+import { Form, Link, useActionData, useTransition } from '@remix-run/react'
 import clsx from 'clsx'
 
 import { authenticator } from '@/modules/users/auth.server'
@@ -47,15 +46,6 @@ export default function RecoveryPage() {
   const transition = useTransition()
   const actionData = useActionData<typeof action>()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm()
-  const submit = useSubmit()
-
-  const onSubmit = (data: any) => submit(data, { method: 'post' })
-
   return (
     <main className="bg-white py-6 px-4 shadow sm:rounded-lg sm:px-10">
       {actionData && actionData?.message && (
@@ -80,7 +70,7 @@ export default function RecoveryPage() {
         </div>
       )}
 
-      <Form method="post" reloadDocument className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <Form method="post" className="space-y-4" autoComplete="off">
         <div>
           <label htmlFor="email" className="text-gray-500 text-sm font-medium px-1">
             Enter your email to continue:
@@ -89,7 +79,7 @@ export default function RecoveryPage() {
             <input
               type="text"
               autoFocus={true}
-              {...register('email', { required: true })}
+              name="email"
               disabled={transition.state === 'submitting'}
               aria-invalid={errors.email ? true : undefined}
               aria-describedby="email-error"

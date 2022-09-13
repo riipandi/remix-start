@@ -31,7 +31,7 @@ Learn more about [Remix Stacks](https://remix.run/stacks).
 - Email/Password Authentication with [remix-auth-form](https://github.com/sergiodxa/remix-auth-form)
 - Google authentication with [remix-auth-google](https://github.com/pbteja1998/remix-auth-google)
 - Spotify authentication with [remix-auth-oauth2](https://github.com/sergiodxa/remix-auth-oauth2)
-- Simple React forms validation with [react-hook-form](https://react-hook-form.com)
+- Simple forms validation with [remix-validated-form](https://www.remix-validated-form.io)
 - Database ORM with [Prisma](https://prisma.io)
 - Optional Redis session storage with [Upstash](https://upstash.com/blog/redis-with-remix)
 - Styling with [Tailwind CSS](https://tailwindcss.com/)

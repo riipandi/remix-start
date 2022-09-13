@@ -1,8 +1,7 @@
-import { useForm } from 'react-hook-form'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, Link, useActionData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
+import { Form, Link, useActionData, useSearchParams, useTransition } from '@remix-run/react'
 
 import { authenticator } from '@/modules/users/auth.server'
 import { createVerificationToken, findUserByEmail, registerUser } from '@/modules/users/user.server'
@@ -50,15 +49,6 @@ export default function SignUp() {
   const actionData = useActionData<typeof action>()
   const redirectTo = searchParams.get('redirectTo') ?? undefined
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm()
-  const submit = useSubmit()
-
-  const onSubmit = (data: any) => submit(data, { method: 'post' })
-
   return (
     <main className="bg-white pt-6 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
       <div className="pb-0">
@@ -95,7 +85,7 @@ export default function SignUp() {
         </div>
       )}
 
-      <Form method="post" className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <Form method="post" className="space-y-4" autoComplete="off">
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div className="grid grid-cols-2 gap-4">
           <div>
