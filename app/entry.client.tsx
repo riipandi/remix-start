@@ -14,8 +14,10 @@ function hydrate() {
     )
   })
 
-  Plausible(plausibleConfig)
-  trackPageview()
+  if (process.env.NODE_ENV === 'production') {
+    Plausible(plausibleConfig)
+    trackPageview()
+  }
 }
 
 if (window.requestIdleCallback) {
