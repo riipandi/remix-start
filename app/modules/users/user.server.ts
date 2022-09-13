@@ -1,9 +1,11 @@
-import type { User, VerificationToken } from '@prisma/client'
 import bcrypt from '@node-rs/bcrypt'
+import type { User, VerificationToken } from '@prisma/client'
 import * as crypto from 'crypto'
 import { addDays } from 'date-fns'
-import { prisma } from '@/db.server'
+
 import { getRandomInt } from '@/utils/helpers'
+
+import { prisma } from '@/db.server'
 
 export async function findUserById(id: User['id']) {
   return prisma.user.findUnique({ where: { id } })

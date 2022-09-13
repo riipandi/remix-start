@@ -33,6 +33,7 @@ specifiers:
   date-fns: ^2.29.2
   eslint: ^8.23.0
   eslint-config-prettier: ^8.5.0
+  eslint-plugin-simple-import-sort: ^8.0.0
   eslint-plugin-tailwindcss: ^3.6.1
   happy-dom: ^6.0.4
   husky: ^8.0.1
@@ -113,6 +114,7 @@ devDependencies:
   csstype: 3.1.0
   eslint: 8.23.0
   eslint-config-prettier: 8.5.0_eslint@8.23.0
+  eslint-plugin-simple-import-sort: 8.0.0_eslint@8.23.0
   eslint-plugin-tailwindcss: 3.6.1_ts-node@10.9.1
   happy-dom: 6.0.4
   husky: 8.0.1
@@ -4268,6 +4270,14 @@ packages:
       resolve: 2.0.0-next.4
       semver: 6.3.0
       string.prototype.matchall: 4.0.7
+    dev: true
+
+  /eslint-plugin-simple-import-sort/8.0.0_eslint@8.23.0:
+    resolution: {integrity: sha512-bXgJQ+lqhtQBCuWY/FUWdB27j4+lqcvXv5rUARkzbeWLwea+S5eBZEQrhnO+WgX3ZoJHVj0cn943iyXwByHHQw==}
+    peerDependencies:
+      eslint: '>=5.0.0'
+    dependencies:
+      eslint: 8.23.0
     dev: true
 
   /eslint-plugin-tailwindcss/3.6.1_ts-node@10.9.1:

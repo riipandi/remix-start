@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+
 import { DefaultUserSeeder } from './seeders/DefaultUserSeeder'
 import { SampleNoteSeeder } from './seeders/SampleNoteSeeder'
 

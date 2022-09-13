@@ -1,4 +1,5 @@
 import type { User } from '@prisma/client'
+
 import { useOptionalUser } from '@/hooks/useOptionalUser'
 
 export function useUser(): User {

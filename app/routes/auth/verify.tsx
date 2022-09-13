@@ -1,12 +1,12 @@
+import { ArrowRightIcon, CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
-import { Form, Link, useActionData, useLoaderData } from '@remix-run/react'
-import { CheckCircleIcon, ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { json, redirect } from '@remix-run/node'
+import { Form, Link, useActionData, useLoaderData } from '@remix-run/react'
 
-import { appUrl } from '@/utils/http'
 import { authenticator } from '@/modules/users/auth.server'
 import { findUserById, findVerificationTokenById } from '@/modules/users/user.server'
 import { sendVerificationEmail } from '@/services/mailer/verification-email.server'
+import { appUrl } from '@/utils/http'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)

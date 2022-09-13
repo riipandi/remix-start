@@ -1,14 +1,15 @@
-import invariant from 'tiny-invariant'
 import { useRef, useState } from 'react'
-import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
-import { Form, useCatch, useLoaderData, useSubmit } from '@remix-run/react'
-import { json, redirect } from '@remix-run/node'
 import { toast } from 'react-hot-toast'
+import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
+import { Form, useCatch, useLoaderData, useSubmit } from '@remix-run/react'
+import invariant from 'tiny-invariant'
 
-import { LOGIN_URL } from '@/services/sessions/constants.server'
 import { deleteNote } from '@/modules/notes/note.server'
 import { getNote } from '@/modules/notes/note.server'
 import { authenticator } from '@/modules/users/auth.server'
+import { LOGIN_URL } from '@/services/sessions/constants.server'
+
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog'
 
 export async function loader({ request, params }: LoaderArgs) {

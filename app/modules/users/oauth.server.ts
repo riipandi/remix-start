@@ -1,6 +1,8 @@
-import { prisma } from '@/db.server'
-import type { User, SocialAccount } from '@prisma/client'
+import type { SocialAccount,User } from '@prisma/client'
+
 import { findUserByEmail } from '@/modules/users/user.server'
+
+import { prisma } from '@/db.server'
 
 export async function createOrUpdateSocialConnection(email: User['email'], provider: string, socialAccount: any) {
   const user = (await prisma.user.findFirst({ where: { email } })) as User

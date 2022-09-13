@@ -1,5 +1,5 @@
-import invariant from 'tiny-invariant'
 import { createTransport } from 'nodemailer'
+import invariant from 'tiny-invariant'
 
 invariant(process.env.SMTP_HOST, 'SMTP_HOST must be set')
 invariant(process.env.SMTP_PORT, 'SMTP_PORT must be set')

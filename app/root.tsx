@@ -1,12 +1,14 @@
-import type { LinksFunction, LoaderArgs, MetaFunction } from '@remix-run/node'
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from '@remix-run/react'
-import { json } from '@remix-run/node'
 import { Toaster } from 'react-hot-toast'
+import type { LinksFunction, LoaderArgs, MetaFunction } from '@remix-run/node'
+import { json } from '@remix-run/node'
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from '@remix-run/react'
 
 import type { AuthSession } from '@/modules/users/auth.server'
 import { authenticator } from '@/modules/users/auth.server'
-import tailwindStylesheetUrl from '@/styles/tailwind.css'
+
 import { ErrorPage } from '@/components/ErrorPage'
+
+import tailwindStylesheetUrl from '@/styles/tailwind.css'
 
 interface LoaderData {
   user: Awaited<AuthSession | null>

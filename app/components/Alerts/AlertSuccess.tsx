@@ -1,5 +1,5 @@
-import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import type { FC } from 'react'
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
 
 interface AlertProps {
   title?: string

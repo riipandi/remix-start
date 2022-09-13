@@ -1,4 +1,5 @@
-import { redirect, type LoaderArgs } from '@remix-run/node'
+import { type LoaderArgs,redirect } from '@remix-run/node'
+
 import { authenticator } from '@/modules/users/auth.server'
 import { LOGIN_URL } from '@/services/sessions/constants.server'
 

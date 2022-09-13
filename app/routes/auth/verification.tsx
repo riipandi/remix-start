@@ -1,7 +1,8 @@
+import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+
 import { findVerificationToken, verifyUserEmail } from '@/modules/users/user.server'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {

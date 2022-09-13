@@ -1,17 +1,18 @@
-import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
-import { Form, Link, useActionData, useLoaderData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
-import { json, redirect } from '@remix-run/node'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useForm } from 'react-hook-form'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { yupResolver } from '@hookform/resolvers/yup'
+import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
+import { Form, Link, useActionData, useLoaderData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
 import * as Yup from 'yup'
 
-import { appUrl } from '@/utils/http'
 import { authenticator } from '@/modules/users/auth.server'
 import { deleteVerificationToken, findVerificationToken, updateUserPassword } from '@/modules/users/user.server'
 import { sendPasswordResetEmail } from '@/services/mailer/password-reset.server'
-import { SubmitButton } from '@/components/Buttons'
+import { appUrl } from '@/utils/http'
+
 import { AlertDanger } from '@/components/Alerts'
+import { SubmitButton } from '@/components/Buttons'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const user = await authenticator.isAuthenticated(request)

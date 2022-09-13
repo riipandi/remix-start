@@ -1,15 +1,16 @@
-import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
-import { Form, Link, useActionData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
-import { json, redirect } from '@remix-run/node'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 import { useForm } from 'react-hook-form'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
+import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
+import { Form, Link, useActionData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
 
 import { authenticator } from '@/modules/users/auth.server'
 import { createVerificationToken, findUserByEmail, registerUser } from '@/modules/users/user.server'
 import { sendVerificationEmail } from '@/services/mailer/verification-email.server'
-import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
 import { appUrl } from '@/utils/http'
+
 import { SubmitButton } from '@/components/Buttons'
+import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const user = await authenticator.isAuthenticated(request)

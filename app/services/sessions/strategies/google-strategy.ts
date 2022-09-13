@@ -1,5 +1,5 @@
-import invariant from 'tiny-invariant'
 import { GoogleStrategy } from 'remix-auth-google'
+import invariant from 'tiny-invariant'
 
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
 import { generateUsernameFromEmail } from '@/modules/users/user.server'

@@ -1,6 +1,6 @@
-import invariant from 'tiny-invariant'
 import { PrismaClient } from '@prisma/client'
 import { Redis } from '@upstash/redis'
+import invariant from 'tiny-invariant'
 
 invariant(process.env.UPSTASH_REDIS_URL, 'UPSTASH_REDIS_URL must be set')
 invariant(process.env.UPSTASH_REDIS_TOKEN, 'UPSTASH_REDIS_TOKEN must be set')

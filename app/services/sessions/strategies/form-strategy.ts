@@ -1,7 +1,8 @@
+import { verify } from '@node-rs/bcrypt'
 import type { Password, User } from '@prisma/client'
 import { AuthorizationError } from 'remix-auth'
 import { FormStrategy } from 'remix-auth-form'
-import { verify } from '@node-rs/bcrypt'
+
 import { prisma } from '@/db.server'
 
 async function login(email: User['email'], password: Password['hash']): Promise<User | null> {

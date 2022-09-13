@@ -1,4 +1,5 @@
 import type { ActionArgs, LoaderArgs } from '@remix-run/node'
+
 import { authenticator } from '@/modules/users/auth.server'
 import { LOGIN_URL } from '@/services/sessions/constants.server'
 

@@ -1,15 +1,16 @@
-import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
-import { Form, Link, useTransition, useSearchParams, useLoaderData, useSubmit } from '@remix-run/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { json, redirect } from '@remix-run/node'
 import { useForm } from 'react-hook-form'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
+import { Form, Link, useLoaderData, useSearchParams, useSubmit,useTransition } from '@remix-run/react'
 
+import { authenticator } from '@/modules/users/auth.server'
 import { LOGIN_URL, SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
 import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/services/sessions/session.server'
-import { authenticator } from '@/modules/users/auth.server'
 import { getRedirectTo } from '@/utils/http'
-import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
+
 import { SubmitButton } from '@/components/Buttons'
+import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
 
 export async function loader({ request }: LoaderArgs) {
   // If the user is already authenticated redirect to /notes directly

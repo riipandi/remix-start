@@ -1,8 +1,8 @@
-import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
-import { Form, Link, useActionData, useSubmit, useTransition } from '@remix-run/react'
-import { json, redirect } from '@remix-run/node'
-import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useForm } from 'react-hook-form'
+import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
+import { Form, Link, useActionData, useSubmit, useTransition } from '@remix-run/react'
 import clsx from 'clsx'
 
 import { authenticator } from '@/modules/users/auth.server'

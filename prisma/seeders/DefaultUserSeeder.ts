@@ -1,5 +1,5 @@
-import type { PrismaClient } from '@prisma/client'
 import { hash as bcryptHash } from '@node-rs/bcrypt'
+import type { PrismaClient } from '@prisma/client'
 
 export const DefaultUserSeeder = async (prisma: PrismaClient) => {
   const hash = await bcryptHash('passw0rd', 10)

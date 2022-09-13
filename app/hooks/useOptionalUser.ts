@@ -1,4 +1,5 @@
 import type { User } from '@prisma/client'
+
 import { useMatchesData } from '@/hooks/useMatchesData'
 
 function isUser(user: any): user is User {

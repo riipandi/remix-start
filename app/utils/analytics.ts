@@ -8,4 +8,4 @@ export const plausibleConfig = {
 
 const { trackPageview, trackEvent } = Plausible(plausibleConfig)
 
-export { Plausible, trackPageview, trackEvent }
+export { Plausible, trackEvent,trackPageview }

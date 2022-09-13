@@ -1,6 +1,7 @@
 import type { LoaderArgs, LoaderFunction } from '@remix-run/node'
-import { LOGIN_URL } from '@/services/sessions/constants.server'
+
 import { authenticator } from '@/modules/users/auth.server'
+import { LOGIN_URL } from '@/services/sessions/constants.server'
 
 export let loader: LoaderFunction = ({ request, params }: LoaderArgs) => {
   const { provider } = params as { provider: string }

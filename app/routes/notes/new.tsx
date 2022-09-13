@@ -1,11 +1,11 @@
+import { useForm } from 'react-hook-form'
 import type { ActionArgs, MetaFunction } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
 import { Form, useSubmit } from '@remix-run/react'
-import { useForm } from 'react-hook-form'
 
-import { LOGIN_URL } from '@/services/sessions/constants.server'
-import { authenticator } from '@/modules/users/auth.server'
 import { createNote } from '@/modules/notes/note.server'
+import { authenticator } from '@/modules/users/auth.server'
+import { LOGIN_URL } from '@/services/sessions/constants.server'
 
 export async function action({ request }: ActionArgs) {
   const { pathname } = new URL(request.url)
