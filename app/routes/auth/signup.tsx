@@ -1,15 +1,15 @@
 import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Form, Link, useActionData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
 import { json, redirect } from '@remix-run/node'
-import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 import { useForm } from 'react-hook-form'
-import clsx from 'clsx'
 
 import { authenticator } from '@/modules/users/auth.server'
 import { createVerificationToken, findUserByEmail, registerUser } from '@/modules/users/user.server'
 import { sendVerificationEmail } from '@/services/mailer/verification-email.server'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
 import { appUrl } from '@/utils/http'
+import { SubmitButton } from '@/components/Buttons'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const user = await authenticator.isAuthenticated(request)
@@ -22,7 +22,7 @@ export async function action({ request }: ActionArgs) {
   const userExists = await findUserByEmail(formData.get('email'))
 
   if (userExists) {
-    return json({ error: { message: 'User already registered!' } }, { status: 400 })
+    return json({ message: 'User already registered!' }, { status: 400 })
   }
 
   const user = await registerUser({
@@ -83,18 +83,18 @@ export default function SignUp() {
         </div>
       </div>
 
-      {actionData?.error?.message && (
+      {actionData?.message && (
         <div
           className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{actionData?.error.message}</div>
+          <div>{actionData?.message}</div>
         </div>
       )}
 
-      <Form method="post" reloadDocument className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <Form method="post" className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -127,7 +127,6 @@ export default function SignUp() {
             <div className="mt-1">
               <input
                 type="text"
-                autoFocus={true}
                 {...register('lastname', { required: true })}
                 disabled={transition.state === 'submitting'}
                 aria-invalid={errors.lastname ? true : undefined}
@@ -151,7 +150,6 @@ export default function SignUp() {
           <div className="mt-1">
             <input
               type="text"
-              autoFocus={true}
               {...register('email', { required: true })}
               disabled={transition.state === 'submitting'}
               aria-invalid={errors.email ? true : undefined}
@@ -190,13 +188,34 @@ export default function SignUp() {
         </div>
 
         <div>
+          <label htmlFor="password-confirmation" className="sr-only">
+            Password Confirmation
+          </label>
+          <div className="mt-1">
+            <input
+              type="password"
+              {...register('passwordConfirmation', { required: true })}
+              disabled={transition.state === 'submitting'}
+              aria-invalid={errors.passwordConfirmation ? true : undefined}
+              aria-describedby="password-confirmation-error"
+              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              placeholder="Confirm password"
+            />
+          </div>
+          {errors.passwordConfirmation && (
+            <span className="pt-1 text-red-700 text-xs" id="password-confirmation-error">
+              Password confirmation is required
+            </span>
+          )}
+        </div>
+
+        {/* <div>
           <label htmlFor="invitecode" className="sr-only">
             Invite Code
           </label>
           <div className="mt-1">
             <input
               type="text"
-              autoFocus={true}
               {...register('invitecode', { required: true })}
               disabled={transition.state === 'submitting'}
               aria-invalid={errors.email ? true : undefined}
@@ -219,42 +238,14 @@ export default function SignUp() {
           <Link to="/waitlist" className="text-primary-500 font-medium hover:underline">
             Get one here &rarr;
           </Link>
-        </p>
+        </p> */}
 
         <div className="py-1">
           <div className="border-t border-dashed border-gray-300" />
         </div>
 
         <div>
-          <div className="flex items-center w-full justify-center">
-            <span className="relative inline-flex w-full">
-              <button
-                type="submit"
-                className={clsx(
-                  transition.state === 'submitting'
-                    ? 'bg-primary-500 hover:bg-primary-400'
-                    : 'bg-primary-500 hover:bg-primary-700',
-                  'w-full flex items-center justify-center py-2.5 px-4 tracking-wide border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
-                )}
-                disabled={transition.state === 'submitting'}
-              >
-                {transition.state === 'submitting' ? (
-                  <span>Processing...</span>
-                ) : (
-                  <>
-                    <span>Continue</span>
-                    <ArrowRightIcon className="h-4 w-4 ml-1 -mr-1" />
-                  </>
-                )}
-              </button>
-              {transition.state === 'submitting' && (
-                <span className="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-500 border-primary-500 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-primary-50 border-primary-500" />
-                </span>
-              )}
-            </span>
-          </div>
+          <SubmitButton transition={transition} idleText="Continue" submitText="Processing..." />
         </div>
       </Form>
       <div className="mt-8 text-sm text-center text-gray-500">

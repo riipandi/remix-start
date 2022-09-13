@@ -1,15 +1,15 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { Form, Link, useTransition, useSearchParams, useLoaderData, useSubmit } from '@remix-run/react'
-import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { json, redirect } from '@remix-run/node'
 import { useForm } from 'react-hook-form'
-import clsx from 'clsx'
 
 import { LOGIN_URL, SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
 import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/services/sessions/session.server'
 import { authenticator } from '@/modules/users/auth.server'
 import { getRedirectTo } from '@/utils/http'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
+import { SubmitButton } from '@/components/Buttons'
 
 export async function loader({ request }: LoaderArgs) {
   // If the user is already authenticated redirect to /notes directly
@@ -75,18 +75,18 @@ export default function SignInPage() {
         </div>
       </div>
 
-      {loaderData?.error && (
+      {loaderData?.message && (
         <div
           className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{loaderData?.error.message}</div>
+          <div>{loaderData?.message}</div>
         </div>
       )}
 
-      <Form method="post" reloadDocument className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <Form method="post" className="space-y-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div>
           <label htmlFor="email" className="sr-only">
@@ -161,35 +161,7 @@ export default function SignInPage() {
         </div>
 
         <div>
-          <div className="flex items-center w-full justify-center">
-            <span className="relative inline-flex w-full">
-              <button
-                type="submit"
-                className={clsx(
-                  transition.state === 'submitting'
-                    ? 'bg-primary-500 hover:bg-primary-400'
-                    : 'bg-primary-500 hover:bg-primary-700',
-                  'w-full flex items-center justify-center py-2.5 px-4 tracking-wide border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
-                )}
-                disabled={transition.state === 'submitting'}
-              >
-                {transition.state === 'submitting' ? (
-                  <span>Processing...</span>
-                ) : (
-                  <>
-                    <span>Continue</span>
-                    <ArrowRightIcon className="h-4 w-4 ml-1 -mr-1" />
-                  </>
-                )}
-              </button>
-              {transition.state === 'submitting' && (
-                <span className="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-500 border-primary-500 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-primary-50 border-primary-500" />
-                </span>
-              )}
-            </span>
-          </div>
+          <SubmitButton transition={transition} idleText="Continue" submitText="Processing..." />
         </div>
       </Form>
 

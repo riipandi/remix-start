@@ -15,7 +15,7 @@ const mailMessage = (name: string, verifyLink: string) => {
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Hello, ${name}!</h3>
                     <div class="mt-2 w-full text-gray-600">
                         <p>
-                            Welcome to Prismix. Before getting started, could you verify your email by clicking on the link bellow.
+                            Welcome to Prismix. Before getting started you must verify your email by clicking on the link bellow.
                         </p>
                     </div>
                     <div class="mt-4 text-sm">

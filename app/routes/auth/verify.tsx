@@ -14,6 +14,7 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const user = await authenticator.isAuthenticated(request)
   if (user) return redirect('/')
 
+  if (!verifyId) return json({ error: { message: 'Invalid verification token!' } }, { status: 400 })
   const verify = await findVerificationTokenById(verifyId)
 
   if (!verify) return json({ error: { message: 'Invalid verification token!' } }, { status: 400 })
@@ -49,7 +50,7 @@ export default function Verify() {
   const loaderData = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof loader>()
 
-  if (!loaderData.success && loaderData?.error?.message)
+  if (!loaderData.success && loaderData?.message)
     return (
       <main className="bg-white pt-8 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
         <div
@@ -58,7 +59,7 @@ export default function Verify() {
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{loaderData?.error.message}</div>
+          <div>{loaderData?.message}</div>
         </div>
         <div className="mt-4">
           <Link
@@ -82,14 +83,14 @@ export default function Verify() {
         </p>
       </div>
 
-      {actionData && actionData.success && (
+      {actionData && actionData.message && (
         <div
           className="mt-4 flex rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <CheckCircleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{actionData?.success.message}</div>
+          <div>{actionData?.message}</div>
         </div>
       )}
 

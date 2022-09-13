@@ -20,7 +20,7 @@ const mailMessage = (name: string, loginLink: string) => {
                     </div>
                     <div class="mt-4 text-sm">
                         <a href="${loginLink}" class="font-medium text-blue-700 hover:text-blue-600">
-                            Click here to reset your password
+                            Click here to continue to your account
                             <span aria-hidden="true"> &rarr;</span>
                         </a>
                     </div>

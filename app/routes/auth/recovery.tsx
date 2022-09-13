@@ -16,29 +16,28 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   return json({})
 }
 
-// TODO: fix actionData null
-export async function action({ request }: ActionArgs): Promise<any> {
+export async function action({ request }: ActionArgs) {
   const formData: any = await request.formData()
 
   try {
     const user = await findUserByEmail(formData.get('email'))
 
     if (!user) {
-      return json({ error: { message: 'User not registered!' } }, { status: 400 })
+      return json({ message: 'User not registered!' }, { status: 400 })
     }
 
     const verify = await createVerificationToken(user.id)
 
     if (!verify) {
-      return json({ error: { message: 'Failed to create verification token!' } }, { status: 400 })
+      return json({ message: 'Failed to create verification token!' }, { status: 400 })
     }
 
     const recoveryLink = appUrl(`/auth/reset-password?id=${verify.id}&token=${verify.token}`)
 
     await sendPasswordRecoveryEmail(user.email, user.firstName, recoveryLink)
-    return json({ success: { message: 'Email with reset password instruction was sent!' } }, { status: 200 })
+    return json({ message: 'Email with reset password instruction was sent!' }, { status: 200 })
   } catch (error) {
-    return json({ error: { message: 'Failed to send password recovery link!' } }, { status: 400 })
+    return json({ message: 'Failed to send password recovery link!' }, { status: 400 })
   }
 }
 
@@ -59,25 +58,25 @@ export default function RecoveryPage() {
 
   return (
     <main className="bg-white py-6 px-4 shadow sm:rounded-lg sm:px-10">
-      {actionData && actionData?.error?.message && (
+      {actionData && actionData?.message && (
         <div
           className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{actionData?.error.message}</div>
+          <div>{actionData?.message}</div>
         </div>
       )}
 
-      {actionData && actionData?.success?.message && (
+      {actionData && actionData?.message && (
         <div
           className="mb-4 flex rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{actionData?.success.message}</div>
+          <div>{actionData?.message}</div>
         </div>
       )}
 

@@ -35,14 +35,14 @@ export default function Verify() {
 
   return (
     <main className="bg-white pt-8 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
-      {!loaderData.success && loaderData?.error?.message ? (
+      {!loaderData.success && loaderData?.message ? (
         <div
           className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{loaderData?.error.message}</div>
+          <div>{loaderData?.message}</div>
         </div>
       ) : (
         <div>
