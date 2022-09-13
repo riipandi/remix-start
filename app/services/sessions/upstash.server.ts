@@ -1,9 +1,8 @@
 import { createSessionStorage } from '@remix-run/node'
 import type { CookieOptions } from '@remix-run/server-runtime'
 
+import { redis } from '@/services/db.server'
 import { expiresToSeconds, getSessionId } from '@/services/sessions/session.server'
-
-import { redis } from '@/db.server'
 
 export function createUpstashSessionStorage({ cookie }: { cookie: CookieOptions }) {
   return createSessionStorage({

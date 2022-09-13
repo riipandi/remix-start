@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, Link, useLoaderData, useSearchParams, useSubmit,useTransition } from '@remix-run/react'
+import { Form, Link, useLoaderData, useSearchParams, useSubmit, useTransition } from '@remix-run/react'
 
 import { authenticator } from '@/modules/users/auth.server'
 import { LOGIN_URL, SESSION_ERROR_KEY } from '@/services/sessions/constants.server'

@@ -1,4 +1,4 @@
-import { type FC,useRef } from 'react'
+import { type FC, useRef } from 'react'
 import { Dialog } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 

@@ -3,7 +3,7 @@ import type { Password, User } from '@prisma/client'
 import { AuthorizationError } from 'remix-auth'
 import { FormStrategy } from 'remix-auth-form'
 
-import { prisma } from '@/db.server'
+import { prisma } from '@/services/db.server'
 
 async function login(email: User['email'], password: Password['hash']): Promise<User | null> {
   const user = await prisma.user.findUnique({
