@@ -22,7 +22,7 @@ COPY --from=deps /app/public ./public
 COPY --from=deps /app/build ./build
 RUN rm -f /app/pnpm-lock.yaml
 RUN npm ci --omit=dev --progress=false
-RUN npm run prisma generate
+RUN npx prisma generate
 
 # -----------------------------------------------------------------------------
 # Production image, copy all the files and run the application

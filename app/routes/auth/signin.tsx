@@ -95,7 +95,7 @@ export default function SignInPage() {
       >
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div>
-          <EmailInput name="email" label="Email address" autoFocus={true} />
+          <EmailInput name="email" label="Email address" autoFocus={false} />
         </div>
         <div>
           <PasswordInput name="password" label="Password" />
