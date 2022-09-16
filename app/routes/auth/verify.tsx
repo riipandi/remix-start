@@ -78,8 +78,9 @@ export default function Verify() {
       <div>
         <h2 className="text-center font-medium text-gray-800 text-xl">Thanks for signing up! </h2>
         <p className="text-gray-700 text-sm text-center mt-4">
-          Before getting started, could you verify your email by clicking on the link we just emailed to you? If you
-          didn&rsquo;t receive the email, we will gladly send you another.
+            You should receive an email with a link to confirm your email address within the next few minutes.
+            If you do not receive an email, make sure to check your spam, we will gladly send you another.
+            You can click the button below to resend it.
         </p>
       </div>
 

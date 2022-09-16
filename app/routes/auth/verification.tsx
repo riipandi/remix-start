@@ -49,8 +49,8 @@ export default function Verify() {
         <div>
           <h2 className="text-center font-medium text-gray-800 text-xl">Your email verified! </h2>
           <p className="text-gray-700 text-sm text-center mt-4">
-            Thank you for confirming your email address. <br />
-            Now, your account is ready.
+            Thanks for confirming your email! Now, your account is ready. You&rsquo;ll be redirected back in a few
+            seconds.
           </p>
 
           <div className="py-6">

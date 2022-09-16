@@ -22,7 +22,7 @@ export async function registerUser({
   lastName: User['lastName']
   password: string
 }) {
-  const hash = await bcrypt.hash(data.password, 10)
+  const hash = await bcrypt.hash(data.password)
   const username = await generateUsernameFromEmail(data.email)
 
   return prisma.user.create({
@@ -74,7 +74,7 @@ export async function verifyUserEmail(token: VerificationToken['token'], id: Use
 }
 
 export async function updateUserPassword(userId: User['id'], password: string) {
-  const hash = await bcrypt.hash(password, 10)
+  const hash = await bcrypt.hash(password)
   await prisma.password.update({
     where: { userId },
     data: { hash },

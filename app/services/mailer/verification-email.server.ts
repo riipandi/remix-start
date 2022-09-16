@@ -15,7 +15,7 @@ const mailMessage = (name: string, verifyLink: string) => {
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Hello, ${name}!</h3>
                     <div class="mt-2 w-full text-gray-600">
                         <p>
-                            Welcome to Prismix. Before getting started you must verify your email by clicking on the link bellow.
+                            Welcome to Prismix. To finish signing up, please confirm your email address.
                         </p>
                     </div>
                     <div class="mt-4 text-sm">
@@ -24,6 +24,13 @@ const mailMessage = (name: string, verifyLink: string) => {
                             <span aria-hidden="true"> &rarr;</span>
                         </a>
                     </div>
+                </div>
+
+                <div class="py-1"><div class="border-t border-dashed border-gray-300"></div></div>
+
+                <div class="px-4 py-5 sm:p-6">
+                    <p>If you're having trouble with the button above, copy and paste the URL below into your web browser.</p>
+                    <a href="${verifyLink}" class="font-medium text-blue-700 hover:text-blue-600">${verifyLink}</a>
                 </div>
             </div>
         </div>

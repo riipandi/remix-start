@@ -13,7 +13,7 @@ export async function login(email: User['email'], password: Password['hash']): P
 
   if (!user || !user.password) return null
 
-  const isValid = await bcrypt.compare(password, user.password.hash)
+  const isValid = await bcrypt.verify(password, user.password.hash)
 
   if (!isValid) return null
 
