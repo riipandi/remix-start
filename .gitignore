@@ -20,3 +20,6 @@ $RECYCLE.BIN/
 /prisma/data.db
 /prisma/data.db-journal
 /app/styles/tailwind.css
+
+# Disable this line in your real app
+/prisma/migrations
