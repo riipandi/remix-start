@@ -9,15 +9,15 @@ import { sendVerificationEmail } from '@/services/mailer/verification-email.serv
 import { appUrl } from '@/utils/http'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
-  const url = new URL(request.url)
-  const verifyId = url.searchParams.get('id') as string
   const user = await authenticator.isAuthenticated(request)
   if (user) return redirect('/')
 
-  if (!verifyId) return json({ error: { message: 'Invalid verification token!' } }, { status: 400 })
-  const verify = await findVerificationTokenById(verifyId)
+  const url = new URL(request.url)
+  const verifyId = url.searchParams.get('id') as string
+  if (!verifyId) return json({ errors: 'Invalid verification token!' })
 
-  if (!verify) return json({ error: { message: 'Invalid verification token!' } }, { status: 400 })
+  const verify = await findVerificationTokenById(verifyId)
+  if (!verify) return json({ errors: 'Invalid verification token!' })
 
   return json({ verifyId })
 }
@@ -27,21 +27,16 @@ export async function action({ request }: ActionArgs) {
   const verifyId = formData.get('verifyId')
 
   const verify = await findVerificationTokenById(verifyId)
-
-  if (!verify) {
-    return json({ error: { message: 'Invalid verification token!' } }, { status: 400 })
-  }
+  if (!verify) return json({ errors: 'Invalid verification token!' })
 
   const verifyLink = appUrl(`/auth/verification?id=${verify.id}&token=${verify.token}`)
   const user = await findUserById(verify.userId)
 
-  if (!user) {
-    return json({ error: { message: 'User not registered!' } }, { status: 400 })
-  }
+  if (!user) return json({ errors: 'User not registered!' })
 
   await sendVerificationEmail(user.email, user.firstName, verifyLink)
 
-  return json({ success: { message: 'Verification email sent!' } }, { status: 200 })
+  return json({ success: 'Verification email sent!' }, { status: 200 })
 }
 
 export const meta: MetaFunction = () => ({ title: 'Verify Email' })
@@ -50,7 +45,7 @@ export default function Verify() {
   const loaderData = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof loader>()
 
-  if (!loaderData.success && loaderData?.message)
+  if (!loaderData.success && loaderData?.errors)
     return (
       <main className="bg-white pt-8 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
         <div
@@ -58,8 +53,8 @@ export default function Verify() {
           role="alert"
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          <span className="sr-only">Info</span>
-          <div>{loaderData?.message}</div>
+          <span className="sr-only">Warning</span>
+          <div>{loaderData?.errors}</div>
         </div>
         <div className="mt-4">
           <Link
@@ -77,21 +72,21 @@ export default function Verify() {
     <main className="bg-white pt-8 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
       <div>
         <h2 className="text-center font-medium text-gray-800 text-xl">Thanks for signing up! </h2>
-        <p className="text-gray-700 text-sm text-center mt-4">
-            You should receive an email with a link to confirm your email address within the next few minutes.
-            If you do not receive an email, make sure to check your spam, we will gladly send you another.
-            You can click the button below to resend it.
+        <p className="text-gray-700 text-sm text-justify mt-4">
+          You should receive an email with a link to confirm your email address within the next few minutes. If you do
+          not receive an email, make sure to check your spam, we will gladly send you another. You can click the button
+          below to resend it.
         </p>
       </div>
 
-      {actionData && actionData.message && (
+      {actionData && actionData.success && (
         <div
           className="mt-4 flex rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <CheckCircleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
           <span className="sr-only">Info</span>
-          <div>{actionData?.message}</div>
+          <div>{actionData?.success}</div>
         </div>
       )}
 
