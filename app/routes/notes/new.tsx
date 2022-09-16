@@ -1,10 +1,23 @@
 import type { ActionArgs, MetaFunction } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
-import { Form } from '@remix-run/react'
+import { withZod } from '@remix-validated-form/with-zod'
+import { ValidatedForm, validationError } from 'remix-validated-form'
+import { z } from 'zod'
 
 import { createNote } from '@/modules/notes/note.server'
 import { authenticator } from '@/modules/users/auth.server'
 import { LOGIN_URL } from '@/services/sessions/constants.server'
+
+import { SubmitButton } from '@/components/Buttons'
+import { TextArea, TextInput } from '@/components/Input'
+
+export const validator = withZod(
+  z.object({
+    title: z.string().min(1, { message: 'Title is required' }),
+    summary: z.string().min(1, { message: 'Summary is required' }),
+    body: z.string().min(1, { message: 'Body is required' }),
+  }),
+)
 
 export async function action({ request }: ActionArgs) {
   const { pathname } = new URL(request.url)
@@ -12,13 +25,13 @@ export async function action({ request }: ActionArgs) {
     failureRedirect: `${LOGIN_URL}?redirectTo=${pathname}`,
   })
 
-  const formData: any = await request.formData()
-  const note = await createNote({
-    title: formData.get('title'),
-    body: formData.get('body'),
-    summary: formData.get('summary'),
-    userId,
-  })
+  // Validate the forms before submitted
+  const fieldValues = await validator.validate(await request.formData())
+  if (fieldValues.error) return validationError(fieldValues.error)
+
+  // Do something with correctly typed values
+  const { title, summary, body } = fieldValues.data
+  const note = await createNote({ title, body, summary, userId })
 
   return redirect(`/notes/${note.id}`)
 }
@@ -27,66 +40,31 @@ export const meta: MetaFunction = () => ({ title: 'New Note - Prismix' })
 
 export default function NewNotePage() {
   return (
-    <Form method="post" className="flex flex-col gap-4 w-full">
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Title: </span>
-          <input
-            {...register('title', { required: true })}
-            className="flex-1 rounded-md border-2 border-primary-500 px-3 text-lg leading-loose"
-            aria-invalid={errors.title ? true : undefined}
-            aria-errormessage={errors.title ? 'title-error' : undefined}
-          />
-        </label>
-        {errors.title && (
-          <span className="pt-1 text-red-700" id="title-error">
-            Title is required
-          </span>
-        )}
-      </div>
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Summary: </span>
-          <input
-            {...register('summary', { required: true })}
-            className="flex-1 rounded-md border-2 border-primary-500 px-3 text-lg leading-loose"
-            aria-invalid={errors.summary ? true : undefined}
-            aria-errormessage={errors.summary ? 'summary-error' : undefined}
-          />
-        </label>
-        {errors.summary && (
-          <span className="pt-1 text-red-700" id="summary-error">
-            This field is required
-          </span>
-        )}
-      </div>
+    <div>
+      <ValidatedForm
+        method="post"
+        validator={validator}
+        className="flex flex-col gap-4 w-full"
+        autoComplete="off"
+        id="signin-form"
+      >
+        <div>
+          <TextInput name="title" label="Title" />
+        </div>
+        <div>
+          <TextInput name="summary" label="Summary" />
+        </div>
 
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Body: </span>
-          <textarea
-            rows={8}
-            {...register('body', { required: true })}
-            className="w-full flex-1 rounded-md border-2 border-primary-500 py-2 px-3 text-lg leading-6"
-            aria-invalid={errors.body ? true : undefined}
-            aria-errormessage={errors.body ? 'body-error' : undefined}
-          />
-        </label>
-        {errors.body && (
-          <span className="pt-1 text-red-700" id="body-error">
-            This field is required
-          </span>
-        )}
-      </div>
+        <div>
+          <TextArea name="body" label="Body" />
+        </div>
 
-      <div className="text-right">
-        <button
-          type="submit"
-          className="rounded bg-primary-500 py-2 px-4 text-white hover:bg-primary-600 focus:bg-primary-400"
-        >
-          Save
-        </button>
-      </div>
-    </Form>
+        <div className="flex sm:justify-end">
+          <div className="w-full sm:w-44">
+            <SubmitButton label="Submit" submitLabel="Processing..." />
+          </div>
+        </div>
+      </ValidatedForm>
+    </div>
   )
 }
