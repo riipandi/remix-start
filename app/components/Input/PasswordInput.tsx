@@ -40,6 +40,7 @@ export const PasswordInput: FC<PasswordInputProps> = (props) => {
           type="button"
           className="absolute inset-y-0 right-0 w-8 flex items-center"
           onClick={() => setTextInput(!textInput)}
+          tabIndex={-1}
         >
           {textInput ? (
             <EyeIcon className="w-5 h-5 text-gray-400 hover:text-gray-500" />

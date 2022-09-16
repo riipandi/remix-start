@@ -56,6 +56,10 @@ export async function findVerificationTokenById(id: VerificationToken['id']) {
   return prisma.verificationToken.findUnique({ where: { id } })
 }
 
+export async function findVerificationTokenByToken(token: VerificationToken['token']) {
+  return prisma.verificationToken.findUnique({ where: { token } })
+}
+
 export async function findVerificationToken(id: VerificationToken['id'], token: VerificationToken['token']) {
   return prisma.verificationToken.findFirst({
     where: { AND: [{ id }, { token }] },
@@ -74,7 +78,7 @@ export async function verifyUserEmail(token: VerificationToken['token'], id: Use
 }
 
 export async function updateUserPassword(userId: User['id'], password: string) {
-  const hash = await bcrypt.hash(password)
+  const hash = await hashPassword(password)
   await prisma.password.update({
     where: { userId },
     data: { hash },

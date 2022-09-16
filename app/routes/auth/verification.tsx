@@ -1,11 +1,17 @@
-import { ArrowRightIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import type { LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 
+import { authenticator } from '@/modules/users/auth.server'
 import { findVerificationToken, verifyUserEmail } from '@/modules/users/user.server'
 
+import { AlertDanger } from '@/components/Alerts'
+
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+  // If the user is already authenticated redirect to the protected page directly.
+  await authenticator.isAuthenticated(request, { successRedirect: '/' })
+
   const url = new URL(request.url)
   const verifyId = url.searchParams.get('id')
   const verifyToken = url.searchParams.get('token')
@@ -33,14 +39,7 @@ export default function Verify() {
   return (
     <main className="bg-white pt-8 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
       {loaderData?.errors ? (
-        <div
-          className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          <span className="sr-only">Info</span>
-          <div>{loaderData?.errors}</div>
-        </div>
+        <AlertDanger message={loaderData?.errors} />
       ) : (
         <div>
           <h2 className="text-center font-medium text-gray-800 text-xl">Your email verified! </h2>

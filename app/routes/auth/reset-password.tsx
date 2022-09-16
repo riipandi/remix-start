@@ -1,136 +1,140 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, Link, useActionData, useLoaderData, useSearchParams, useTransition } from '@remix-run/react'
-import * as Yup from 'yup'
+import { Link, useActionData, useLoaderData, useSearchParams } from '@remix-run/react'
+import { withZod } from '@remix-validated-form/with-zod'
+import { ValidatedForm, validationError } from 'remix-validated-form'
+import { z } from 'zod'
 
 import { authenticator } from '@/modules/users/auth.server'
-import { deleteVerificationToken, findVerificationToken, updateUserPassword } from '@/modules/users/user.server'
+import {
+  deleteVerificationToken,
+  findVerificationToken,
+  findVerificationTokenByToken,
+  updateUserPassword,
+} from '@/modules/users/user.server'
 import { sendPasswordResetEmail } from '@/services/mailer/password-reset.server'
 import { appUrl } from '@/utils/http'
 
 import { AlertDanger } from '@/components/Alerts'
 import { SubmitButton } from '@/components/Buttons'
+import { PasswordInput } from '@/components/Input'
+
+export const validator = withZod(
+  z
+    .object({
+      password: z.string().min(1, { message: 'Password is required' }),
+      passwordConfirmation: z.string().min(1, { message: 'Password confirmation is required' }),
+    })
+    .refine((data) => data.password === data.passwordConfirmation, {
+      message: "Passwords don't match",
+      path: ['passwordConfirmation'], // path of error
+    }),
+)
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
-  const user = await authenticator.isAuthenticated(request)
-  if (user) return redirect('/')
-  return json({})
+  // If the user is already authenticated redirect to the protected page directly.
+  await authenticator.isAuthenticated(request, { successRedirect: '/' })
+
+  const url = new URL(request.url)
+  const verifyId = url.searchParams.get('id')
+  const verifyToken = url.searchParams.get('token')
+
+  if (!verifyId || !verifyToken) return json({ errors: 'Verification token required!' })
+
+  const verify = await findVerificationToken(verifyId, verifyToken)
+
+  if (!verify) return json({ errors: 'Invalid verification token!' })
+
+  if (new Date().getTime() >= verify.expires.getTime()) {
+    return json({ errors: 'Verification token has been expired!' })
+  }
+
+  return json({ success: true }, { status: 200 })
 }
 
-export async function action({ request }: ActionArgs) {
-  const formData: any = await request.formData()
+export async function action({ request }: ActionArgs): Promise<any> {
+  // Validate the forms before submitted
+  const fieldValues = await validator.validate(await request.formData())
+  if (fieldValues.error) return validationError(fieldValues.error)
 
-  const verify = await findVerificationToken(formData.get('verifyId'), formData.get('verifyToken'))
+  // Do something with correctly typed values
+  const { verifyToken } = fieldValues.submittedData
+  console.log(fieldValues.submittedData)
+  const { password } = fieldValues.data
 
-  if (!verify) {
-    return json({ message: 'Invalid verification token!' }, { status: 400 })
-  }
+  const verify = await findVerificationTokenByToken(verifyToken)
+
+  if (!verify) return json({ errors: 'Invalid verification token!' })
 
   const loginLink = appUrl(`/auth/signin`)
-  const user = await updateUserPassword(verify.userId, formData.get('password'))
+  const user = await updateUserPassword(verify.userId, password)
 
-  if (!user) {
-    return json({ message: 'Failed to reset your password!' }, { status: 400 })
-  }
+  if (!user) return json({ errors: 'Failed to reset your password!' })
 
   await sendPasswordResetEmail(user.email, user?.firstName, loginLink)
   await deleteVerificationToken(verify.token)
-  //   try {
-  //   } catch (error) {
-  //     return json({ error: { message: 'Failed to reset your password!' } }, { status: 400 })
-  //   }
 
-  return json({ message: 'Your password has been changed!' }, { status: 400 })
+  return redirect('/auth/signin?changed=true')
 }
 
 export const meta: MetaFunction = () => ({ title: 'Reset Password' })
 
 export default function ResetPasswordPage() {
-  const transition = useTransition()
   const actionData = useActionData<typeof action>()
   const loaderData = useLoaderData<typeof loader>()
   const [searchParams] = useSearchParams()
-  const verifyId = searchParams.get('id')
-  const verifyToken = searchParams.get('token')
+  const verifyId = searchParams.get('id') ?? undefined
+  const verifyToken = searchParams.get('token') ?? undefined
 
-  if (!verifyId || !verifyToken) {
+  if (!loaderData.success && loaderData.errors) {
     return (
       <main className="bg-white py-6 px-4 shadow sm:rounded-lg sm:px-10">
-        <div
-          className="flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-          role="alert"
+        <AlertDanger message={loaderData?.errors} />
+        <div className="py-6">
+          <div className="border-t border-dashed border-gray-300" />
+        </div>
+        <Link
+          to="/auth/signin"
+          className="w-full flex items-center justify-center py-2.5 px-4 tracking-wide border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
         >
-          <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          <span className="sr-only">Info</span>
-          <div>Invalid token!</div>
-        </div>
-        <div className="mt-4 px-1 text-sm text-gray-500">
-          Remember your password?{' '}
-          <Link to="/auth/signin" className="text-primary-500 font-medium hover:underline">
-            Sign in
-          </Link>
-        </div>
+          <span>Continue sign in</span>
+          <ArrowRightIcon className="h-4 w-4 ml-1 -mr-1" />
+        </Link>
       </main>
     )
   }
 
   return (
     <main className="bg-white py-6 px-4 shadow sm:rounded-lg sm:px-10">
-      {actionData?.message && <AlertDanger title="Information" message={actionData?.message} />}
+      {actionData?.errors && <AlertDanger message={actionData?.errors} />}
 
-      <Form method="post" className="space-y-4" autoComplete="off">
-        <input type="hidden" name="verifyId" value={loaderData.verifyId} />
-        <input type="hidden" name="verifyToken" value={loaderData.verifyToken} />
+      <ValidatedForm
+        method="post"
+        validator={validator}
+        defaultValues={loaderData.defaultValues}
+        className="space-y-4"
+        autoComplete="off"
+        id="recovery-form"
+      >
+        <input type="hidden" name="verifyId" value={verifyId} />
+        <input type="hidden" name="verifyToken" value={verifyToken} />
         <div>
-          <label htmlFor="password" className="sr-only">
-            Enter your new password:
-          </label>
-          <div className="mt-2">
-            <input
-              type="password"
-              autoFocus={true}
-              {...register('password', { required: true })}
-              disabled={transition.state === 'submitting'}
-              aria-invalid={errors.password ? true : undefined}
-              aria-describedby="password-error"
-              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-              placeholder="Enter your new password"
-            />
-          </div>
-          {errors.password && (
-            <span className="pt-1 text-red-700 text-xs" id="password-error">
-              {errors.password?.message as string}
-            </span>
-          )}
+          <PasswordInput name="password" label="Enter your new password" />
         </div>
 
         <div>
-          <label htmlFor="password-confirmation" className="sr-only">
-            Confirm your new password:
-          </label>
-          <div className="mt-2">
-            <input
-              type="password"
-              {...register('confirmPassword', { required: true })}
-              disabled={transition.state === 'submitting'}
-              aria-invalid={errors.confirmPassword ? true : undefined}
-              aria-describedby="password-confirmation-error"
-              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-              placeholder="Confirm your new password"
-            />
-          </div>
-          {errors.confirmPassword && (
-            <span className="pt-1 text-red-700 text-xs" id="-confirmation-error">
-              {errors.confirmPassword?.message as string}
-            </span>
-          )}
+          <PasswordInput name="passwordConfirmation" label="Confirm your new password" />
+        </div>
+
+        <div className="py-2">
+          <div className="border-t border-dashed border-gray-300" />
         </div>
 
         <div>
-          <SubmitButton transition={transition} idleText="Continue" submitText="Processing..." />
+          <SubmitButton label="Continue" submitLabel="Processing..." />
         </div>
-      </Form>
+      </ValidatedForm>
 
       <div className="mt-6 text-sm text-center text-gray-500">
         Remember your password?{' '}

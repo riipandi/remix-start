@@ -1,4 +1,3 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, useActionData, useLoaderData, useSearchParams } from '@remix-run/react'
@@ -13,6 +12,7 @@ import { SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
 import { sessionStorage } from '@/services/sessions/session.server'
 import { appUrl } from '@/utils/http'
 
+import { AlertDanger } from '@/components/Alerts'
 import { SubmitButton } from '@/components/Buttons'
 import { EmailInput, PasswordInput, TextInput } from '@/components/Input'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
@@ -41,17 +41,17 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   return json({ error, defaultValues: { email: '', password: '' } })
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionArgs): Promise<any> {
   // Validate the forms before submitted
   const fieldValues = await validator.validate(await request.formData())
   if (fieldValues.error) return validationError(fieldValues.error)
 
-  // Do something with correctly typed values;
+  // Do something with correctly typed values
   const { email, firstName, lastName, password } = fieldValues.data
   const userExists = await findUserByEmail(email)
 
   if (userExists) {
-    return json({ errors: 'User already registered!' }, { status: 400 })
+    return json({ errors: 'User already registered!' })
   }
 
   const user = await registerUser({ email, firstName, lastName, password })
@@ -97,16 +97,7 @@ export default function SignUp() {
         </div>
       </div>
 
-      {actionData?.errors && (
-        <div
-          className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          <span className="sr-only">Warning</span>
-          <div>{actionData?.errors}</div>
-        </div>
-      )}
+      {actionData?.errors && <AlertDanger message={actionData?.errors} />}
 
       <ValidatedForm
         method="post"

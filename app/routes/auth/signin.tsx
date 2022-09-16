@@ -1,4 +1,3 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, useActionData, useLoaderData, useSearchParams } from '@remix-run/react'
@@ -11,6 +10,7 @@ import { SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
 import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/services/sessions/session.server'
 import { login } from '@/services/sessions/strategies/form-strategy'
 
+import { AlertDanger, AlertSuccess } from '@/components/Alerts'
 import { SubmitButton } from '@/components/Buttons'
 import { EmailInput, PasswordInput } from '@/components/Input'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
@@ -36,7 +36,7 @@ export async function action({ request }: ActionArgs): Promise<any> {
   const fieldValues = await validator.validate(await request.formData())
   if (fieldValues.error) return validationError(fieldValues.error)
 
-  // Do something with correctly typed values;
+  // Do something with correctly typed values
   const redirectTo = fieldValues.submittedData.redirectTo || '/'
   const { email, password } = fieldValues.data
   const user = await login(email, password)
@@ -64,6 +64,7 @@ export default function SignInPage() {
   const actionData = useActionData<typeof action>()
   const { defaultValues } = useLoaderData<typeof loader>()
   const redirectTo = searchParams.get('redirectTo') || '/notes'
+  const passwordChanged = searchParams.get('changed')
 
   return (
     <main className="bg-white pt-6 pb-8 px-4 shadow-md sm:rounded-lg sm:px-10">
@@ -81,16 +82,8 @@ export default function SignInPage() {
         </div>
       </div>
 
-      {actionData?.errors && (
-        <div
-          className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          <span className="sr-only">Warning</span>
-          <div>{actionData?.errors}</div>
-        </div>
-      )}
+      {actionData?.errors && <AlertDanger message={actionData?.errors} />}
+      {passwordChanged && <AlertSuccess message="Password has been changed!" />}
 
       <ValidatedForm
         method="post"
@@ -102,7 +95,7 @@ export default function SignInPage() {
       >
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div>
-          <EmailInput name="email" label="Email address" autoFocus={false} />
+          <EmailInput name="email" label="Email address" autoFocus={true} />
         </div>
         <div>
           <PasswordInput name="password" label="Password" />
