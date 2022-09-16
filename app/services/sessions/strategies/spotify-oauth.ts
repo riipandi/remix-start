@@ -75,8 +75,10 @@ export class SpotifyStrategy<User> extends OAuth2Strategy<User, SpotifyProfile, 
   }
 
   protected authorizationParams(): URLSearchParams {
-    const params = new URLSearchParams({ scope: this.scope })
-    return params
+    const urlSearchParams: Record<string, string> = {
+      scope: this.scope,
+    }
+    return new URLSearchParams(urlSearchParams)
   }
 
   protected async userProfile(accessToken: string): Promise<SpotifyProfile> {

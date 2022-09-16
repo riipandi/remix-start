@@ -6,6 +6,7 @@ import { sessionStorage } from '@/services/sessions/session.server'
 import { formStrategy } from '@/services/sessions/strategies/form-strategy'
 import { googleStrategy } from '@/services/sessions/strategies/google-strategy'
 import { spotifyStrategy } from '@/services/sessions/strategies/spotify-strategy'
+import { udotidStrategy } from '@/services/sessions/strategies/udotid-strategy'
 
 export interface AuthSession extends User {
   //   subscription: Subscription[]
@@ -21,5 +22,6 @@ export const authenticator = new Authenticator<AuthSession>(sessionStorage, {
 
 // Register the authentication strategies
 authenticator.use(formStrategy, 'user-pass')
-authenticator.use(googleStrategy, 'google')
-authenticator.use(spotifyStrategy, 'spotify')
+authenticator.use(googleStrategy)
+authenticator.use(spotifyStrategy)
+authenticator.use(udotidStrategy)

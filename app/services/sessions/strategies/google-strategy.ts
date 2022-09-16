@@ -3,7 +3,6 @@ import invariant from 'tiny-invariant'
 
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
 import { generateUsernameFromEmail } from '@/modules/users/user.server'
-// import { sendWelcomeEmail } from '@/services/mailer/welcome-email.server'
 import { appUrl } from '@/utils/http'
 
 // Validate envars value.
@@ -23,6 +22,7 @@ export const googleStrategy = new GoogleStrategy(
   async ({ accessToken, refreshToken, extraParams, profile }) => {
     const expiresAt = Date.now() + extraParams.expires_in * 1000
     const username = await generateUsernameFromEmail(profile._json.email)
+    const avatarUrl = profile._json.picture
 
     const socialAccount = {
       type: 'oauth',
@@ -35,7 +35,7 @@ export const googleStrategy = new GoogleStrategy(
       scopes: extraParams.scope, // optional
       idToken: extraParams.id_token, // optional
       sessionState: null, // optional
-      avatarUrl: profile._json.picture, // optional
+      avatarUrl, // optional
     }
 
     const user = await createUserFromOAuth(
@@ -43,17 +43,13 @@ export const googleStrategy = new GoogleStrategy(
         email: profile._json.email,
         firstName: profile._json.given_name,
         lastName: profile._json.family_name,
-        avatarUrl: profile._json.picture,
+        avatarUrl,
         username,
       },
       socialAccount,
     )
 
     if (!user) throw new Error('Unable to create user.')
-
-    // Send email notification to user.
-    // const loginLink = appUrl(`/auth/signin`)
-    // await sendWelcomeEmail(user.email, user.firstName, loginLink)
 
     // Returns Auth Session from database.
     return { ...user }

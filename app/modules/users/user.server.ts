@@ -1,9 +1,10 @@
-import bcrypt from '@node-rs/bcrypt'
+// import bcrypt from '@node-rs/bcrypt'
 import type { User, VerificationToken } from '@prisma/client'
 import * as crypto from 'crypto'
 import { addDays } from 'date-fns'
 
 import { prisma } from '@/services/db.server'
+import { hashPassword } from '@/utils/encryption.server'
 import { getRandomInt } from '@/utils/helpers'
 
 export async function findUserById(id: User['id']) {
@@ -22,7 +23,7 @@ export async function registerUser({
   lastName: User['lastName']
   password: string
 }) {
-  const hash = await bcrypt.hash(data.password)
+  const hash = await hashPassword(data.password)
   const username = await generateUsernameFromEmail(data.email)
 
   return prisma.user.create({

@@ -4,7 +4,6 @@ import invariant from 'tiny-invariant'
 import { createUserFromOAuth } from '@/modules/users/oauth.server'
 import { generateUsernameFromEmail } from '@/modules/users/user.server'
 import { SpotifyStrategy } from '@/services/sessions/strategies/spotify-oauth'
-// import { sendWelcomeEmail } from '@/services/mailer/welcome-email.server'
 import { appUrl } from '@/utils/http'
 
 // Validate envars value.
@@ -30,6 +29,7 @@ export const spotifyStrategy = new SpotifyStrategy(
     const fullName = parseFullName(profile.displayName)
     const generatedUsername = await generateUsernameFromEmail(profile.emails[0].value)
     const username = profile.id || generatedUsername
+    const avatarUrl = profile.__json.images?.[0].url
 
     const socialAccount = {
       type: 'oauth',
@@ -42,7 +42,7 @@ export const spotifyStrategy = new SpotifyStrategy(
       scopes: scopes, // optional
       idToken: extraParams.id_token, // optional
       sessionState: null, // optional
-      avatarUrl: profile.__json.images?.[0].url, // optional
+      avatarUrl, // optional
     }
 
     const user = await createUserFromOAuth(
@@ -50,17 +50,13 @@ export const spotifyStrategy = new SpotifyStrategy(
         email: profile.emails[0].value,
         firstName: fullName.first,
         lastName: fullName.last,
-        avatarUrl: profile.__json.images?.[0].url,
+        avatarUrl,
         username,
       },
       socialAccount,
     )
 
     if (!user) throw new Error('Unable to create user.')
-
-    // Send email notification to user
-    // const loginLink = appUrl(`/auth/signin`)
-    // await sendWelcomeEmail(user.email, user.firstName, loginLink)
 
     // Returns Auth Session from database.
     return { ...user }

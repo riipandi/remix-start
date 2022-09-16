@@ -2,14 +2,10 @@ import type { StrategyVerifyCallback } from 'remix-auth'
 import type { OAuth2Profile, OAuth2StrategyVerifyParams } from 'remix-auth-oauth2'
 import { OAuth2Strategy } from 'remix-auth-oauth2'
 
-export interface UIDStrategyOptions {
+export interface UdotIdStrategyOptions {
   clientID: string
   clientSecret: string
   callbackURL: string
-  /**
-   * @default "user-read-email"
-   */
-  scope?: string
 }
 
 export interface VerificationStatuses {
@@ -21,7 +17,7 @@ export interface VerificationStatuses {
   percent: number
 }
 
-export interface UIDProfile extends OAuth2Profile {
+export interface UdotIdProfile extends OAuth2Profile {
   id: string
   displayName: string
   emails: [{ value: string }]
@@ -34,19 +30,18 @@ export interface UIDProfile extends OAuth2Profile {
   }
 }
 
-export interface UIDExtraParams extends Record<string, string | number> {
+export interface UdotIdExtraParams extends Record<string, string | number> {
   expires_in: number
   token_type: string
 }
 
-export class UIDStrategy<User> extends OAuth2Strategy<User, UIDProfile, UIDExtraParams> {
-  public name = 'uid'
-  private readonly scope: string
+export class UdotIdStrategy<User> extends OAuth2Strategy<User, UdotIdProfile, UdotIdExtraParams> {
+  public name = 'udotid'
   private readonly userInfoURL = 'https://api-v2.u.id/api/v2/user_info'
 
   constructor(
-    { clientID, clientSecret, callbackURL, scope }: UIDStrategyOptions,
-    verify: StrategyVerifyCallback<User, OAuth2StrategyVerifyParams<UIDProfile, UIDExtraParams>>,
+    { clientID, clientSecret, callbackURL }: UdotIdStrategyOptions,
+    verify: StrategyVerifyCallback<User, OAuth2StrategyVerifyParams<UdotIdProfile, UdotIdExtraParams>>,
   ) {
     super(
       {
@@ -58,28 +53,31 @@ export class UIDStrategy<User> extends OAuth2Strategy<User, UIDProfile, UIDExtra
       },
       verify,
     )
-    this.scope = scope ?? 'user-read-email'
   }
 
   protected authorizationParams(): URLSearchParams {
-    const params = new URLSearchParams({ scope: this.scope })
-    return params
+    const urlSearchParams: Record<string, string> = {
+      response_type: 'code',
+    }
+    return new URLSearchParams(urlSearchParams)
   }
 
-  protected async userProfile(access_token: string): Promise<UIDProfile> {
+  protected async userProfile(accessToken: string): Promise<UdotIdProfile> {
     const response = await fetch(this.userInfoURL, {
+      method: 'GET',
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     })
 
-    const data: UIDProfile['__json'] = await response.json()
+    const result = await response.json()
+    const data: UdotIdProfile['__json'] = result.data
 
-    const profile: UIDProfile = {
-      provider: 'uid',
-      displayName: data.fullname,
+    const profile: UdotIdProfile = {
+      provider: 'udotid',
       id: data.user_id,
+      displayName: data.fullname,
       emails: [{ value: data.email }],
       photos: undefined,
       __json: data,
@@ -91,7 +89,7 @@ export class UIDStrategy<User> extends OAuth2Strategy<User, UIDProfile, UIDExtra
   protected async getAccessToken(response: Response): Promise<{
     accessToken: string
     refreshToken: string
-    extraParams: UIDExtraParams
+    extraParams: UdotIdExtraParams
   }> {
     const { access_token, token_type, expires_in, refresh_token } = await response.json()
 

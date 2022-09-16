@@ -1,9 +1,10 @@
-import bcrypt from '@node-rs/bcrypt'
+// import bcrypt from '@node-rs/bcrypt'
 import type { Password, User } from '@prisma/client'
 import { AuthorizationError } from 'remix-auth'
 import { FormStrategy } from 'remix-auth-form'
 
 import { prisma } from '@/services/db.server'
+import { matchPassword } from '@/utils/encryption.server'
 
 export async function login(email: User['email'], password: Password['hash']): Promise<User | null> {
   const user = await prisma.user.findUnique({
@@ -13,7 +14,7 @@ export async function login(email: User['email'], password: Password['hash']): P
 
   if (!user || !user.password) return null
 
-  const isValid = await bcrypt.verify(password, user.password.hash)
+  const isValid = await matchPassword(password, user.password.hash)
 
   if (!isValid) return null
 
