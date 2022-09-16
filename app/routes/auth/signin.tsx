@@ -1,7 +1,7 @@
-// import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Link, useLoaderData, useSearchParams } from '@remix-run/react'
+import { Link, useActionData, useLoaderData, useSearchParams } from '@remix-run/react'
 import { withZod } from '@remix-validated-form/with-zod'
 import { ValidatedForm, validationError } from 'remix-validated-form'
 import { z } from 'zod'
@@ -31,22 +31,18 @@ export async function loader({ request }: LoaderArgs) {
   return json({ error, defaultValues: { email: '', password: '' } })
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionArgs): Promise<any> {
   // Validate the forms before submitted
   const fieldValues = await validator.validate(await request.formData())
   if (fieldValues.error) return validationError(fieldValues.error)
 
   // Do something with correctly typed values;
+  const redirectTo = fieldValues.submittedData.redirectTo || '/'
   const { email, password } = fieldValues.data
   const user = await login(email, password)
-  const redirectTo = '/'
 
-  // we call the method with the name of the strategy we want to use and the
-  // request object, optionally we pass an object with the URLs we want the user
-  // to be redirected to after a success or a failure
-  //   const user = await authenticator.authenticate('user-pass', request, {
-  //     failureRedirect: `${LOGIN_URL}?redirectTo=${redirectTo}`,
-  //   })
+  if (!user) return json({ errors: 'Invalid credentials!' })
+  if (user && !user.emailVerifiedAt) return json({ errors: 'Your email not verified!' })
 
   // manually get the session, store the user data, and commit the session
   const session = await getSession(request.headers.get('Cookie'))
@@ -65,6 +61,7 @@ export const meta: MetaFunction = () => ({ title: 'Sign In' })
 
 export default function SignInPage() {
   const [searchParams] = useSearchParams()
+  const actionData = useActionData<typeof action>()
   const { defaultValues } = useLoaderData<typeof loader>()
   const redirectTo = searchParams.get('redirectTo') || '/notes'
 
@@ -84,16 +81,16 @@ export default function SignInPage() {
         </div>
       </div>
 
-      {/* {loaderData?.message && (
+      {actionData?.errors && (
         <div
           className="mb-4 flex rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <ExclamationTriangleIcon className="mr-3 inline h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          <span className="sr-only">Info</span>
-          <div>{loaderData?.message}</div>
+          <span className="sr-only">Warning</span>
+          <div>{actionData?.errors}</div>
         </div>
-      )} */}
+      )}
 
       <ValidatedForm
         method="post"

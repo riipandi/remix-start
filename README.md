@@ -28,7 +28,6 @@ Learn more about [Remix Stacks](https://remix.run/stacks).
 - [Fly app deployment](https://fly.io) with [Docker](https://www.docker.com/)
 - Production-ready [SQLite Database](https://sqlite.org)
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
-- Email/Password Authentication with [remix-auth-form](https://github.com/sergiodxa/remix-auth-form)
 - Google authentication with [remix-auth-google](https://github.com/pbteja1998/remix-auth-google)
 - Spotify authentication with [remix-auth-oauth2](https://github.com/sergiodxa/remix-auth-oauth2)
 - Simple forms validation with [remix-validated-form](https://www.remix-validated-form.io)
