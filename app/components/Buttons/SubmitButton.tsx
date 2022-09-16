@@ -20,7 +20,7 @@ export const SubmitButton: FC<SubmitButtonProps> = (props) => {
         <button
           type="submit"
           className={clsx(
-            isSubmitting
+            disabled
               ? 'bg-primary-500 hover:bg-primary-400 disabled:bg-primary-400'
               : 'bg-primary-500 hover:bg-primary-700 disabled:bg-primary-400',
             'w-full flex items-center justify-center py-2.5 px-4 tracking-wide border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',

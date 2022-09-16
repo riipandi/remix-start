@@ -1,4 +1,3 @@
-// import bcrypt from '@node-rs/bcrypt'
 import type { Password, User } from '@prisma/client'
 import { AuthorizationError } from 'remix-auth'
 import { FormStrategy } from 'remix-auth-form'

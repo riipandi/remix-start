@@ -7,7 +7,7 @@ import { ValidatedForm, validationError } from 'remix-validated-form'
 import { z } from 'zod'
 
 import { authenticator } from '@/modules/users/auth.server'
-import { LOGIN_URL, SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
+import { SESSION_ERROR_KEY } from '@/services/sessions/constants.server'
 import { commitSession, getSession, sessionStorage, setCookieExpires } from '@/services/sessions/session.server'
 import { login } from '@/services/sessions/strategies/form-strategy'
 
@@ -15,7 +15,6 @@ import { SubmitButton } from '@/components/Buttons'
 import { EmailInput, PasswordInput } from '@/components/Input'
 import { AuthLabel, SocialAuth } from '@/components/SocialAuth'
 
-// Using zod in this example, but you can use anything
 export const validator = withZod(
   z.object({
     email: z.string().min(1, { message: 'Email is required' }).email('Must be a valid email'),

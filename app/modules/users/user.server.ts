@@ -1,4 +1,3 @@
-// import bcrypt from '@node-rs/bcrypt'
 import type { User, VerificationToken } from '@prisma/client'
 import * as crypto from 'crypto'
 import { addDays } from 'date-fns'
