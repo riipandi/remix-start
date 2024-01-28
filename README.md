@@ -58,6 +58,23 @@ The database seed script creates a new user with some data you can use to get st
 - Email: `admin@example.com`
 - Password: `passw0rd`
 
+### E2E Testing
+
+```sh
+pnpm e2e-test --ui --skipInstall
+```
+
+## 🐳 Build Container
+
+```sh
+pnpm docker:build
+```
+
+```sh
+# Run API Docker container in foreground
+docker run --rm -it -p 3000:3000 --name remix-start --env-file .env remix-start
+```
+
 ## 🚀 Deployment
 
 [Read the guide](./DEPLOY.md) to learn how to deploy this project.
@@ -70,12 +87,12 @@ this project. It's recommended to get TypeScript set up for your editor and inst
 plugin (like the [VSCode Prettier plugin](https://s.id/vscode-prettier)) to get auto-formatting
 on saving and get a really great in-editor experience with type checking and auto-complete.
 
-## Thanks to...
+## 🙏 Thanks to...
 
 In general, I'd like to thank every single one who open-sources their source code for their
 effort to contribute something to the open-source community. Your work means the world! 🌍 ❤️
 
-## License
+## 📝 License
 
 This project is open-sourced software licensed under the [MIT license](./LICENSE).
 
