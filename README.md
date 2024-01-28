@@ -1,10 +1,10 @@
 # Remix Start
 
-[![Languages](https://img.shields.io/github/languages/top/riipandi/remix-start?style=flat-square)](https://github.com/riipandi/remix-start)
-[![Contribution](https://img.shields.io/badge/Contributions-welcome-gray.svg?style=flat-square)](https://github.com/riipandi/remix-start/pulse)
-[![License](https://img.shields.io/github/license/riipandi/remix-start?style=flat-square)][mit-license]
-
-<!-- [![Test](https://github.com/riipandi/remix-start/actions/workflows/test.yml/badge.svg)](https://github.com/riipandi/remix-start/actions/workflows/test.yml) -->
+[![Release](https://img.shields.io/github/v/release/riipandi/remix-start?logo=remix&color=orange)](https://github.com/riipandi/remix-start/releases)
+[![Languages](https://img.shields.io/github/languages/top/riipandi/remix-start)](https://github.com/riipandi/remix-start)
+[![License](https://img.shields.io/github/license/riipandi/remix-start)][mit-license]
+[![Test](https://github.com/riipandi/remix-start/actions/workflows/test.yml/badge.svg)](https://github.com/riipandi/remix-start/actions/workflows/test.yml)
+[![Contribution](https://img.shields.io/badge/Contributions-welcome-gray.svg)](https://github.com/riipandi/remix-start/pulse)
 
 Minimal containerized Remix Stack with Tailwind CSS.
 
