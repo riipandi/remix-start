@@ -29,6 +29,9 @@ export default defineConfig({
     locale: 'en-US',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    launchOptions: {
+      slowMo: 1000, // a 1000 milliseconds pause before each operation. Useful for slow systems.
+    },
   },
   /* Configure projects for major browsers */
   projects: [
