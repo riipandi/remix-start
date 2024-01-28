@@ -10,9 +10,6 @@ on:
 
 permissions: read-all
 
-env:
-  NODE_ENV: production
-
 jobs:
   test:
     name: Test

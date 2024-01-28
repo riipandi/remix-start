@@ -15,9 +15,6 @@ permissions:
   contents: write
   packages: write
 
-env:
-  NODE_ENV: production
-
 jobs:
   build-release:
     name: Build release
