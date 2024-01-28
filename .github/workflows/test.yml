@@ -15,7 +15,7 @@ env:
 
 jobs:
   test:
-    name: Test
+    name: Unit Test
     strategy:
       matrix:
         node-version: ['18', '20']
@@ -35,9 +35,13 @@ jobs:
 
       - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
         name: Install and build
-        run: pnpm install && pnpm build
+        run: |
+          pnpm install
+          pnpm test
+          pnpm build
 
   e2e-test:
+    name: E2E Test
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:

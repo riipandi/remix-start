@@ -16,7 +16,9 @@
         "update-deps": "npm-check-updates --configFileName .ncurc.json",
         "cleanup": "docker compose down --remove-orphans --volumes",
         "preinstall": "pnpm dlx only-allow pnpm",
-        "test": "vitest",
+        "test": "vitest --run",
+        "test:ui": "vitest --ui",
+        "coverage": "vitest run --coverage",
         "e2e-test:ui": "playwright test --ui",
         "e2e-test:desktop": "playwright test --headed --project Chromium",
         "e2e-test:mobile": "playwright test --headed --project 'Mobile Chrome'",
@@ -41,14 +43,20 @@
         "@playwright/test": "^1.41.1",
         "@remix-run/dev": "^2.5.1",
         "@remix-run/testing": "^2.5.1",
+        "@storybook/react": "^7.6.10",
+        "@storybook/testing-react": "^2.0.1",
         "@tailwindcss/aspect-ratio": "^0.4.2",
         "@tailwindcss/forms": "^0.5.7",
         "@tailwindcss/typography": "^0.5.10",
+        "@testing-library/jest-dom": "^6.3.0",
         "@testing-library/react": "^14.1.2",
+        "@types/jest": "^29.5.11",
         "@types/node": "^20.11.9",
         "@types/react": "^18.2.48",
         "@types/react-dom": "^18.2.18",
         "@typescript-eslint/eslint-plugin": "^6.19.1",
+        "@vitest/coverage-v8": "^1.2.2",
+        "@vitest/ui": "^1.2.2",
         "eslint": "^8.56.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-import-resolver-typescript": "^3.6.1",
@@ -59,13 +67,17 @@
         "eslint-plugin-simple-import-sort": "^10.0.0",
         "eslint-plugin-tailwindcss": "^3.14.1",
         "husky": "^9.0.6",
+        "jsdom": "^24.0.0",
         "lint-staged": "^15.2.0",
+        "msw": "^2.1.5",
+        "msw-storybook-addon": "^1.10.0",
         "npm-check-updates": "^16.14.14",
         "playwright": "^1.41.1",
         "prettier": "^3.2.4",
         "prettier-plugin-tailwindcss": "^0.5.11",
         "tailwindcss": "^3.4.1",
-        "typescript": "^5.1.6"
+        "typescript": "^5.1.6",
+        "vitest": "^1.2.2"
     },
     "engines": {
         "node": ">=18.0.0"
@@ -84,5 +96,10 @@
         "/node_modules",
         "/build",
         "/public/build"
-    ]
+    ],
+    "msw": {
+        "workerDirectory": [
+            "public"
+        ]
+    }
 }

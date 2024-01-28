@@ -1,6 +1,5 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
     "compilerOptions": {
         "lib": ["DOM", "DOM.Iterable", "ES2022"],
         "isolatedModules": true,
@@ -22,4 +21,13 @@
         // Remix takes care of building everything in `remix build`.
         "noEmit": true,
     },
+    "include": [
+        "remix.env.d.ts",
+        "playwright.config.ts",
+        "setup-test.ts",
+        "tailwind.config.ts",
+        "vitest.config.ts",
+        "**/*.ts",
+        "**/*.tsx",
+    ],
 }
