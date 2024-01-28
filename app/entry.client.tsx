@@ -1,27 +1,18 @@
-import * as React from 'react'
-import { hydrateRoot } from 'react-dom/client'
-import { RemixBrowser } from '@remix-run/react'
+/**
+ * By default, Remix will handle hydrating your app on the client for you.
+ * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
+ * For more information, see https://remix.run/file-conventions/entry.client
+ */
 
-import { Plausible, plausibleConfig, trackPageview } from '@/utils/analytics'
+import { startTransition, StrictMode } from 'react';
+import { hydrateRoot } from 'react-dom/client';
+import { RemixBrowser } from '@remix-run/react';
 
-function hydrate() {
-  React.startTransition(() => {
-    hydrateRoot(
-      document,
-      <React.StrictMode>
-        <RemixBrowser />
-      </React.StrictMode>,
-    )
-  })
-
-  if (process.env.NODE_ENV === 'production') {
-    Plausible(plausibleConfig)
-    trackPageview()
-  }
-}
-
-if (window.requestIdleCallback) {
-  window.requestIdleCallback(hydrate)
-} else {
-  window.setTimeout(hydrate, 1)
-}
+startTransition(() => {
+  hydrateRoot(
+    document,
+    <StrictMode>
+      <RemixBrowser />
+    </StrictMode>
+  );
+});

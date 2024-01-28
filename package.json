@@ -1,113 +1,72 @@
 {
-  "name": "prismix",
-  "version": "0.1.0",
-  "private": true,
-  "sideEffects": false,
-  "scripts": {
-    "build": "run-s build:*",
-    "build:css": "npm run generate:css -- --minify",
-    "build:remix": "remix build",
-    "dev": "run-p dev:*",
-    "dev:css": "npm run generate:css -- --watch",
-    "dev:remix": "cross-env NODE_ENV=development binode -- @remix-run/dev:remix dev",
-    "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
-    "db:init": "prisma migrate dev --name initialize",
-    "db:setup": "prisma migrate deploy && prisma db seed",
-    "db:migrate": "prisma migrate deploy",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "lint:fix": "eslint --cache --cache-location ./node_modules/.cache/eslint . --fix",
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "prebuild": "prisma generate",
-    "predev": "prisma generate",
-    "start": "remix-serve build",
-    "typecheck": "tsc -b"
-  },
-  "dependencies": {
-    "@headlessui/react": "^1.7.1",
-    "@heroicons/react": "^2.0.11",
-    "@node-rs/bcrypt": "^1.6.1",
-    "@prisma/client": "^4.3.1",
-    "@remix-run/node": "^1.7.0",
-    "@remix-run/react": "^1.7.0",
-    "@remix-run/serve": "^1.7.0",
-    "@remix-run/server-runtime": "^1.7.0",
-    "@remix-validated-form/with-zod": "^2.0.1",
-    "@upstash/redis": "^1.13.1",
-    "clsx": "^1.2.1",
-    "date-fns": "^2.29.3",
-    "isbot": "^3.5.3",
-    "nodemailer": "^6.7.8",
-    "parse-full-name": "^1.2.6",
-    "plausible-tracker": "^0.3.8",
-    "react-device-detect": "^2.2.2",
-    "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.3.0",
-    "react": "^18.2.0",
-    "remix-auth-google": "^1.1.0",
-    "remix-auth-oauth2": "^1.3.0",
-    "remix-auth": "^3.2.2",
-    "remix-utils": "^3.3.0",
-    "remix-validated-form": "^4.5.5",
-    "tiny-invariant": "^1.2.0",
-    "zod": "^3.19.1"
-  },
-  "devDependencies": {
-    "@remix-run/dev": "^1.7.0",
-    "@remix-run/eslint-config": "^1.7.0",
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/line-clamp": "^0.4.2",
-    "@tailwindcss/typography": "^0.5.7",
-    "@types/eslint": "^8.4.6",
-    "@types/node": "^18.7.17",
-    "@types/nodemailer": "^6.4.6",
-    "@types/parse-full-name": "^1.2.2",
-    "@types/react": "^18.0.19",
-    "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.1.0",
-    "autoprefixer": "^10.4.9",
-    "binode": "^1.0.5",
-    "cookie": "^0.5.0",
-    "cross-env": "^7.0.3",
-    "csstype": "^3.1.1",
-    "eslint": "^8.23.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-simple-import-sort": "^8.0.0",
-    "eslint-plugin-tailwindcss": "^3.6.1",
-    "happy-dom": "^6.0.4",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
-    "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.16",
-    "prettier": "2.7.1",
-    "prisma": "^4.3.1",
-    "tailwindcss": "^3.1.8",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.8.3",
-    "vite": "^3.1.0"
-  },
-  "engines": {
-    "node": ">=14"
-  },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-  },
-  "prettier": {
-    "arrowParens": "always",
-    "printWidth": 120,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "useTabs": false
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "name": "remix-start",
+    "version": "0.0.0",
+    "license": "MIT",
+    "private": true,
+    "sideEffects": false,
+    "type": "module",
+    "scripts": {
+        "build": "remix build",
+        "dev": "docker compose up -d && remix dev",
+        "start": "remix-serve ./build/index.js",
+        "format": "prettier --write . --log-level warn",
+        "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint . --fix",
+        "docker:build": "docker build -f Dockerfile . -t $npm_package_name:latest -t $npm_package_name:$npm_package_version",
+        "docker:run": "docker run --rm -it -p 3000:3000 --env-file .env --name $npm_package_name $npm_package_name:latest",
+        "update-deps": "npm-check-updates --configFileName .ncurc.json",
+        "cleanup": "docker compose down --remove-orphans --volumes",
+        "preinstall": "pnpm dlx only-allow pnpm",
+        "typecheck": "tsc -b"
+    },
+    "dependencies": {
+        "@remix-run/css-bundle": "^2.5.1",
+        "@remix-run/node": "^2.5.1",
+        "@remix-run/react": "^2.5.1",
+        "@remix-run/serve": "^2.5.1",
+        "clsx": "^2.1.0",
+        "isbot": "^4.4.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "tailwind-merge": "^2.2.1",
+        "tailwindcss-animate": "^1.0.7"
+    },
+    "devDependencies": {
+        "@remix-run/dev": "^2.5.1",
+        "@tailwindcss/aspect-ratio": "^0.4.2",
+        "@tailwindcss/forms": "^0.5.7",
+        "@tailwindcss/typography": "^0.5.10",
+        "@types/node": "^20.11.9",
+        "@types/react": "^18.2.48",
+        "@types/react-dom": "^18.2.18",
+        "@typescript-eslint/eslint-plugin": "^6.19.1",
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-import-resolver-typescript": "^3.6.1",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-jsx-a11y": "^6.8.0",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-simple-import-sort": "^10.0.0",
+        "eslint-plugin-tailwindcss": "^3.14.1",
+        "husky": "^9.0.6",
+        "lint-staged": "^15.2.0",
+        "npm-check-updates": "^16.14.14",
+        "prettier": "^3.2.4",
+        "prettier-plugin-tailwindcss": "^0.5.11",
+        "tailwindcss": "^3.4.1",
+        "typescript": "^5.1.6"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,json,css,scss,md,ts,tsx,html}": [
+            "pnpm format"
+        ]
     }
-  },
-  "lint-staged": {
-    "*.{js,jsx,json,css,scss,md,ts,tsx,html,graphql}": [
-      "npm run format --uncommitted"
-    ]
-  }
 }

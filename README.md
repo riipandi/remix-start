@@ -1,22 +1,15 @@
-<p align="center"><img src="./banner.svg" width="500" height="150" alt="Project Logo"></p>
-<p align="center">
-    <a href="https://github.com/riipandi/prismix/pulse">
-        <img src="https://img.shields.io/badge/Contributions-welcome-blue.svg?style=flat-square" alt="Contribution welcome">
-    </a>
-    <a href="https://github.com/riipandi/prismix">
-        <img src="https://img.shields.io/github/languages/top/riipandi/prismix?style=flat-square" alt="Top language">
-    </a>
-    <a href="https://aris.mit-license.org">
-        <img src="https://img.shields.io/github/license/riipandi/prismix?style=flat-square" alt="License">
-    </a>
-</p>
+# Remix Start
 
----
+[![Languages](https://img.shields.io/github/languages/top/riipandi/remix-start?style=flat-square)](https://github.com/riipandi/remix-start)
+[![Contribution](https://img.shields.io/badge/Contributions-welcome-gray.svg?style=flat-square)](https://github.com/riipandi/remix-start/pulse)
+[![License](https://img.shields.io/github/license/riipandi/remix-start?style=flat-square)][mit-license]
 
-Minimal containerized Remix Stack with Tailwind CSSS, SQLite, and Prisma ORM.
+<!-- [![Test](https://github.com/riipandi/remix-start/actions/workflows/test.yml/badge.svg)](https://github.com/riipandi/remix-start/actions/workflows/test.yml) -->
+
+Minimal containerized Remix Stack with Tailwind CSS.
 
 ```sh
-pnpm create remix --template riipandi/prismix app_name
+pnpm create remix --template riipandi/remix-start app_name
 ```
 
 Learn more about [Remix Stacks](https://remix.run/stacks).
@@ -26,13 +19,7 @@ Learn more about [Remix Stacks](https://remix.run/stacks).
 ## What's in the stack
 
 - [Fly app deployment](https://fly.io) with [Docker](https://www.docker.com/)
-- Production-ready [SQLite Database](https://sqlite.org)
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
-- Google authentication with [remix-auth-google](https://github.com/pbteja1998/remix-auth-google)
-- Spotify authentication with [remix-auth-oauth2](https://github.com/sergiodxa/remix-auth-oauth2)
-- Simple forms validation with [remix-validated-form](https://www.remix-validated-form.io)
-- Database ORM with [Prisma](https://prisma.io)
-- Optional Redis session storage with [Upstash](https://upstash.com/blog/redis-with-remix)
 - Styling with [Tailwind CSS](https://tailwindcss.com/)
 - Tailwind linting and formatting with [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
 - Code formatting with [Prettier](https://prettier.io)
@@ -57,20 +44,19 @@ to generate a random secret.
 ### Up and running
 
 ```sh
-pnpm install          # install the dependencies
-pnpm run db:init      # Prepare database migration
-pnpm run db:setup     # Populate database seeder
+pnpm install      # install the dependencies
+pnpm db:migrate   # Prepare database migration
 
-pnpm run dev          # serve with hot reload
-pnpm run build        # build for production
-pnpm run start        # launch generated build
+pnpm dev          # serve with hot reload
+pnpm build        # build for production
+pnpm start        # launch generated build
 ```
 
 This starts your app in development mode, rebuilding assets on file changes.
 
 The database seed script creates a new user with some data you can use to get started:
 
-- Email: `aris@duck.com`
+- Email: `admin@example.com`
 - Password: `passw0rd`
 
 ## 🚀 Deployment
@@ -84,3 +70,21 @@ is configured in `.eslintrc.js`, and [Prettier](https://prettier.io/) for auto-f
 this project. It's recommended to get TypeScript set up for your editor and install an editor
 plugin (like the [VSCode Prettier plugin](https://s.id/vscode-prettier)) to get auto-formatting
 on saving and get a really great in-editor experience with type checking and auto-complete.
+
+## Thanks to...
+
+In general, I'd like to thank every single one who open-sources their source code for their
+effort to contribute something to the open-source community. Your work means the world! 🌍 ❤️
+
+## License
+
+This project is open-sourced software licensed under the [MIT license](./LICENSE).
+
+Copyrights in this project are retained by their contributors.
+See the [license file](./LICENSE) for more information.
+
+---
+
+<sub>🤫 Psst! If you like my work you can support me via [GitHub sponsors](https://github.com/sponsors/riipandi).</sub>
+
+[mit-license]: https://choosealicense.com/licenses/mit/

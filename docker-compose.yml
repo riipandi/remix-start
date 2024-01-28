@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+version: '3.8'
+
+services:
+  pgsql:
+    image: postgres:16-alpine
+    container_name: remix_pgsql
+    hostname: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      # Optional: only use when using custom query for preparation
+      # - ./initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: securedb
+      POSTGRES_DB: remixdb
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d remixdb']
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # keydb:
+  #   # drop-in replacement for Redis
+  #   image: eqalpha/keydb:latest
+  #   container_name: remix_keydb
+  #   restart: always
+  #   ports:
+  #     - '6379:6379'
+  #   volumes:
+  #     - 'keydb_data:/data'
+  #   command: 'keydb-server /etc/keydb/redis.conf --server-threads 2'
+
+  pgweb:
+    image: ghcr.io/sosedoff/pgweb:latest
+    container_name: remix_pgweb
+    restart: always
+    ports:
+      - '54321:8081'
+    environment:
+      PGWEB_DATABASE_URL: 'postgres://postgres:postgres@pgsql:5432/remixdb?sslmode=disable'
+    depends_on:
+      - pgsql
+
+  mailpit:
+    image: axllent/mailpit:v1.10
+    container_name: remix_mailpit
+    restart: unless-stopped
+    volumes:
+      - mailpit_data:/data
+    ports:
+      - '1025:1025' # port the SMTP server should be accessible on
+      - '8025:8025' # port the web interface should be accessible on
+    environment:
+      # https://github.com/axllent/mailpit/wiki/Runtime-options
+      TZ: 'Asia/Jakarta'
+
+volumes:
+  pg_data:
+    driver: local
+  # keydb_data:
+  #   driver: local
+  mailpit_data:
+    driver: local

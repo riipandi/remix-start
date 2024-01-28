@@ -11,8 +11,9 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 
-/build
+/.cache
 /public/build
+/build
 
 .env.*
 !.env.example

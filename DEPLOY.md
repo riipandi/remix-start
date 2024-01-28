@@ -15,7 +15,7 @@ fly auth login
 ## Create Fly application
 
 ```sh
-fly apps create --org personal --name prismix
+fly apps create --org personal --name remix-start
 ```
 
 > **Note:** Make sure this name matches the `app` set in your `fly.toml` file.
@@ -30,7 +30,7 @@ fly secrets set $(cat .env | xargs -I %s echo %s)
 ## Create a persistent volume for the sqlite
 
 ```sh
-fly volumes create data --size 1 --app prismix --region lax
+fly volumes create data --size 1 --app remix-start --region lax
 ```
 
 ## Deploy the application:
@@ -39,7 +39,7 @@ fly volumes create data --size 1 --app prismix --region lax
 fly deploy
 ```
 
-The application will available at `https://prismix.fly.dev`.
+The application will available at `https://remix-start.fly.dev`.
 
 Go to the [documentation](https://fly.io/docs/flyctl) for more information about Fly CLI.
 
