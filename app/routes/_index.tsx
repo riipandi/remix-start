@@ -10,10 +10,10 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className='mx-auto flex size-full min-h-screen flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8'>
-      <h1 className='block text-7xl font-bold text-gray-800 dark:text-white sm:text-7xl'>
+      <h1 className='block text-7xl font-bold text-gray-800 sm:text-7xl dark:text-white'>
         Welcome to Remix
       </h1>
-      <div className='mt-8 text-lg text-gray-600 dark:text-gray-300 sm:mt-10'>
+      <div className='mt-8 text-lg text-gray-600 sm:mt-10 dark:text-gray-300'>
         <p className='leading-8'>
           Minimal containerized Remix Stack with Tailwind CSS and TypeScript.
         </p>
