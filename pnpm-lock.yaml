@@ -23,6 +23,9 @@ dependencies:
   dotenv:
     specifier: ^16.4.1
     version: 16.4.1
+  husky:
+    specifier: ^9.0.6
+    version: 9.0.6
   isbot:
     specifier: ^4.4.0
     version: 4.4.0
@@ -112,9 +115,6 @@ devDependencies:
   eslint-plugin-tailwindcss:
     specifier: ^3.14.1
     version: 3.14.1(tailwindcss@3.4.1)
-  husky:
-    specifier: ^9.0.6
-    version: 9.0.6
   jsdom:
     specifier: ^24.0.0
     version: 24.0.0
@@ -5991,7 +5991,7 @@ packages:
       }
     engines: { node: '>=18' }
     hasBin: true
-    dev: true
+    dev: false
 
   /iconv-lite@0.4.24:
     resolution:
@@ -6008,7 +6008,6 @@ packages:
         integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==,
       }
     engines: { node: '>=0.10.0' }
-    requiresBuild: true
     dependencies:
       safer-buffer: 2.1.2
     dev: true

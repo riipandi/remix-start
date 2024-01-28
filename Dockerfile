@@ -20,7 +20,6 @@ WORKDIR /srv
 # -----------------------------------------------------------------------------
 FROM base AS builder
 COPY --chown=node:node . .
-ENV NODE_ENV=$NODE_ENV
 RUN --mount=type=cache,id=cache-pnpm,target=/pnpm/store pnpm install && pnpm build
 
 # -----------------------------------------------------------------------------
@@ -36,6 +35,7 @@ COPY --from=builder --chown=nonroot:nonroot /srv/public ./public
 COPY --from=builder --chown=nonroot:nonroot /srv/build ./build
 
 # Install production dependencies
+ENV NODE_ENV $NODE_ENV
 RUN npm install --no-audit --omit=dev
 RUN /usr/local/bin/node-prune
 

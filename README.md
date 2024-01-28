@@ -12,19 +12,21 @@ Minimal containerized Remix Stack with Tailwind CSS.
 pnpm create remix --template riipandi/remix-start app_name
 ```
 
-Learn more about [Remix Stacks](https://remix.run/stacks).
+Learn more about [Remix Stacks](https://remix.run/docs/en/main/guides/templates#stacks).
 
 ---
 
 ## What's in the stack
 
-- [Fly app deployment](https://fly.io) with [Docker](https://www.docker.com/)
+- Deploy to [Fly.io](https://fly.io) using [Docker](https://www.docker.com/) container
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
-- Styling with [Tailwind CSS](https://tailwindcss.com/)
+- Styling with [Tailwind CSS](https://tailwindcss.com/), [clsx](https://www.npmjs.com/package/clsx), and [tailwind-merge](https://www.npmjs.com/package/tailwind-merge)
 - Tailwind linting and formatting with [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
 - Code formatting with [Prettier](https://prettier.io)
 - Linting with [ESLint](https://eslint.org)
 - Static Types with [TypeScript](https://typescriptlang.org)
+- Unit testing with [Vitest](https://vitest.dev)
+- E2E testing with [Playwright](https://playwright.dev)
 
 ## 🏁 Quickstart
 

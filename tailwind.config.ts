@@ -5,7 +5,7 @@ import { Config } from 'tailwindcss';
 
 export default {
   content: ['./app/**/*!(*.stories|*.spec).{ts,tsx}'],
-  darkMode: 'class',
+  darkMode: 'media',
   theme: {
     extend: {
       fontFamily: {
