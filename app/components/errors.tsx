@@ -1,6 +1,8 @@
 import { ErrorResponse } from '@remix-run/node';
 import { Link } from '@remix-run/react';
 
+import { cn } from '@/utils/ui-helper';
+
 export function NotFound({ status, statusText }: Omit<ErrorResponse, 'data'>) {
   return (
     <div className='mx-auto flex size-full min-h-screen flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8'>
@@ -14,7 +16,7 @@ export function NotFound({ status, statusText }: Omit<ErrorResponse, 'data'>) {
       <div className='mt-8 flex flex-col items-center justify-center lg:mt-14'>
         <a
           href='/'
-          className='inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2 text-sm
+          className='inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2
               font-semibold text-primary-500 ring-offset-white transition-all hover:text-primary-700 focus:outline-none focus:ring-1
               focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900 sm:w-auto'
         >
@@ -44,9 +46,11 @@ export function InternalError({ message }: { message: string }) {
       <div className='mt-8 flex flex-col items-center justify-center lg:mt-14'>
         <Link
           to='/'
-          className='inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2 text-sm
-              font-semibold text-primary-500 ring-offset-white transition-all hover:text-primary-700 focus:outline-none focus:ring-1
-              focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900 sm:w-auto'
+          className={cn(
+            'inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2',
+            'font-semibold text-primary-500 ring-offset-white transition-all hover:text-primary-700 sm:w-auto',
+            'focus:outline-none focus:ring-1 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900'
+          )}
         >
           <svg className='size-2.5' width='{20}' height='{20}' viewBox='0 0 16 16' fill='none'>
             <path

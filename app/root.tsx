@@ -30,7 +30,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className={cn(isDevelopment() && 'debug-screen')}>
+      <body className={cn(isDevelopment() && 'debug-screen', 'bg-white dark:bg-black')}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
