@@ -42,7 +42,7 @@ the following command:
 openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
 ```
 
-If you don't have openssl installed, you can also use [1password](https://1password.com/password-generator)
+If you don't have openssl installed, you can also use [1password][1password]
 to generate a random secret.
 
 ### Up and running
@@ -108,3 +108,4 @@ See the [license file](./LICENSE) for more information.
 <sub>🤫 Psst! If you like my work you can support me via [GitHub sponsors](https://github.com/sponsors/riipandi).</sub>
 
 [mit-license]: https://choosealicense.com/licenses/mit/
+[1password]: https://1password.com/password-generator
