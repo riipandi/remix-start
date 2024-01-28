@@ -19,11 +19,7 @@ Learn more about [Remix Stacks](https://remix.run/stacks).
 ## What's in the stack
 
 - [Fly app deployment](https://fly.io) with [Docker](https://www.docker.com/)
-- Production-ready [SQLite Database](https://sqlite.org)
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
-- Google authentication with [remix-auth-google](https://github.com/pbteja1998/remix-auth-google)
-- Simple forms validation with [remix-validated-form](https://www.remix-validated-form.io)
-- Optional Redis session storage with [Upstash](https://upstash.com/blog/redis-with-remix)
 - Styling with [Tailwind CSS](https://tailwindcss.com/)
 - Tailwind linting and formatting with [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
 - Code formatting with [Prettier](https://prettier.io)
