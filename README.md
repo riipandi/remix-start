@@ -45,9 +45,8 @@ to generate a random secret.
 
 ```sh
 pnpm install      # install the dependencies
-pnpm db:migrate   # Prepare database migration
-
 pnpm dev          # serve with hot reload
+
 pnpm build        # build for production
 pnpm start        # launch generated build
 ```
