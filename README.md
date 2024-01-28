@@ -30,6 +30,8 @@ Learn more about [Remix Stacks](https://remix.run/docs/en/main/guides/templates#
 
 ## 🏁 Quickstart
 
+At least you will need `Node.js >=18.17.1` and `Docker >= 20.10` for building the container.
+
 ### Generate Secret Key
 
 Before you continue, you need to create `.env` file (you can duplicate `.env.example`) and
