@@ -14,6 +14,7 @@ RUN apk update && apk add --no-cache tini curl jq libc6-compat
 RUN corepack enable && corepack prepare pnpm@latest-8 --activate
 RUN curl -sf https://gobinaries.com/tj/node-prune | sh
 WORKDIR /srv
+ENV HUSKY 0
 
 # -----------------------------------------------------------------------------
 # Build the application

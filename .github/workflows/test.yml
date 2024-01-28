@@ -12,6 +12,7 @@ permissions: read-all
 
 env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
+  HUSKY: 0
 
 jobs:
   test:
