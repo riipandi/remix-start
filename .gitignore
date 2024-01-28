@@ -24,7 +24,7 @@ $RECYCLE.BIN/
 /app/styles/tailwind.css
 
 # Disable this line in your real app
-/test-results/
+/tests-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
