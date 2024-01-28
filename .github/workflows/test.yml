@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: Test
+
+on:
+  push:
+    branches: ['**']
+    tags-ignore: ['*']
+  pull_request:
+
+permissions: read-all
+
+env:
+  NODE_ENV: production
+
+jobs:
+  test:
+    name: Test
+    strategy:
+      matrix:
+        node-version: ['18', '20']
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run actions/setup-sdk@local
+        uses: ./.github/setup-sdk
+        with:
+          nodeVersion: ${{ matrix.node-version }}
+
+      - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
+        name: Install and build
+        run: pnpm install && pnpm build

@@ -1,0 +1,96 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+# git tag --delete v0.0.1
+# git tag v0.0.1 -m "version bump"
+# git push origin --tags
+
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  NODE_ENV: production
+
+jobs:
+  build-release:
+    name: Build release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run actions/setup-sdk@local
+        uses: ./.github/setup-sdk
+
+      - name: Get current tag
+        id: current_tag
+        shell: bash
+        run: echo "PKG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
+        name: Install and build
+        run: pnpm install && pnpm build
+
+      - name: Release new version
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: ${{ env.PKG_VERSION }}
+          tag_name: ${{ env.PKG_VERSION }}
+          body: "⚠️ Changelog not yet provided."
+          prerelease: true
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # release-to-ghcr:
+  #   needs: [build-release]
+  #   name: Docker container
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: docker/setup-qemu-action@v2
+  #     - uses: docker/setup-buildx-action@v2
+
+  #     - name: Get current tag
+  #       id: current_tag
+  #       shell: bash
+  #       run: echo "PKG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+  #     - name: Log in to ghcr.io
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+
+  #     - name: Extract metadata (tags, labels) for Docker
+  #       id: meta
+  #       uses: docker/metadata-action@v5
+  #       with:
+  #         images: ghcr.io/metrisible/analytics
+  #         tags: |
+  #           type=semver,pattern={{version}},value=${{ env.PKG_VERSION }}
+  #           type=semver,pattern={{major}}.{{minor}},value=${{ env.PKG_VERSION }}
+  #           type=semver,pattern={{major}},value=${{ env.PKG_VERSION }}
+
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v4
+  #       with:
+  #         context: .
+  #         push: true
+  #         build-args: PKG_VERSION=${{ env.PKG_VERSION }}
+  #         platforms: linux/amd64,linux/arm64/v8
+  #         labels: ${{ steps.meta.outputs.labels }}
+  #         tags: ${{ steps.meta.outputs.tags }}
+  #         cache-from: type=gha
+  #         cache-to: type=gha,mode=min
