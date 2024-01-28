@@ -74,7 +74,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/metrisible/analytics
+          images: ghcr.io/riipandi/remix-start
           tags: |
             type=semver,pattern={{version}},value=${{ env.PKG_VERSION }}
             type=semver,pattern={{major}}.{{minor}},value=${{ env.PKG_VERSION }}
