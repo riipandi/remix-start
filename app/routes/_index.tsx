@@ -18,14 +18,26 @@ export default function Index() {
           Minimal containerized Remix Stack with Tailwind CSS and TypeScript.
         </p>
       </div>
-      <div className='mt-8 flex flex-col items-center justify-center lg:mt-14'>
+      <div className='mt-8 flex flex-row items-center justify-center gap-4 lg:mt-12'>
+        <Link
+          to='https://github.com/riipandi/remix-start'
+          target='_blank'
+          rel='noreferrer'
+          className={cn(
+            'inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2 duration-150',
+            'border border-primary-700 font-medium text-primary-500 ring-offset-white transition-all hover:text-primary-700 sm:w-auto',
+            'focus:outline-none focus:ring-1 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900'
+          )}
+        >
+          GitHub Repo
+        </Link>
         <Link
           to='https://remix.run/docs'
           target='_blank'
           rel='noreferrer'
           className={cn(
-            'inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2',
-            'font-semibold text-primary-500 ring-offset-white transition-all hover:text-primary-700 sm:w-auto',
+            'inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2 duration-150',
+            'border border-primary-700 font-medium text-primary-500 ring-offset-white transition-all hover:text-primary-700 sm:w-auto',
             'focus:outline-none focus:ring-1 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900'
           )}
         >
