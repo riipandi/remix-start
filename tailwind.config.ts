@@ -4,7 +4,8 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 import { Config } from 'tailwindcss';
 
 export default {
-  content: ['./app/**/*.{js,jsx,ts,tsx}'],
+  content: ['./app/**/*!(*.stories|*.spec).{ts,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -17,11 +18,17 @@ export default {
         primary: colors.indigo,
       },
     },
+    debugScreens: {
+      position: ['bottom', 'right'],
+      printSize: true,
+      prefix: '',
+    },
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('tailwindcss-animate'),
+    require('./tw-plugins/debug-screen'),
   ],
 } satisfies Config;

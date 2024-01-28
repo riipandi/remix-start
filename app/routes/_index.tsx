@@ -6,7 +6,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className='min-h-screen w-full bg-black text-white'>
+    <div className='min-h-screen w-full bg-white dark:bg-black dark:text-white'>
       <h1>Welcome to Remix</h1>
       <ul>
         <li>
