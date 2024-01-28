@@ -40,7 +40,7 @@ module.exports = {
       {
         groups: [
           // These packages come first.
-          ['^dotenv', '^node(?!:?$)'],
+          ['dotenv', '^node(?!:?$)'],
           // Packages `react` related packages come after.
           ['^react', '^react-dom(?!/?$)', '^@remix-run(?!/?$)', '^@?\\w'],
           // Internal packages.

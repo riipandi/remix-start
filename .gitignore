@@ -14,6 +14,7 @@ $RECYCLE.BIN/
 /.cache
 /public/build
 /build
+/tmp
 
 .env.*
 !.env.example
@@ -23,4 +24,7 @@ $RECYCLE.BIN/
 /app/styles/tailwind.css
 
 # Disable this line in your real app
-/prisma/migrations
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

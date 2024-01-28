@@ -61,7 +61,7 @@ The database seed script creates a new user with some data you can use to get st
 ### E2E Testing
 
 ```sh
-pnpm e2e-test --ui --skipInstall
+pnpm e2e-test:ui
 ```
 
 ## 🐳 Build Container

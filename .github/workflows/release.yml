@@ -9,7 +9,7 @@ name: Release
 on:
   push:
     tags:
-      - "v*.*.*"
+      - 'v*.*.*'
 
 permissions:
   contents: write
@@ -41,7 +41,7 @@ jobs:
         with:
           name: ${{ env.PKG_VERSION }}
           tag_name: ${{ env.PKG_VERSION }}
-          body: "⚠️ Changelog not yet provided."
+          body: '⚠️ Changelog not yet provided.'
           prerelease: true
           draft: false
         env:

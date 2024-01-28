@@ -10,6 +10,9 @@ on:
 
 permissions: read-all
 
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
+
 jobs:
   test:
     name: Test
@@ -33,3 +36,30 @@ jobs:
       - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
         name: Install and build
         run: pnpm install && pnpm build
+
+  e2e-test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run actions/setup-sdk@local
+        uses: ./.github/setup-sdk
+
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm exec playwright test
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
