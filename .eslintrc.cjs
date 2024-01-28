@@ -21,7 +21,42 @@ module.exports = {
   },
 
   // Base config
-  extends: ['eslint:recommended'],
+  extends: ['eslint:recommended', 'prettier'],
+  plugins: ['simple-import-sort'],
+
+  rules: {
+    'react/jsx-key': 'off',
+    'tailwindcss/no-custom-classname': 'off',
+    'import/no-anonymous-default-export': 'off',
+    'no-console': [
+      'warn',
+      {
+        allow: ['error', 'info'],
+      },
+    ],
+    'simple-import-sort/exports': 'warn',
+    'simple-import-sort/imports': [
+      'warn',
+      {
+        groups: [
+          // These packages come first.
+          ['^dotenv', '^node(?!:?$)'],
+          // Packages `react` related packages come after.
+          ['^react', '^react-dom(?!/?$)', '^@remix-run(?!/?$)', '^@?\\w'],
+          // Internal packages.
+          ['^(@|components)(/.*|$)', '^@/hooks'],
+          // Side effect imports.
+          ['^\\u0000'],
+          // Parent imports. Put `..` last.
+          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+          // Other relative imports. Put same-folder imports and `.` last.
+          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+          // Style imports.
+          ['^.+\\.?(css)$'],
+        ],
+      },
+    ],
+  },
 
   overrides: [
     // React

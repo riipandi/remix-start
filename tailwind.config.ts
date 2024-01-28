@@ -1,6 +1,7 @@
-import { Config } from 'tailwindcss';
 import colors from 'tailwindcss/colors';
 import defaultTheme from 'tailwindcss/defaultTheme';
+
+import { Config } from 'tailwindcss';
 
 export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],

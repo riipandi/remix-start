@@ -32,6 +32,7 @@ WORKDIR /srv
 COPY --from=base /usr/local/bin/node-prune /usr/local/bin/node-prune
 COPY --from=builder --chown=nonroot:nonroot /srv/package.json ./package.json
 COPY --from=builder --chown=nonroot:nonroot /srv/.npmrc ./.npmrc
+COPY --from=builder --chown=nonroot:nonroot /srv/public ./public
 COPY --from=builder --chown=nonroot:nonroot /srv/build ./build
 
 # Install production dependencies
