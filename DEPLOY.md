@@ -30,7 +30,7 @@ fly secrets set $(cat .env | xargs -I %s echo %s)
 ## Create a persistent volume for the sqlite
 
 ```sh
-fly volumes create data --size 1 --app remix-start --region lax
+fly volumes create data --size 1 --app remix-start --region sjc
 ```
 
 ## Deploy the application:
@@ -45,8 +45,9 @@ Go to the [documentation](https://fly.io/docs/flyctl) for more information about
 
 ## Connecting to your database
 
-The sqlite database lives at `/data/sqlite.db` in your deployed application. You can connect to
-the live database by running `fly ssh console -C database-cli`.
+The sqlite database lives at `/data/sqlite.db` in your deployed application.
+
+You can connect to the live database by running `fly ssh console -C database-cli`.
 
 ## Getting Help with Deployment
 
