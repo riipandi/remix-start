@@ -1,6 +1,8 @@
 # Contributing Guideline
 
-Please open an issue to discuss the contribution you wish to make before submitting any changes. This way we can guide you through the process and give feedback.
+Please open an issue to discuss the contribution you wish to make before submitting any changes.
+
+This way we can guide you through the process and give feedback.
 
 ## 🏁 Quick Start
 
@@ -77,7 +79,13 @@ Read [Deployment Guide](./DEPLOY.md) for detailed documentation.
 
 ## 🪪 Licensing
 
-This project is GNU AGPL licensed. If you make a contribution, you agree to transfer ownership of your contribution to us.
+This project is licensed under the [MIT License][mit-license], which allows for the
+freedom to use, modify, and distribute the software while retaining the requirement
+that the original copyright notice and disclaimer are included in all copies or
+substantial portions of the software. Contributions are subject to the same license
+terms, and contributors agree to transfer ownership of their contributions to the
+project maintainers.
 
 [docker]: https://docs.docker.com/engine/install
 [install-nodejs]: https://nodejs.org/en/download
+[mit-license]: https://choosealicense.com/licenses/mit/

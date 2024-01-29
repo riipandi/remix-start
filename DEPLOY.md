@@ -1,4 +1,4 @@
-# Deployment to Fly.io
+# Deploy to Fly.io
 
 Prior to your first deployment, you'll need to [Install Fly CLI](https://fly.io/docs/getting-started/installing-flyctl/).
 
