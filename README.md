@@ -57,11 +57,6 @@ pnpm start        # launch generated build
 
 This starts your app in development mode, rebuilding assets on file changes.
 
-The database seed script creates a new user with some data you can use to get started:
-
-- Email: `admin@example.com`
-- Password: `Passw0rd!`
-
 ### E2E Testing
 
 ```sh
