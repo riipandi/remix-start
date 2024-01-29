@@ -16,7 +16,7 @@ Learn more about [Remix Stacks](https://remix.run/docs/en/main/guides/templates#
 
 ---
 
-## What's in the stack
+## What's in the stack?
 
 - Deploy to [Fly.io](https://fly.io) using [Docker](https://www.docker.com/) container
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
