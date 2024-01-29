@@ -39,10 +39,10 @@ openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
 
 ```sh
 # Start development server
-docker-compose -f docker-compose.yml up -d
+docker-compose up -d
 
 # Stop development server
-docker-compose -f docker-compose.yml down --remove-orphans --volumes
+docker-compose down --remove-orphans --volumes
 ```
 
 ### Build Container
