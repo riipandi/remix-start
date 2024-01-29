@@ -91,6 +91,13 @@ this project. It's recommended to get TypeScript set up for your editor and inst
 plugin (like the [VSCode Prettier plugin](https://s.id/vscode-prettier)) to get auto-formatting
 on saving and get a really great in-editor experience with type checking and auto-complete.
 
+## 👷‍♂️ Contributions
+
+Contributions are welcome! Please open a pull requests for your changes and tickets in case
+you would like to discuss something or have a question.
+
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed documentation.
+
 ## 🙏 Thanks to...
 
 In general, I'd like to thank every single one who open-sources their source code for their
