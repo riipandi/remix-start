@@ -7,7 +7,7 @@
     "type": "module",
     "scripts": {
         "build": "remix build",
-        "dev": "docker compose up -d && remix dev",
+        "dev": "remix dev",
         "start": "remix-serve ./build/index.js",
         "format": "prettier --write . --log-level warn",
         "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint . --fix",
@@ -16,6 +16,7 @@
         "update-deps": "npm-check-updates --configFileName .ncurc.json",
         "cleanup": "docker compose down --remove-orphans --volumes",
         "preinstall": "pnpm dlx only-allow pnpm",
+        "pre-dev": "docker compose up -d",
         "prepare": "husky || true",
         "test": "vitest --run",
         "test:ui": "vitest --ui",

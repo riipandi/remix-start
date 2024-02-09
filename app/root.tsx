@@ -23,14 +23,14 @@ export const meta: MetaFunction = () => {
 
 export default function App() {
   return (
-    <html lang='en' className='h-full min-h-screen'>
+    <html lang='en'>
       <head>
         <meta charSet='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <Meta />
         <Links />
       </head>
-      <body className={cn(isDevelopment() && 'debug-screen', 'bg-white dark:bg-black')}>
+      <body className={cn(isDevelopment() && 'debug-screen')} suppressHydrationWarning>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
