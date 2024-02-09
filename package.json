@@ -40,7 +40,8 @@
         "react-dom": "^18.2.0",
         "react": "^18.2.0",
         "tailwind-merge": "^2.2.1",
-        "tailwindcss-animate": "^1.0.7"
+        "tailwindcss-animate": "^1.0.7",
+        "undici": "^6.6.2"
     },
     "devDependencies": {
         "@playwright/test": "^1.41.2",
