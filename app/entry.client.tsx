@@ -8,6 +8,14 @@ import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { RemixBrowser } from '@remix-run/react';
 
+declare global {
+  interface Window {
+    env: {
+      SENTRY_DSN: string; // --> window.env.SENTRY_DSN
+    };
+  }
+}
+
 startTransition(() => {
   hydrateRoot(
     document,

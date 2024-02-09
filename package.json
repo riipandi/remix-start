@@ -17,6 +17,7 @@
         "cleanup": "docker compose down --remove-orphans --volumes",
         "preinstall": "pnpm dlx only-allow pnpm",
         "pre-dev": "docker compose up -d",
+        "pre-commit": "sh .husky/pre-commit",
         "prepare": "husky || true",
         "test": "vitest --run",
         "test:ui": "vitest --ui",

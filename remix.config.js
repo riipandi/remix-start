@@ -2,4 +2,7 @@
 export default {
   cacheDirectory: './node_modules/.cache/remix',
   ignoredRouteFiles: ['**/.*'],
+  serverModuleFormat: 'esm',
+  serverPlatform: 'node',
+  watchPaths: ['./tailwind.config.js'],
 };

@@ -1,6 +1,12 @@
-import type { LinksFunction, MetaFunction } from '@remix-run/node';
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaDescriptor,
+  MetaFunction,
+} from '@remix-run/node';
 import {
   isRouteErrorResponse,
+  json,
   Links,
   LiveReload,
   Meta,
@@ -17,8 +23,20 @@ import styles from './styles.css';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
-export const meta: MetaFunction = () => {
-  return [{ title: 'Remix Start' }, { name: 'description', content: 'Welcome to Remix!' }];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [
+    { title: 'Remix Start' },
+    { name: 'description', content: 'Welcome to Remix!' },
+    ...(data?.meta ?? []),
+  ];
+};
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return json({
+    env: { SENTRY_DSN: process.env.SENTRY_DSN },
+    // Dynamic Canonical URL: https://sergiodxa.com/tutorials/add-dynamic-canonical-url-to-remix-routes
+    meta: [{ tagName: 'link', rel: 'canonical', href: request.url }] satisfies MetaDescriptor[],
+  });
 };
 
 export default function App() {
