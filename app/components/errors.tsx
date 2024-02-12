@@ -9,7 +9,7 @@ export function NotFound({ status, statusText }: Omit<ErrorResponse, 'data'>) {
       <h1 className='block text-7xl font-bold text-gray-800 sm:text-8xl dark:text-white'>
         {status}
       </h1>
-      <div className='mt-8 text-lg text-gray-600 sm:mt-10 dark:text-gray-400'>
+      <div className='mt-8 text-lg text-gray-600 sm:mt-10 dark:text-gray-300'>
         <p className='leading-8'>Oops, something went wrong.</p>
         <p className='leading-8'>{statusText}</p>
       </div>
@@ -39,7 +39,7 @@ export function InternalError({ message }: { message: string }) {
   return (
     <div className='mx-auto flex size-full min-h-screen flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8'>
       <h1 className='block text-7xl font-bold text-gray-800 sm:text-8xl dark:text-white'>500</h1>
-      <div className='mt-8 text-lg text-gray-600 sm:mt-10 dark:text-gray-400'>
+      <div className='mt-8 text-lg text-gray-600 sm:mt-10 dark:text-gray-300'>
         <p className='leading-8'>Oops, something went wrong.</p>
         <p className='leading-8'>{message}</p>
       </div>

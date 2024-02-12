@@ -14,7 +14,7 @@ export default {
       },
       colors: {
         black: '#000d1a',
-        gray: colors.slate,
+        gray: colors.gray,
         primary: colors.indigo,
       },
     },

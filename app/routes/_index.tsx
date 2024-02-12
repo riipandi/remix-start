@@ -7,7 +7,7 @@ export const meta: MetaFunction = () => {
   return [{ title: 'Remix Start' }, { name: 'description', content: 'Welcome to Remix!' }];
 };
 
-export default function Index() {
+export default function IndexPage() {
   return (
     <div className='mx-auto flex size-full min-h-screen flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8'>
       <h1 className='block text-7xl font-bold text-gray-800 sm:text-7xl dark:text-white'>
