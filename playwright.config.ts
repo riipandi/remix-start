@@ -50,7 +50,7 @@ export default defineConfig({
     : {
         command: 'pnpm build && pnpm start',
         reuseExistingServer: !process.env.CI,
-        timeout: 4000,
+        timeout: 10_000,
         port: 3000,
       },
 });
