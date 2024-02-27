@@ -14,8 +14,8 @@ export function NotFound({ status, statusText }: Omit<ErrorResponse, 'data'>) {
         <p className='leading-8'>{statusText}</p>
       </div>
       <div className='mt-8 flex flex-col items-center justify-center lg:mt-14'>
-        <a
-          href='/'
+        <Link
+          to='/'
           className='inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2
               font-semibold text-primary-500 ring-offset-white transition-all hover:text-primary-700 focus:outline-none focus:ring-1
               focus:ring-primary-500 focus:ring-offset-2 sm:w-auto dark:ring-offset-gray-900'
@@ -29,7 +29,7 @@ export function NotFound({ status, statusText }: Omit<ErrorResponse, 'data'>) {
             />
           </svg>
           Back to main page
-        </a>
+        </Link>
       </div>
     </div>
   );

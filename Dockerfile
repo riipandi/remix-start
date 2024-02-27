@@ -32,8 +32,8 @@ WORKDIR /srv
 COPY --from=builder --chown=nonroot:nonroot /srv/package.json ./package.json
 COPY --from=builder --chown=nonroot:nonroot /srv/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder --chown=nonroot:nonroot /srv/.npmrc ./.npmrc
-COPY --from=builder --chown=nonroot:nonroot /srv/public ./public
-COPY --from=builder --chown=nonroot:nonroot /srv/build ./build
+COPY --from=builder --chown=nonroot:nonroot /srv/build/client ./build/client
+COPY --from=builder --chown=nonroot:nonroot /srv/build/server ./build/server
 
 # Install production dependencies
 ENV NODE_ENV $NODE_ENV

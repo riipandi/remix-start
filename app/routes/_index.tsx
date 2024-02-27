@@ -20,6 +20,16 @@ export default function IndexPage() {
       </div>
       <div className='mt-8 flex flex-row items-center justify-center gap-4 lg:mt-12'>
         <Link
+          to='/login'
+          className={cn(
+            'inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2 duration-150',
+            'border border-primary-700 font-medium text-primary-500 ring-offset-white transition-all hover:text-primary-700 sm:w-auto',
+            'focus:outline-none focus:ring-1 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900'
+          )}
+        >
+          Example Page
+        </Link>
+        <Link
           to='https://github.com/riipandi/remix-start'
           target='_blank'
           rel='noreferrer'

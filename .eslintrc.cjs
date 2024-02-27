@@ -21,7 +21,12 @@ module.exports = {
   },
 
   // Base config
-  extends: ['eslint:recommended', 'prettier', 'plugin:tailwindcss/recommended'],
+  extends: [
+    'eslint:recommended',
+    'prettier',
+    'plugin:tailwindcss/recommended',
+    'plugin:storybook/recommended',
+  ],
   plugins: ['simple-import-sort'],
 
   rules: {
