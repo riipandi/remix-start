@@ -1,5 +1,4 @@
 /node_modules
-/.vscode
 /.fleet
 /.pnp
 .pnp.js
@@ -10,6 +9,9 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/settings.json
 
 /.cache
 /public/build
@@ -28,6 +30,7 @@ $RECYCLE.BIN/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/tests-e2e/.results/
 
 *storybook.log
 /storybook-static/

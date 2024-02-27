@@ -15,7 +15,7 @@ export const STORAGE_STATE = path.join(__dirname, 'tmp/auth/user.json')
 export default defineConfig({
   quiet: !!process.env.CI,
   testDir: './tests-e2e',
-  outputDir: './tests-results',
+  outputDir: './tests-e2e/.results',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
