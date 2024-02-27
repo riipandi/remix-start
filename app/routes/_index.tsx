@@ -1,7 +1,7 @@
 import type { MetaFunction } from '@remix-run/node';
 import { Link } from '@remix-run/react';
 
-import { cn } from '@/utils/ui-helper';
+import Button from '@/components/Button';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Remix Start' }, { name: 'description', content: 'Welcome to Remix!' }];
@@ -19,40 +19,19 @@ export default function IndexPage() {
         </p>
       </div>
       <div className='mt-8 flex flex-row items-center justify-center gap-4 lg:mt-12'>
-        <Link
-          to='/login'
-          className={cn(
-            'inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2 duration-150',
-            'border border-primary-700 font-medium text-primary-500 ring-offset-white transition-all hover:text-primary-700 sm:w-auto',
-            'focus:outline-none focus:ring-1 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900'
-          )}
-        >
-          Example Page
-        </Link>
-        <Link
-          to='https://github.com/riipandi/remix-start'
-          target='_blank'
-          rel='noreferrer'
-          className={cn(
-            'inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2 duration-150',
-            'border border-primary-700 font-medium text-primary-500 ring-offset-white transition-all hover:text-primary-700 sm:w-auto',
-            'focus:outline-none focus:ring-1 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900'
-          )}
-        >
-          GitHub Repo
-        </Link>
-        <Link
-          to='https://remix.run/docs'
-          target='_blank'
-          rel='noreferrer'
-          className={cn(
-            'inline-flex w-full items-center justify-center gap-2 rounded-md border border-transparent px-3 py-2 duration-150',
-            'border border-primary-700 font-medium text-primary-500 ring-offset-white transition-all hover:text-primary-700 sm:w-auto',
-            'focus:outline-none focus:ring-1 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-gray-900'
-          )}
-        >
-          Remix Docs
-        </Link>
+        <Button variant='primary'>
+          <Link to='/login'>Example Page</Link>
+        </Button>
+        <Button variant='secondary'>
+          <Link to='https://github.com/riipandi/remix-start' target='_blank' rel='noreferrer'>
+            GitHub Repo
+          </Link>
+        </Button>
+        <Button variant='destructive'>
+          <Link to='https://remix.run/docs' target='_blank' rel='noreferrer'>
+            Remix Docs
+          </Link>
+        </Button>
       </div>
     </div>
   );

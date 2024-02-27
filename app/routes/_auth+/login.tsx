@@ -1,7 +1,7 @@
 import type { MetaFunction } from '@remix-run/node';
 import { Link } from '@remix-run/react';
 
-import { cn } from '@/utils/ui-helper';
+import Button from '@/components/Button';
 
 import { SocialLogin } from './__social';
 
@@ -128,16 +128,9 @@ export default function SignInPage() {
                   </div>
                 </div>
                 {/* End Checkbox */}
-                <button
-                  type='submit'
-                  className={cn(
-                    'pressed:bg-primary-800 cursor-pointer rounded-md border border-black/10',
-                    'bg-primary-600 px-4 py-2 text-center text-sm text-white transition',
-                    'hover:bg-primary-700 dark:border-white/10 dark:shadow-none'
-                  )}
-                >
+                <Button type='submit' variant='primary'>
                   Continue
-                </button>
+                </Button>
               </div>
             </form>
             {/* End Form */}

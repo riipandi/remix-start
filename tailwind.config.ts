@@ -1,9 +1,10 @@
+import { withTV } from 'tailwind-variants/transformer';
 import colors from 'tailwindcss/colors';
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 import { Config } from 'tailwindcss';
 
-export default {
+const TailwindConfig: Config = {
   content: ['./app/**/*!(*.stories|*.spec).{ts,tsx}'],
   darkMode: 'media',
   theme: {
@@ -31,4 +32,6 @@ export default {
     require('tailwindcss-animate'),
     require('./tw-plugins/debug-screen'),
   ],
-} satisfies Config;
+};
+
+export default withTV(TailwindConfig);
