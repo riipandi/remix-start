@@ -3,6 +3,4 @@
 
 pnpm format
 pnpm lint
-
-# FIXME Temporary disable test
-# pnpm test
+pnpm test

@@ -9,7 +9,8 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 installGlobals();
 
-const isStorybook = process.argv[1]?.includes('storybook');
+// @ref: https://remix.run/docs/en/main/future/vite#plugin-usage-with-other-vite-based-tools-eg-vitest-storybook
+const isTestOrStorybook = process.env.NODE_ENV === 'test' || process.argv[1]?.includes('storybook');
 
 const RemixConfig: VitePluginConfig = {
   ignoredRouteFiles: ['**/.*'],
@@ -23,7 +24,7 @@ const RemixConfig: VitePluginConfig = {
 
 export default defineConfig({
   plugins: [
-    (!process.env.VITEST || !isStorybook) && remix(RemixConfig),
+    !isTestOrStorybook && remix(RemixConfig),
     // `emitFile` is necessary since Remix builds more than one bundle!
     visualizer({ emitFile: true }),
     tsconfigPaths(),
