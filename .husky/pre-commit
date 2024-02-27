@@ -4,3 +4,6 @@
 pnpm format
 pnpm lint
 pnpm test
+
+# This is optional but recommended
+# pnpm exec playwright test
