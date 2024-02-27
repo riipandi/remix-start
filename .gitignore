@@ -27,10 +27,9 @@ $RECYCLE.BIN/
 
 # Disable this line in your real app
 /tests-results/
+/playwright/.cache/
 /playwright-report/
 /blob-report/
-/playwright/.cache/
-/tests-e2e/.results/
 
 *storybook.log
 /storybook-static/
