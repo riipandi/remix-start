@@ -1,6 +1,6 @@
 {
     "name": "remix-start",
-    "version": "0.1.0",
+    "version": "0.0.0",
     "private": true,
     "sideEffects": false,
     "type": "module",
@@ -42,6 +42,7 @@
         "react": "^18.2.0",
         "remix-flat-routes": "^0.6.4",
         "tailwind-merge": "^2.2.1",
+        "tailwind-variants": "^0.2.0",
         "undici": "^6.6.2"
     },
     "devDependencies": {
@@ -90,7 +91,6 @@
         "prettier": "^3.2.5",
         "rollup-plugin-visualizer": "^5.12.0",
         "storybook": "8.0.0-beta.5",
-        "tailwind-variants": "^0.2.0",
         "tailwindcss-animate": "^1.0.7",
         "tailwindcss": "^3.4.1",
         "typescript": "^5.1.6",
