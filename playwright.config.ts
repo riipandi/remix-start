@@ -45,9 +45,12 @@ export default defineConfig({
     },
   ],
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'pnpm exec remix vite:dev',
-    url: 'http://127.0.0.1:3000',
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: process.env.URL
+    ? undefined
+    : {
+        command: 'pnpm build && pnpm start',
+        reuseExistingServer: !process.env.CI,
+        timeout: 4000,
+        port: 3000,
+      },
 });
