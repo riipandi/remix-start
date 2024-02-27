@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -8,7 +9,6 @@ import {
   isRouteErrorResponse,
   json,
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -17,11 +17,18 @@ import {
 } from '@remix-run/react';
 
 import { InternalError, NotFound } from '@/components/errors';
-import { cn, isDevelopment } from '@/utils/ui-helper';
+import { cn } from '@/utils/ui-helper';
 
-import styles from './styles.css';
+import styles from './styles.css?url';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return json({
+    // Dynamic Canonical URL: https://sergiodxa.com/tutorials/add-dynamic-canonical-url-to-remix-routes
+    meta: [{ tagName: 'link', rel: 'canonical', href: request.url }] satisfies MetaDescriptor[],
+  });
+};
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -31,15 +38,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({
-    env: { SENTRY_DSN: process.env.SENTRY_DSN },
-    // Dynamic Canonical URL: https://sergiodxa.com/tutorials/add-dynamic-canonical-url-to-remix-routes
-    meta: [{ tagName: 'link', rel: 'canonical', href: request.url }] satisfies MetaDescriptor[],
-  });
-};
-
-export default function App() {
+export function Layout({ children }: PropsWithChildren) {
   return (
     <html lang='en'>
       <head>
@@ -48,11 +47,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className={cn(isDevelopment() && 'debug-screen')} suppressHydrationWarning>
-        <Outlet />
+      <body className={cn(import.meta.env.DEV && 'debug-screen')} suppressHydrationWarning>
+        {children}
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );
@@ -87,4 +85,8 @@ export function ErrorBoundary() {
       </body>
     </html>
   );
+}
+
+export default function App() {
+  return <Outlet />;
 }
