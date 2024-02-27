@@ -1,12 +1,12 @@
-import 'dotenv/config';
-import path, { dirname } from 'node:path';
+import 'dotenv/config'
+import path, { dirname } from 'node:path'
 
-import { defineConfig, devices } from '@playwright/test';
-import { fileURLToPath } from 'url';
+import { defineConfig, devices } from '@playwright/test'
+import { fileURLToPath } from 'url'
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-export const STORAGE_STATE = path.join(__dirname, 'tmp/auth/user.json');
+export const STORAGE_STATE = path.join(__dirname, 'tmp/auth/user.json')
 
 /**
  * Reference: https://playwright.dev/docs/test-configuration
@@ -53,4 +53,4 @@ export default defineConfig({
         timeout: 10_000,
         port: 3000,
       },
-});
+})

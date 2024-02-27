@@ -1,6 +1,6 @@
-import type { Preview } from '@storybook/react';
-import { themes } from '@storybook/theming';
-import '../app/styles.css';
+import type { Preview } from '@storybook/react'
+import { themes } from '@storybook/theming'
+import '../app/styles.css'
 
 const preview: Preview = {
   parameters: {
@@ -17,6 +17,6 @@ const preview: Preview = {
       theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? themes.dark : themes.light,
     },
   },
-};
+}
 
-export default preview;
+export default preview

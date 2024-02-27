@@ -1,16 +1,16 @@
-import Button from '@/components/Button';
+import Button from '@/components/Button'
 
-import './header.css';
+import './header.css'
 
 type User = {
-  name: string;
-};
+  name: string
+}
 
 interface HeaderProps {
-  user?: User;
-  onLogin?: () => void;
-  onLogout?: () => void;
-  onCreateAccount?: () => void;
+  user?: User
+  onLogin?: () => void
+  onLogout?: () => void
+  onCreateAccount?: () => void
 }
 
 export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps) => (
@@ -58,4 +58,4 @@ export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps
       </div>
     </div>
   </header>
-);
+)

@@ -1,10 +1,10 @@
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react'
 import type {
   LinksFunction,
   LoaderFunctionArgs,
   MetaDescriptor,
   MetaFunction,
-} from '@remix-run/node';
+} from '@remix-run/node'
 import {
   isRouteErrorResponse,
   json,
@@ -14,29 +14,29 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteError,
-} from '@remix-run/react';
+} from '@remix-run/react'
 
-import { InternalError, NotFound } from '@/components/errors';
-import { cn } from '@/utils/ui-helper';
+import { InternalError, NotFound } from '@/components/errors'
+import { cn } from '@/utils/ui-helper'
 
-import styles from './styles.css?url';
+import styles from './styles.css?url'
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }]
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({
     // Dynamic Canonical URL: https://sergiodxa.com/tutorials/add-dynamic-canonical-url-to-remix-routes
     meta: [{ tagName: 'link', rel: 'canonical', href: request.url }] satisfies MetaDescriptor[],
-  });
-};
+  })
+}
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
     { title: 'Remix Start' },
     { name: 'description', content: 'Welcome to Remix!' },
     ...(data?.meta ?? []),
-  ];
-};
+  ]
+}
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -53,16 +53,16 @@ export function Layout({ children }: PropsWithChildren) {
         <Scripts />
       </body>
     </html>
-  );
+  )
 }
 
 export function ErrorBoundary() {
-  const error = useRouteError();
+  const error = useRouteError()
   const pageTitle = isRouteErrorResponse(error)
     ? `${error.status} ${error.statusText}`
     : error instanceof Error
       ? error.message
-      : 'Something wrong';
+      : 'Something wrong'
 
   return (
     <html lang='en'>
@@ -84,9 +84,9 @@ export function ErrorBoundary() {
         <Scripts />
       </body>
     </html>
-  );
+  )
 }
 
 export default function App() {
-  return <Outlet />;
+  return <Outlet />
 }

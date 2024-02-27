@@ -1,13 +1,15 @@
-import type { MetaFunction } from '@remix-run/node';
-import { Link } from '@remix-run/react';
+import type { MetaFunction } from '@remix-run/node'
+import { Link } from '@remix-run/react'
+import { AlertCircle } from 'lucide-react'
 
-import Button from '@/components/Button';
+import Button from '@/components/Button'
+import { cn } from '@/utils/ui-helper'
 
-import { SocialLogin } from './__social';
+import { SocialLogin } from './__social'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Sign in - Remix Start' }];
-};
+  return [{ title: 'Sign in - Remix Start' }]
+}
 
 export default function SignInPage() {
   return (
@@ -19,8 +21,8 @@ export default function SignInPage() {
             <p className='mt-3 text-sm text-gray-600 dark:text-gray-300'>
               Don&apos;t have an account yet?{' '}
               <Link
-                to='#'
-                className='font-medium text-primary-600 decoration-2 hover:underline dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600'
+                to='/register'
+                className='font-medium text-primary-600 hover:underline focus:outline-none dark:text-primary-500'
               >
                 Sign up here
               </Link>
@@ -47,16 +49,7 @@ export default function SignInPage() {
                         required
                       />
                       <div className='pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3'>
-                        <svg
-                          className='size-5 text-red-500'
-                          width={16}
-                          height={16}
-                          fill='currentColor'
-                          viewBox='0 0 16 16'
-                          aria-hidden='true'
-                        >
-                          <path d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z' />
-                        </svg>
+                        <AlertCircle className={cn('hidden', 'size-5 text-red-500')} />
                       </div>
                     </div>
                   </div>
@@ -79,16 +72,7 @@ export default function SignInPage() {
                         required
                       />
                       <div className='pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3'>
-                        <svg
-                          className='size-5 text-red-500'
-                          width={16}
-                          height={16}
-                          fill='currentColor'
-                          viewBox='0 0 16 16'
-                          aria-hidden='true'
-                        >
-                          <path d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z' />
-                        </svg>
+                        <AlertCircle className={cn('hidden', 'size-5 text-red-500')} />
                       </div>
                     </div>
                   </div>
@@ -138,6 +122,11 @@ export default function SignInPage() {
           </div>
         </div>
       </div>
+      <div className='mt-6 text-center'>
+        <Link to='/' className='text-sm hover:underline dark:text-white'>
+          Back to homepage
+        </Link>
+      </div>
     </main>
-  );
+  )
 }

@@ -53,5 +53,5 @@ export function SocialLogin({ label }: { label: string }) {
         </button>
       </div>
     </>
-  );
+  )
 }

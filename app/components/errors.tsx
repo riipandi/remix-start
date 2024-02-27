@@ -1,7 +1,7 @@
-import { ErrorResponse } from '@remix-run/node';
-import { Link } from '@remix-run/react';
+import { ErrorResponse } from '@remix-run/node'
+import { Link } from '@remix-run/react'
 
-import { cn } from '@/utils/ui-helper';
+import { cn } from '@/utils/ui-helper'
 
 export function NotFound({ status, statusText }: Omit<ErrorResponse, 'data'>) {
   return (
@@ -32,7 +32,7 @@ export function NotFound({ status, statusText }: Omit<ErrorResponse, 'data'>) {
         </Link>
       </div>
     </div>
-  );
+  )
 }
 
 export function InternalError({ message }: { message: string }) {
@@ -64,5 +64,5 @@ export function InternalError({ message }: { message: string }) {
         </Link>
       </div>
     </div>
-  );
+  )
 }

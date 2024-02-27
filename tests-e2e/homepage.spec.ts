@@ -1,13 +1,13 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@playwright/test'
 
 test.describe('@feature-default', () => {
   test('has title', async ({ page }) => {
-    await page.goto('/');
-    await expect(page).toHaveTitle(/Remix Start/);
-  });
+    await page.goto('/')
+    await expect(page).toHaveTitle(/Remix Start/)
+  })
 
   test('contain title', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'Welcome to Remix' })).toBeVisible();
-  });
-});
+    await page.goto('/')
+    await expect(page.getByRole('heading', { name: 'Welcome to Remix' })).toBeVisible()
+  })
+})

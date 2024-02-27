@@ -1,16 +1,16 @@
 /// <reference types="vitest" />
 
-import { vitePlugin as remix, type VitePluginConfig } from '@remix-run/dev';
-import { installGlobals } from '@remix-run/node';
-import { flatRoutes } from 'remix-flat-routes';
-import { visualizer } from 'rollup-plugin-visualizer';
-import { defineConfig, loadEnv } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { vitePlugin as remix, type VitePluginConfig } from '@remix-run/dev'
+import { installGlobals } from '@remix-run/node'
+import { flatRoutes } from 'remix-flat-routes'
+import { visualizer } from 'rollup-plugin-visualizer'
+import { defineConfig, loadEnv } from 'vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
-installGlobals();
+installGlobals()
 
 // @ref: https://remix.run/docs/en/main/future/vite#plugin-usage-with-other-vite-based-tools-eg-vitest-storybook
-const isTestOrStorybook = process.env.NODE_ENV === 'test' || process.argv[1]?.includes('storybook');
+const isTestOrStorybook = process.env.NODE_ENV === 'test' || process.argv[1]?.includes('storybook')
 
 const RemixConfig: VitePluginConfig = {
   ignoredRouteFiles: ['**/.*'],
@@ -18,9 +18,9 @@ const RemixConfig: VitePluginConfig = {
   routes(defineRoutes) {
     return flatRoutes('routes', defineRoutes, {
       ignoredRouteFiles: ['.*', '**/*.css', '**/*.test.{js,jsx,ts,tsx}', '**/__*.*'],
-    });
+    })
   },
-};
+}
 
 export default defineConfig({
   plugins: [
@@ -40,4 +40,4 @@ export default defineConfig({
     dir: './tests',
     globals: true,
   },
-});
+})

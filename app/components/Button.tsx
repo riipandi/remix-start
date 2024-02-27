@@ -1,5 +1,5 @@
-import { ButtonHTMLAttributes, forwardRef } from 'react';
-import { tv, type VariantProps } from 'tailwind-variants';
+import { ButtonHTMLAttributes, forwardRef } from 'react'
+import { tv, type VariantProps } from 'tailwind-variants'
 
 const button = tv({
   defaultVariants: { variant: 'primary', size: 'md' },
@@ -19,21 +19,21 @@ const button = tv({
       lg: 'px-8 py-4 text-base',
     },
   },
-});
+})
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof button> {}
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-  const { type = 'button', variant, size, children, ...rest } = props;
+  const { type = 'button', variant, size, children, ...rest } = props
   return (
     <button ref={ref} type={type} className={button({ size, variant })} {...rest}>
       {children}
     </button>
-  );
-});
+  )
+})
 
-Button.displayName = 'Button';
+Button.displayName = 'Button'
 
-export default Button;
+export default Button
