@@ -33,3 +33,7 @@ $RECYCLE.BIN/
 
 *storybook.log
 /storybook-static/
+
+# fly.toml
+fly*.toml*
+!fly*.example.toml
