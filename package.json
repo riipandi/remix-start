@@ -34,7 +34,7 @@
         "e2e-test:install": "playwright install-deps",
         "e2e-test:ui": "playwright test --ui",
         "preinstall": "npx only-allow pnpm",
-        "prepare": "lefthook install",
+        "prepare": "lefthook install || true",
         "lint": "biome lint . --write",
         "check": "biome check . --write",
         "format": "biome format . --write",

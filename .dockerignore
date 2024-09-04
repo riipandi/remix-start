@@ -2,6 +2,7 @@
 /build
 /dist
 .cache
+.husky
 .DS_Store
 .DS_Store?
 .dockerignore

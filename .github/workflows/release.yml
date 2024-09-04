@@ -12,7 +12,8 @@ on:
       - 'v*.*.*'
 
 env:
-  HUSKY: 0
+  LEFTHOOK: 0
+  CI: true
 
 permissions:
   contents: write

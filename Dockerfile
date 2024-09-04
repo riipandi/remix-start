@@ -10,6 +10,7 @@ ARG NODE_VERSION=20
 # -----------------------------------------------------------------------------
 FROM --platform=${PLATFORM} node:${NODE_VERSION}-alpine AS base
 ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+ENV LEFTHOOK=0 CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
 RUN corepack enable && corepack prepare pnpm@latest-9 --activate
 WORKDIR /srv
 
@@ -22,7 +23,7 @@ FROM base AS builder
 COPY --chown=node:node . .
 
 RUN apk update && apk add --no-cache tini jq libc6-compat
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install && pnpm build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --ignore-scripts && pnpm build
 
 # -----------------------------------------------------------------------------
 # Compile the application and install production only dependencies.
