@@ -19,7 +19,7 @@ jobs:
     name: Unit Test
     strategy:
       matrix:
-        node-version: ['18', '20']
+        node-version: ['20', '22']
       fail-fast: false
 
     runs-on: ubuntu-latest
