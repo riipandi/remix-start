@@ -4,6 +4,7 @@
 /.pnp
 /.cache
 /.output
+/.husky
 .pnp.js
 .DS_Store
 .DS_Store?
@@ -16,6 +17,7 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 !.vscode/settings.json
 !.vscode/launch.json
+
 *.bak
 
 # SQLite

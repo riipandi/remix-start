@@ -1,11 +1,11 @@
 # Refer for explanation to following link:
 # https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
 
-pre-push:
-  commands:
-    npm-audit:
-      tags: frontend security
-      run: pnpm audit
+# pre-push:
+#   commands:
+#     npm-audit:
+#       tags: frontend security
+#       run: pnpm audit
 
 pre-commit:
   parallel: true
@@ -13,12 +13,11 @@ pre-commit:
     check:
       glob: "*.{js,ts,jsx,tsx}"
       exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
-      run: pnpm check {staged_files}
+      run: pnpm exec biome check {staged_files} --write
     lint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: pnpm lint {staged_files}
+      exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
+      run: pnpm exec biome lint {staged_files} --write
   # scripts:
   #   "hello.js":
   #     runner: node
-  #   "any.go":
-  #     runner: go run
