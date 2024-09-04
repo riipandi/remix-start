@@ -46,12 +46,20 @@ export default defineConfig({
       html: './tests-results/index.html',
     },
     coverage: {
-      provider: 'v8',
+      provider: 'istanbul',
       reporter: process.env.CI ? ['json'] : ['html-spa'],
       reportsDirectory: './tests-results/coverage',
       include: ['app/**/*.{js,jsx,ts,tsx}'],
       cleanOnRerun: true,
       clean: true,
+      thresholds: {
+        global: {
+          statements: 80,
+          branches: 70,
+          functions: 75,
+          lines: 80,
+        },
+      },
     },
     dir: './tests',
     globals: true,
