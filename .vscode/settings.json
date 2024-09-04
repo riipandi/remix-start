@@ -1,51 +1,26 @@
 {
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.formatOnSave": true,
-	"editor.codeActionsOnSave": {
-		"source.fixAll": "always",
-		"source.fixAll.eslint": "always"
-	},
-	"eslint.workingDirectories": [{ "mode": "auto" }],
-	"eslint.format.enable": true,
-	"eslint.validate": [
-		"javascript",
-		"javascriptreact",
-		"typescript",
-		"typescriptreact"
-	],
-	"files.associations": {
-		"*.mdx": "markdown"
-	},
-	"files.watcherExclude": {
-		"**/.github": true,
-		"**/.vscode": true,
-		"**/.next": true,
-		"**/*.gz": true,
-		"**/*.png": true
-	},
-	"files.exclude": {
-		"**/.nx": true
-	},
-	"search.exclude": {
-		"**/.github": true,
-		"**/.vscode": true,
-		"**/.next": true,
-		"**/*.gz": true,
-		"**/.nx": true,
-		"**/*.png": true,
-		"**/build/*/**": true,
-		"**/vendor/*/**": true
-	},
-	"tailwindCSS.emmetCompletions": true,
-	"tailwindCSS.experimental.classRegex": ["cn\\(([^)]*)\\)"],
-	"tailwindCSS.includeLanguages": {
-		"javascriptreact": "javascriptreact",
-		"typescriptreact": "javascriptreact"
-	},
-	"tailwindCSS.files.exclude": ["**/.github/**", "**/*.{md,js,ts,json}"],
-	"[toml]": {
-		"editor.formatOnSave": false
-	}
+    "editor.defaultFormatter": "biomejs.biome",
+    "typescript.enablePromptUseWorkspaceTsdk": false,
+    "files.associations": {
+        "*.yml.example": "yaml",
+        "*.css": "tailwindcss"
+    },
+    "search.exclude": {
+        "**/.output": true,
+        "**/build": true,
+        "**/dist": true,
+    },
+    "tailwindCSS.experimental.classRegex": [
+        ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+        "cn\\(([^)]*)\\)", // cn(xxx)
+        "clx\\(([^)]*)\\)", // clx(xxx)
+        "cx\\(([^)]*)\\)", // cx(xxx)
+    ],
+    "[toml]": {
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "darkriszty.markdown-table-prettify"
+    }
 }

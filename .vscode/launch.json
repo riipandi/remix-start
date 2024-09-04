@@ -1,0 +1,55 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start Remix App",
+            "runtimeExecutable": "pnpm",
+            "runtimeArgs": ["dev"],
+            "skipFiles": ["<node_internals>/**"],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart",
+            "presentation": {
+                "hidden": true,
+                "group": "debug"
+            }
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug with Chrome",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}",
+            "cleanUp": "wholeBrowser",
+            // Chrome args: https://peter.sh/experiments/chromium-command-line-switches
+            "runtimeArgs": [
+                "--auto-open-devtools-for-tabs",
+                "--start-maximized",
+                "--bwsi",
+                "--no-default-browser-check",
+                "--allow-insecure-localhost",
+                "--disable-component-update",
+                "--disable-crash-reporter",
+                "--disable-extensions",
+                "--disable-hang-monitor",
+                "--disable-background-networking",
+                "--suppress-message-center-popups",
+                "--show-component-extension-options",
+                "--silent-debugger-extension-api"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "presentation": {
+                "hidden": true,
+                "group": "debug"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Run Debug",
+            "configurations": ["Start Remix App", "Debug with Chrome"],
+            "stopAll": true
+        }
+    ]
+}

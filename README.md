@@ -2,7 +2,6 @@
 
 [![Release](https://img.shields.io/github/v/release/riipandi/remix-start?logo=remix&color=orange)](https://github.com/riipandi/remix-start/releases)
 [![Languages](https://img.shields.io/github/languages/top/riipandi/remix-start)](https://github.com/riipandi/remix-start)
-[![License](https://img.shields.io/github/license/riipandi/remix-start)][mit-license]
 [![Test](https://github.com/riipandi/remix-start/actions/workflows/test.yml/badge.svg)](https://github.com/riipandi/remix-start/actions/workflows/test.yml)
 [![Contribution](https://img.shields.io/badge/Contributions-welcome-gray.svg)](https://github.com/riipandi/remix-start/pulse)
 
@@ -12,25 +11,23 @@ Minimal containerized Remix Stack with Tailwind CSS.
 pnpm create remix --template riipandi/remix-start app_name
 ```
 
-Learn more about [Remix Stacks](https://remix.run/docs/en/main/guides/templates#stacks).
+Learn more about [Remix Stacks][remix-stacks].
 
 ---
 
 ## What's in the stack?
 
-- Deploy to [Fly.io](https://fly.io) using [Docker](https://www.docker.com/) container
-- Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
-- Styling with [Tailwind CSS](https://tailwindcss.com/), [clsx](https://www.npmjs.com/package/clsx), and [tailwind-merge](https://www.npmjs.com/package/tailwind-merge)
-- Tailwind linting and formatting with [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
-- Code formatting with [Prettier](https://prettier.io)
-- Linting with [ESLint](https://eslint.org)
-- Static Types with [TypeScript](https://typescriptlang.org)
-- Unit testing with [Vitest](https://vitest.dev)
-- E2E testing with [Playwright](https://playwright.dev)
+- Deploy to [Fly.io](https://fly.io) using [Docker][docker] container
+- Healthcheck endpoint for [Fly backups region fallbacks][fly-io]
+- Styling with [Tailwind CSS][tailwindcss], [clsx][clsx], and [tailwind-merge][tailwind-merge]
+- Code formatting and linting with [Biome][biome]
+- Static Types with [TypeScript][typescript]
+- Unit testing with [Vitest][vitest]
+- E2E testing with [Playwright][playwright]
 
 ## 🏁 Quickstart
 
-At least you will need `Node.js >=18.17.1` and `Docker >= 20.10` for building the container.
+At least you will need `Node.js >=20.11.1` and `Docker >= 20.10` for building the container.
 
 ### Generate Secret Key
 
@@ -67,6 +64,7 @@ pnpm e2e-test:ui
 
 ```sh
 pnpm docker:build
+pnpm docker:images
 ```
 
 ```sh
@@ -80,11 +78,11 @@ docker run --rm -it -p 3000:3000 --name remix-start --env-file .env remix-start
 
 ## 🧑🏻‍💻 Development
 
-This project uses TypeScript for type checking, [ESLint](https://eslint.org/) for linting which
-is configured in `.eslintrc.js`, and [Prettier](https://prettier.io/) for auto-formatting in
-this project. It's recommended to get TypeScript set up for your editor and install an editor
-plugin (like the [VSCode Prettier plugin](https://s.id/vscode-prettier)) to get auto-formatting
-on saving and get a really great in-editor experience with type checking and auto-complete.
+This project uses TypeScript for type checking, [Biome][biome] for code formatting
+and linting which is configured in [`biome.json`](./biome.json). It's recommended
+to get TypeScript set up for your editor and install an editor plugin (like the
+[VSCode Biome plugin][vscode-biome]) to get auto-formatting on saving and get a
+really great in-editor experience with type checking and auto-complete.
 
 ## 👷‍♂️ Contributions
 
@@ -100,14 +98,34 @@ effort to contribute something to the open-source community. Your work means the
 
 ## 📝 License
 
-This project is open-sourced software licensed under the [MIT license](./LICENSE).
+Licensed under either of [Apache License 2.0][license-apache] or [MIT license][license-mit] at your option.
+
+> Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in this project by you,
+> as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
 
 Copyrights in this project are retained by their contributors.
-See the [license file](./LICENSE) for more information.
+
+See the [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT) files for more information.
 
 ---
 
 <sub>🤫 Psst! If you like my work you can support me via [GitHub sponsors](https://github.com/sponsors/riipandi).</sub>
 
-[mit-license]: https://choosealicense.com/licenses/mit/
+<!-- link reference definition -->
 [1password]: https://1password.com/password-generator
+[biome]: https://biomejs.dev
+[clsx]: https://www.npmjs.com/package/clsx
+[docker]: https://docs.docker.com/engine/install
+[fly-io]: https://fly.io/docs/reference/configuration/#services-http_checks
+[license-apache]: https://choosealicense.com/licenses/apache-2.0/
+[license-mit]: https://choosealicense.com/licenses/mit/
+[nodejs]: https://nodejs.org/en/download/
+[playwright]: https://playwright.dev
+[pnpm]: https://pnpm.io/installation
+[remix-stacks]: https://remix.run/docs/en/main/guides/templates#stacks
+[riipandi-x]: https://x.com/intent/follow?screen_name=riipandi
+[tailwind-merge]: https://www.npmjs.com/package/tailwind-merge
+[tailwindcss]: https://tailwindcss.com
+[typescript]: https://typescriptlang.org
+[vitest]: https://vitest.dev
+[vscode-biome]: https://marketplace.visualstudio.com/items?itemName=biomejs.biome
