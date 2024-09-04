@@ -7,10 +7,6 @@
 
 Minimal containerized Remix Stack with Tailwind CSS.
 
-```sh
-pnpm create remix --template riipandi/remix-start app_name
-```
-
 Learn more about [Remix Stacks][remix-stacks].
 
 ---
@@ -27,54 +23,11 @@ Learn more about [Remix Stacks][remix-stacks].
 
 ## 🏁 Quickstart
 
-At least you will need `Node.js >=20.11.1` and `Docker >= 20.10` for building the container.
-
-### Generate Secret Key
-
-Before you continue, you need to create `.env` file (you can duplicate `.env.example`) and
-fill the `application secret key` with some random string. To generate a secret key, use
-the following command:
-
 ```sh
-openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
+pnpm create remix --template riipandi/remix-start app_name
 ```
 
-If you don't have openssl installed, you can also use [1password][1password]
-to generate a random secret.
-
-### Up and running
-
-```sh
-pnpm install      # install the dependencies
-pnpm dev          # serve with hot reload
-
-pnpm build        # build for production
-pnpm start        # launch generated build
-```
-
-This starts your app in development mode, rebuilding assets on file changes.
-
-### E2E Testing
-
-```sh
-pnpm e2e-test:ui
-```
-
-## 🐳 Build Container
-
-```sh
-pnpm docker:build
-pnpm docker:images
-```
-
-```sh
-# Run API Docker container in foreground
-docker run --rm -it -p 3000:3000 --name remix-start --env-file .env remix-start
-```
-
-## 🚀 Deployment
-
-[Read the guide](./DEPLOY.md) to learn how to deploy this project.
+Read the [CONTRIBUTING.md](./CONTRIBUTING.md) to get started with the project.
 
 ## 🧑🏻‍💻 Development
 
@@ -86,10 +39,8 @@ really great in-editor experience with type checking and auto-complete.
 
 ## 👷‍♂️ Contributions
 
-Contributions are welcome! Please open a pull requests for your changes and tickets in case
-you would like to discuss something or have a question.
-
-Read [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed documentation.
+Contributions are welcome! Please open a pull requests for your changes and tickets
+in case you would like to discuss something or have a question.
 
 ## 🙏 Thanks to...
 
@@ -111,17 +62,16 @@ See the [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT) file
 
 <sub>🤫 Psst! If you like my work you can support me via [GitHub sponsors](https://github.com/sponsors/riipandi).</sub>
 
+[![Made by](https://badgen.net/badge/icon/Made%20by%20Aris%20Ripandi?icon=bitcoin-lightning&label&color=black&labelColor=black)][riipandi-x]
+
 <!-- link reference definition -->
-[1password]: https://1password.com/password-generator
 [biome]: https://biomejs.dev
 [clsx]: https://www.npmjs.com/package/clsx
 [docker]: https://docs.docker.com/engine/install
 [fly-io]: https://fly.io/docs/reference/configuration/#services-http_checks
 [license-apache]: https://choosealicense.com/licenses/apache-2.0/
 [license-mit]: https://choosealicense.com/licenses/mit/
-[nodejs]: https://nodejs.org/en/download/
 [playwright]: https://playwright.dev
-[pnpm]: https://pnpm.io/installation
 [remix-stacks]: https://remix.run/docs/en/main/guides/templates#stacks
 [riipandi-x]: https://x.com/intent/follow?screen_name=riipandi
 [tailwind-merge]: https://www.npmjs.com/package/tailwind-merge

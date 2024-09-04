@@ -6,27 +6,56 @@ This way we can guide you through the process and give feedback.
 
 ## 🏁 Quick Start
 
-### Prerequisites
+You will need `Node.js >=20.11.1`, `pnpm >=9.9.0` and `Docker >= 20.10` installed on your machine.
 
-You will need `Node.js >=18.17.1` and `Docker >= 20.10` installed on your machine.
+Optionally, you can use [Docker Slim][docker-slim] to reduce the container image size.
 
 ### Up and Running
 
-1. Install the required toolchain & SDK: [Node.js][install-nodejs] and [Docker][docker].
-2. Create `.env` file or copy from `.env.example`, then configure required variables.
-3. Generate application secret key, use [Generate Secret](#generate-secret) command.
-4. Install required dependencies: `pnpm install`
-5. Run project in development mode: `pnpm dev`
+1. Install the required toolchain & SDK: [Node.js][nodejs], [pnpm][pnpm], and [Docker][docker].
+2. Install required project dependencies: `pnpm install`
+3. Create `.env` file or copy from `.env.example`, then configure required variables.
+4. Generate application secret key: `pnpm generate:key`
+5. Start the database server and local SMTP server: `pnpm pre-dev`
+6. Prepare database migrations: `pnpm db:generate`
+7. Run project in development mode: `pnpm dev`
 
-Type `cargo --help` on your terminal and see the available `cargo` commands.
+If you don't have OpenSSL installed, an alternative option for generating a secret key
+is to use [1password][1password] to create a random secret.
 
-### Generate Secret
+Application will run at <http://localhost:3000>
 
-You need to set the `secret key` with a random string. To generate a secret key,
-use the following command:
+For detailed explanation on how things work, check out [Remix documentation][remix-docs].
+
+### OAuth Configuration
+
+Callback: `http://localhost:3000/auth/<PROVIDER>/callback`
+
+### Webhooks
+
+In order to receive webhooks (_i.e. notifications, payment integrations, etc_), you will need
+to expose the local port to the internet. To expose a local port to the internet, you can use
+service like [Tailscale Funnel][tailscale], [Expose by Beyond Code][expose-dev], or [ngrok][ngrok].
+
+In this case we will use Tailscale Funnel. By default, no alias for `tailscale` is set up.
+If you plan on frequently accessing the Tailscale CLI, you can add an alias to your `.bashrc`
+or `.zshrc` to make it easier.
 
 ```sh
-openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+```
+
+```sh
+tailscale funnel --bg=false http://localhost:3000
+tailscale funnel status
+```
+
+Reference: https://www.twilio.com/blog/expose-localhost-to-internet-with-tunnel
+
+### E2E Testing
+
+```sh
+pnpm e2e-test:ui
 ```
 
 ## 🔰 Database Migration
@@ -48,15 +77,20 @@ docker-compose down --remove-orphans --volumes
 ### Build Container
 
 ```sh
-docker build -f Dockerfile . -t remix-start
+pnpm docker:build
+```
 
-docker image list | grep remix-start
+### List Docker Images
+
+```sh
+pnpm docker:images
 ```
 
 ### Testing Container
 
 ```sh
-docker run --rm -it -p 3000:3000 --env-file .env.docker --name remix-start remix-start
+# Run API Docker container in foreground
+docker run --rm -it -p 3000:3000 --name remix-start --env-file .env remix-start
 ```
 
 ### Push Images
@@ -77,15 +111,13 @@ docker push ghcr.io/riipandi/remix-start:latest
 
 Read [Deployment Guide](./DEPLOY.md) for detailed documentation.
 
-## 🪪 Licensing
-
-This project is licensed under the [MIT License][mit-license], which allows for the
-freedom to use, modify, and distribute the software while retaining the requirement
-that the original copyright notice and disclaimer are included in all copies or
-substantial portions of the software. Contributions are subject to the same license
-terms, and contributors agree to transfer ownership of their contributions to the
-project maintainers.
-
+<!-- link reference definition -->
+[1password]: https://1password.com/password-generator
+[docker-slim]: https://github.com/slimtoolkit/slim
 [docker]: https://docs.docker.com/engine/install
-[install-nodejs]: https://nodejs.org/en/download
-[mit-license]: https://choosealicense.com/licenses/mit/
+[expose-dev]: https://expose.dev/
+[ngrok]: https://ngrok.com/
+[nodejs]: https://nodejs.org/en/download/
+[pnpm]: https://pnpm.io/installation
+[remix-docs]: https://remix.run/docs
+[tailscale]: https://tailscale.com/kb/1223/funnel
