@@ -1,15 +1,15 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
-import { AlertCircle } from "lucide-react";
+import type { MetaFunction } from '@remix-run/node'
+import { Link } from '@remix-run/react'
+import * as Lucide from 'lucide-react'
 
-import Button from "@/components/Button";
-import { cn } from "@/utils/ui-helper";
+import Button from '@/components/Button'
+import { cn } from '@/utils/ui-helper'
 
-import { SocialLogin } from "./__social";
+import { SocialLogin } from './__social'
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Sign in - Remix Start" }];
-};
+  return [{ title: 'Sign in - Remix Start' }]
+}
 
 export default function SignInPage() {
   return (
@@ -19,7 +19,7 @@ export default function SignInPage() {
           <div className="text-center">
             <h1 className="block font-bold text-2xl text-gray-800 dark:text-white">Sign in</h1>
             <p className="mt-3 text-gray-600 text-sm dark:text-gray-300">
-              Don&apos;t have an account yet?{" "}
+              Don&apos;t have an account yet?{' '}
               <Link
                 to="/register"
                 className="font-medium text-primary-600 hover:underline focus:outline-none dark:text-primary-500"
@@ -49,7 +49,7 @@ export default function SignInPage() {
                         required
                       />
                       <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3">
-                        <AlertCircle className={cn("hidden", "size-5 text-red-500")} />
+                        <Lucide.AlertCircle className={cn('hidden', 'size-5 text-red-500')} />
                       </div>
                     </div>
                   </div>
@@ -72,7 +72,7 @@ export default function SignInPage() {
                         required
                       />
                       <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3">
-                        <AlertCircle className={cn("hidden", "size-5 text-red-500")} />
+                        <Lucide.AlertCircle className={cn('hidden', 'size-5 text-red-500')} />
                       </div>
                     </div>
                   </div>
@@ -128,5 +128,5 @@ export default function SignInPage() {
         </Link>
       </div>
     </main>
-  );
+  )
 }

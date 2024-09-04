@@ -1,8 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-pnpm lint
-pnpm test
-
-# This is optional but recommended
-# pnpm exec playwright test
