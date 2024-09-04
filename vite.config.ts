@@ -37,6 +37,16 @@ export default defineConfig({
     // Additionally, this is to load ".env.test" during vitest
     env: loadEnv('test', process.cwd(), ''),
     setupFiles: ['./tests/setup-test.ts'],
+    includeSource: ['app/**/*.{ts,tsx}'],
+    exclude: ['node_modules', 'tests-e2e'],
+    reporters: process.env.CI ? ['json'] : ['default', 'html'],
+    outputFile: {
+      json: './tests-results/vitest-results.json',
+      html: './tests-results/index.html',
+    },
+    coverage: {
+      provider: 'v8',
+    },
     dir: './tests',
     globals: true,
   },

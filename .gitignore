@@ -35,10 +35,11 @@ $RECYCLE.BIN/
 !.env.example
 
 # Disable this line in your real app
-/tests-results/
 /playwright/.cache/
 /playwright-report/
+/tests-results/
 /blob-report/
+.playwright/
 
 # Sentry Config File
 .sentryclirc

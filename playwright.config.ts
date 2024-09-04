@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-export const STORAGE_STATE = path.join(__dirname, 'tmp/auth/user.json')
+export const STORAGE_STATE = path.join(__dirname, '.playwright/user.json')
 
 /**
  * Reference: https://playwright.dev/docs/test-configuration
@@ -21,10 +21,10 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [['html', { open: 'never', outputDir: './playwright-report' }]],
   use: {
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL: process.env.URL || 'http://127.0.0.1:3000',
     ...devices['Desktop Chrome'],
     defaultBrowserType: 'chromium',
-    colorScheme: 'light',
+    colorScheme: 'no-preference',
     locale: 'en-US',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
