@@ -1,7 +1,11 @@
 import { Link } from '#/components/link'
 import { clx } from '#/utils/ui-helper'
 
-export default function InternalError({ message }: { message: string }) {
+interface InternalErrorProps {
+  message: string
+}
+
+export default function InternalError({ message }: InternalErrorProps) {
   return (
     <div className="mx-auto flex size-full min-h-screen flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8">
       <h1 className="block font-bold text-7xl text-gray-800 sm:text-8xl dark:text-white">500</h1>
