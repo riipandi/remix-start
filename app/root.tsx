@@ -14,10 +14,11 @@ import {
   json,
   useRouteError,
 } from '@remix-run/react'
-import type { PropsWithChildren } from 'react'
+import { type PropsWithChildren, useMemo } from 'react'
 
-import { InternalError, NotFound } from '#/components/errors'
-import { cn } from '#/utils/ui-helper'
+import InternalError from '#/components/errors/internal-error'
+import NotFound from '#/components/errors/not-found'
+import { clx } from '#/utils/ui-helper'
 
 import styles from './styles.css?url'
 
@@ -30,15 +31,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   })
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [
-    { title: 'Remix Start' },
-    { name: 'description', content: 'Welcome to Remix!' },
-    ...(data?.meta ?? []),
-  ]
-}
+export const meta: MetaFunction<typeof loader> = ({ data }) => [
+  { title: 'Remix Start' },
+  { name: 'description', content: 'Welcome to Remix!' },
+  ...(data?.meta ?? []),
+]
 
 export function Layout({ children }: PropsWithChildren) {
+  const bodyClassName = useMemo(() => clx(import.meta.env.DEV && 'debug-breakpoints'), [])
+
   return (
     <html lang="en">
       <head>
@@ -47,7 +48,7 @@ export function Layout({ children }: PropsWithChildren) {
         <Meta />
         <Links />
       </head>
-      <body className={cn(import.meta.env.DEV && 'debug-screen')} suppressHydrationWarning>
+      <body className={bodyClassName} suppressHydrationWarning>
         {children}
         <ScrollRestoration />
         <Scripts />

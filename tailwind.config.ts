@@ -6,7 +6,7 @@ import type { Config } from 'tailwindcss'
 
 const TailwindConfig: Config = {
   content: ['./app/**/{**,.client,.server}/**/*!(*.stories|*.spec).{js,jsx,ts,tsx}'],
-  darkMode: 'media',
+  darkMode: ['class'],
   theme: {
     extend: {
       fontFamily: {

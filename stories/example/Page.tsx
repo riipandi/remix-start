@@ -1,9 +1,8 @@
+import { Link } from '@remix-run/react'
 import React from 'react'
 
 import { Header } from './Header'
-
 import './page.css'
-import { Link } from '@remix-run/react'
 
 type User = {
   name: string

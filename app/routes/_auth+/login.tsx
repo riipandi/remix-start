@@ -1,15 +1,12 @@
 import type { MetaFunction } from '@remix-run/node'
-import { Link } from '@remix-run/react'
 import * as Lucide from 'lucide-react'
-
-import Button from '#/components/Button'
-import { cn } from '#/utils/ui-helper'
+import { Button } from '#/components/base-ui'
+import { Link } from '#/components/link'
+import { clx } from '#/utils/ui-helper'
 
 import { SocialLogin } from './__social'
 
-export const meta: MetaFunction = () => {
-  return [{ title: 'Sign in - Remix Start' }]
-}
+export const meta: MetaFunction = () => [{ title: 'Sign in - Remix Start' }]
 
 export default function SignInPage() {
   return (
@@ -38,7 +35,7 @@ export default function SignInPage() {
                     Email address
                   </label>
                   <div className="relative flex flex-col gap-1">
-                    <label htmlFor="email" className="font-medium text-sm text-white">
+                    <label htmlFor="email" className="text-sm dark:text-white">
                       Email Address
                     </label>
                     <div className="relative flex flex-col">
@@ -49,7 +46,7 @@ export default function SignInPage() {
                         required
                       />
                       <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3">
-                        <Lucide.AlertCircle className={cn('hidden', 'size-5 text-red-500')} />
+                        <Lucide.AlertCircle className={clx('hidden', 'size-5 text-red-500')} />
                       </div>
                     </div>
                   </div>
@@ -61,7 +58,7 @@ export default function SignInPage() {
                 {/* Form Group */}
                 <div>
                   <div className="relative flex flex-col gap-1">
-                    <label htmlFor="password" className="font-medium text-sm text-white">
+                    <label htmlFor="password" className="text-sm dark:text-white">
                       Password
                     </label>
                     <div className="relative flex flex-col">
@@ -72,7 +69,7 @@ export default function SignInPage() {
                         required
                       />
                       <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3">
-                        <Lucide.AlertCircle className={cn('hidden', 'size-5 text-red-500')} />
+                        <Lucide.AlertCircle className={clx('hidden', 'size-5 text-red-500')} />
                       </div>
                     </div>
                   </div>

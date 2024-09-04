@@ -1,11 +1,11 @@
 import type { MetaFunction } from '@remix-run/node'
-import { Link } from '@remix-run/react'
+import { Button } from '#/components/base-ui'
+import { Link } from '#/components/link'
 
-import Button from '#/components/Button'
-
-export const meta: MetaFunction = () => {
-  return [{ title: 'Remix Start' }, { name: 'description', content: 'Welcome to Remix!' }]
-}
+export const meta: MetaFunction = () => [
+  { title: 'Remix Start' },
+  { name: 'description', content: 'Welcome to Remix!' },
+]
 
 export default function IndexPage() {
   return (
@@ -23,12 +23,12 @@ export default function IndexPage() {
           <Link to="/login">Example Page</Link>
         </Button>
         <Button variant="secondary">
-          <Link to="https://github.com/riipandi/remix-start" target="_blank" rel="noreferrer">
+          <Link to="https://github.com/riipandi/remix-start" newTab>
             GitHub Repo
           </Link>
         </Button>
         <Button variant="destructive">
-          <Link to="https://remix.run/docs" target="_blank" rel="noreferrer">
+          <Link to="https://remix.run/docs" newTab>
             Remix Docs
           </Link>
         </Button>
