@@ -39,7 +39,7 @@
         "format": "biome format . --write",
         "cleanup": "pnpm run --color \"/cleanup:/\"",
         "cleanup:artifacts": "pnpm dlx rimraf build storybook-static",
-        "cleanup:tests": "pnpm dlx rimraf tests-results playwright-report coverage",
+        "cleanup:tests": "pnpm dlx rimraf tests-results playwright-report",
         "cleanup:packages": "pnpm dlx rimraf pnpm-lock.yaml node_modules",
         "cleanup:docker": "docker compose down --remove-orphans --volumes",
         "update-deps": "npm-check-updates --configFileName .ncurc.json",
@@ -101,6 +101,7 @@
         "tailwindcss-animate": "^1.0.7",
         "tailwindcss": "^3.4.10",
         "typescript": "^5.5.4",
+        "vite-plugin-inspect": "^0.8.7",
         "vite-tsconfig-paths": "^5.0.1",
         "vite": "^5.4.3",
         "vitest": "^2.0.5"
