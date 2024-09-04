@@ -38,7 +38,7 @@ export default defineConfig({
     // Additionally, this is to load ".env.test" during vitest
     env: loadEnv('test', process.cwd(), ''),
     setupFiles: ['./tests/setup-test.ts'],
-    includeSource: ['./app/**/*.{ts,tsx}'],
+    includeSource: ['./app/**/*.{js,jsx,ts,tsx}'],
     exclude: ['node_modules', 'tests-e2e'],
     reporters: process.env.CI ? ['json'] : ['default', 'html'],
     outputFile: {
@@ -47,8 +47,9 @@ export default defineConfig({
     },
     coverage: {
       provider: 'v8',
-      reporter: process.env.CI ? ['json'] : ['html-spa', 'hanging-process'],
+      reporter: process.env.CI ? ['json'] : ['html-spa'],
       reportsDirectory: './tests-results/coverage',
+      include: ['app/**/*.{js,jsx,ts,tsx}'],
       cleanOnRerun: true,
       clean: true,
     },
