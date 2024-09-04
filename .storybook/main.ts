@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite'
+import { mergeConfig } from 'vite'
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -12,11 +13,18 @@ const config: StorybookConfig = {
     options: {},
   },
   core: {
-    disableTelemetry: true,
-    enableCrashReports: false,
+    disableTelemetry: true, // 👈 Disables telemetry
+    enableCrashReports: false, // 👈 Appends the crash reports to the telemetry events
   },
   docs: {
     autodocs: 'tag',
+  },
+  async viteFinal(config) {
+    return mergeConfig(config, {
+      build: {
+        chunkSizeWarningLimit: 1024,
+      },
+    })
   },
 }
 
