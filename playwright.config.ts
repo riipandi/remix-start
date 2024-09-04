@@ -1,8 +1,7 @@
 import 'dotenv/config'
 import path, { dirname } from 'node:path'
-
+import { fileURLToPath } from 'node:url'
 import { defineConfig, devices } from '@playwright/test'
-import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 

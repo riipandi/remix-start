@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @layer base {
-  html,
-  body {
-    @apply h-full min-h-screen scroll-smooth bg-white dark:bg-gray-950;
-  }
-  body * {
-    @apply transition-colors duration-100;
-  }
+    html,
+    body {
+        @apply h-full min-h-screen scroll-smooth bg-white dark:bg-gray-950;
+    }
+    body * {
+        @apply transition-colors duration-100;
+    }
 }

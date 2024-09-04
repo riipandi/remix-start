@@ -13,7 +13,10 @@ const meta = {
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
-    variant: { control: { type: 'select' }, options: ['primary', 'secondary', 'destructive'] },
+    variant: {
+      control: { type: 'select' },
+      options: ['primary', 'secondary', 'destructive'],
+    },
     size: { control: { type: 'inline-radio' }, options: ['sm', 'md', 'lg'] },
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked.

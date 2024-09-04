@@ -1,5 +1,5 @@
-import { ButtonHTMLAttributes, forwardRef } from 'react'
-import { tv, type VariantProps } from 'tailwind-variants'
+import { type ButtonHTMLAttributes, forwardRef } from 'react'
+import { type VariantProps, tv } from 'tailwind-variants'
 
 const button = tv({
   defaultVariants: { variant: 'primary', size: 'md' },

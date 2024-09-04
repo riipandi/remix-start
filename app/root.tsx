@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from 'react'
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -6,15 +5,16 @@ import type {
   MetaFunction,
 } from '@remix-run/node'
 import {
-  isRouteErrorResponse,
-  json,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
+  json,
   useRouteError,
 } from '@remix-run/react'
+import type { PropsWithChildren } from 'react'
 
 import { InternalError, NotFound } from '@/components/errors'
 import { cn } from '@/utils/ui-helper'
@@ -40,10 +40,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export function Layout({ children }: PropsWithChildren) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
-        <meta charSet='utf-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
@@ -65,7 +65,7 @@ export function ErrorBoundary() {
       : 'Something wrong'
 
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         <title>{pageTitle}</title>
         <Meta />

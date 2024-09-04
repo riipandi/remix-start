@@ -1,11 +1,11 @@
 {
-    "recommendations": [
-        "bradlc.vscode-tailwindcss",
-        "dbaeumer.vscode-eslint",
-        "EditorConfig.EditorConfig",
-        "esbenp.prettier-vscode",
-        "foxundermoon.shell-format",
-        "ms-playwright.playwright",
-        "unifiedjs.vscode-mdx"
-    ]
+	"recommendations": [
+		"bradlc.vscode-tailwindcss",
+		"dbaeumer.vscode-eslint",
+		"EditorConfig.EditorConfig",
+		"esbenp.prettier-vscode",
+		"foxundermoon.shell-format",
+		"ms-playwright.playwright",
+		"unifiedjs.vscode-mdx"
+	]
 }

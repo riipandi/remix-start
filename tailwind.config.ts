@@ -2,10 +2,10 @@ import { withTV } from 'tailwind-variants/transformer'
 import colors from 'tailwindcss/colors'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
-import { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss'
 
 const TailwindConfig: Config = {
-  content: ['./app/**/*!(*.stories|*.spec).{ts,tsx}'],
+  content: ['./app/**/{**,.client,.server}/**/*!(*.stories|*.spec).{js,jsx,ts,tsx}'],
   darkMode: 'media',
   theme: {
     extend: {
@@ -21,6 +21,7 @@ const TailwindConfig: Config = {
     },
     debugScreens: {
       position: ['bottom', 'right'],
+      borderTopLeftRadius: '4px',
       printSize: true,
       prefix: '',
     },
@@ -30,7 +31,7 @@ const TailwindConfig: Config = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('tailwindcss-animate'),
-    require('./tw-plugins/debug-screen'),
+    require('tailwind-debug-breakpoints'),
   ],
 }
 

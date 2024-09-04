@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 
-import { vitePlugin as remix, type VitePluginConfig } from '@remix-run/dev'
+import { type VitePluginConfig, vitePlugin as remix } from '@remix-run/dev'
 import { installGlobals } from '@remix-run/node'
 import { flatRoutes } from 'remix-flat-routes'
 import { visualizer } from 'rollup-plugin-visualizer'

@@ -1,6 +1,9 @@
 /node_modules
 /.fleet
+/.idea
 /.pnp
+/.cache
+/.output
 .pnp.js
 .DS_Store
 .DS_Store?
@@ -9,21 +12,27 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
-/.vscode/*
-!/.vscode/extensions.json
-!/.vscode/settings.json
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+*.bak
 
-/.cache
+# SQLite
+*.sqlite*
+*.sqlite3*
+*.libsql
+*.db
+
+# Remix
 /public/build
 /build
+/dist
 /tmp
 
+# envars
 .env.*
 !.env.example
-
-/prisma/data.db
-/prisma/data.db-journal
-/app/styles/tailwind.css
 
 # Disable this line in your real app
 /tests-results/
@@ -31,9 +40,25 @@ $RECYCLE.BIN/
 /playwright-report/
 /blob-report/
 
+# Sentry Config File
+.sentryclirc
+
+# Storybook
 *storybook.log
 /storybook-static/
 
 # fly.toml
 fly*.toml*
 !fly*.example.toml
+
+# Miscellaneous
+.unikraft/
+slim.report.json
+stats.html
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate*
+terraform.tfvars*
+!terraform.tfvars.example
