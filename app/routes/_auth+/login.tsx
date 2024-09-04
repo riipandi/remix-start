@@ -2,8 +2,8 @@ import type { MetaFunction } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import * as Lucide from 'lucide-react'
 
-import Button from '@/components/Button'
-import { cn } from '@/utils/ui-helper'
+import Button from '#/components/Button'
+import { cn } from '#/utils/ui-helper'
 
 import { SocialLogin } from './__social'
 

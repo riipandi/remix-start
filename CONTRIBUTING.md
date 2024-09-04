@@ -55,7 +55,15 @@ Reference: https://www.twilio.com/blog/expose-localhost-to-internet-with-tunnel
 ### E2E Testing
 
 ```sh
-pnpm e2e-test:ui
+pnpm e2e-test:install   # Install dependencies for E2E testing
+pnpm e2e-test:ui        # Launch the E2E test runner UI
+
+pnpm e2e-test:chrome    # Run end-to-end tests in Chrome browser
+pnpm e2e-test:firefox   # Run end-to-end tests in Firefox browser
+pnpm e2e-test:safari    # Run end-to-end tests in Safari browser
+pnpm e2e-test:mobile    # Run end-to-end tests for mobile devices
+
+pnpm e2e-test:report    # Generate and view the E2E test report
 ```
 
 ## 🔰 Database Migration

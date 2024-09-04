@@ -14,12 +14,12 @@ export const STORAGE_STATE = path.join(__dirname, 'tmp/auth/user.json')
 export default defineConfig({
   quiet: !!process.env.CI,
   testDir: './tests-e2e',
-  outputDir: './tests-results',
+  outputDir: './playwright-report',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [['html', { open: 'never' }]],
+  reporter: [['html', { open: 'never', outputDir: './playwright-report' }]],
   use: {
     baseURL: 'http://127.0.0.1:3000',
     ...devices['Desktop Chrome'],
@@ -34,20 +34,16 @@ export default defineConfig({
   },
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: 'Chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
+    { name: 'Chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'Firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'Safari', use: { ...devices['Desktop Safari'] } },
+    { name: 'Mobile Chrome', use: { ...devices['Pixel 5'] } },
   ],
   /* Run your local dev server before starting the tests */
   webServer: process.env.URL
     ? undefined
     : {
-        command: 'pnpm build && pnpm start',
+        command: 'pnpm run build && pnpm run preview',
         reuseExistingServer: !process.env.CI,
         timeout: 10_000,
         port: 3000,

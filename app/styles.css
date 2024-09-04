@@ -1,13 +1,43 @@
+@font-face {
+  font-family: "Mulish Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/mulish:vf@latest/latin-wght-normal.woff2) format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+    U+FFFD;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-    html,
-    body {
-        @apply h-full min-h-screen scroll-smooth bg-white dark:bg-gray-950;
-    }
-    body * {
-        @apply transition-colors duration-100;
-    }
+  html,
+  body {
+    @apply size-full min-h-screen antialiased scroll-smooth dark:bg-gray-950;
+  }
+}
+
+@layer utilities {
+  /* Skip link */
+  .skiplink {
+    @apply h-px overflow-hidden absolute w-px focus:rounded-lg focus:text-gray-900 focus:h-auto focus:w-auto focus:no-underline focus:m-1 focus:px-4 focus:py-2;
+    clip: rect(1px, 1px, 1px, 1px);
+  }
+  .skiplink:focus {
+    clip: auto;
+  }
+  .skiplink:focus,
+  .skiplink:active {
+    border: none;
+    outline: none;
+  }
+  /* Debug element */
+  .debug {
+    border-width: 1px;
+    border-style: dashed;
+    border-color: #f87171;
+  }
 }

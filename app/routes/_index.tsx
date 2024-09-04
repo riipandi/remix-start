@@ -1,7 +1,7 @@
 import type { MetaFunction } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 
-import Button from '@/components/Button'
+import Button from '#/components/Button'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Remix Start' }, { name: 'description', content: 'Welcome to Remix!' }]

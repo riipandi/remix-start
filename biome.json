@@ -81,7 +81,8 @@
         "formatWithErrors": false,
         "indentStyle": "space",
         "indentWidth": 4,
-        "lineWidth": 100
+        "lineWidth": 100,
+        "ignore": ["tsconfig.json"]
     },
     "css": {
         "parser": {

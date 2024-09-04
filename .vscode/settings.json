@@ -16,6 +16,9 @@
         "clx\\(([^)]*)\\)", // clx(xxx)
         "cx\\(([^)]*)\\)", // cx(xxx)
     ],
+    "[css]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
     "[toml]": {
         "editor.formatOnSave": false,
         "editor.defaultFormatter": "tamasfe.even-better-toml"

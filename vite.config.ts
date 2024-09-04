@@ -25,9 +25,8 @@ const RemixConfig: VitePluginConfig = {
 export default defineConfig({
   plugins: [
     !isTestOrStorybook && remix(RemixConfig),
-    visualizer({
-      emitFile: true, // `emitFile` is necessary since Remix builds more than one bundle!
-    }),
+    // `emitFile` is necessary since Remix builds more than one bundle!
+    visualizer({ emitFile: true }),
     tsconfigPaths(),
   ],
   server: {

@@ -16,8 +16,8 @@ import {
 } from '@remix-run/react'
 import type { PropsWithChildren } from 'react'
 
-import { InternalError, NotFound } from '@/components/errors'
-import { cn } from '@/utils/ui-helper'
+import { InternalError, NotFound } from '#/components/errors'
+import { cn } from '#/utils/ui-helper'
 
 import styles from './styles.css?url'
 

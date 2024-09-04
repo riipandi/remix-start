@@ -1,7 +1,7 @@
 import type { ErrorResponse } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 
-import { cn } from '@/utils/ui-helper'
+import { cn } from '#/utils/ui-helper'
 
 export function NotFound({ status, statusText }: Omit<ErrorResponse, 'data'>) {
   return (
