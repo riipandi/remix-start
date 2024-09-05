@@ -10,6 +10,7 @@ ARG NODE_VERSION=20
 # -----------------------------------------------------------------------------
 FROM --platform=${PLATFORM} node:${NODE_VERSION}-bookworm-slim AS base
 ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+ENV LEFTHOOK=0 CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
 RUN corepack enable && corepack prepare pnpm@latest-9 --activate
 WORKDIR /srv
 
@@ -31,6 +32,7 @@ FROM base AS pruner
 ENV NODE_ENV $NODE_ENV
 
 COPY --from=builder /srv/.npmrc /srv/.npmrc
+COPY --from=builder /srv/server.js /srv/server.js
 COPY --from=builder /srv/package.json /srv/package.json
 COPY --from=builder /srv/pnpm-lock.yaml /srv/pnpm-lock.yaml
 COPY --from=builder /srv/build/client /srv/build/client
@@ -78,4 +80,4 @@ USER node:node
 EXPOSE $PORT
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["/usr/local/bin/pnpm", "start"]
+CMD ["/usr/local/bin/node", "server.js"]
