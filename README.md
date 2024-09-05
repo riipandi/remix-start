@@ -16,6 +16,7 @@ Learn more about [Remix Stacks][remix-stacks].
 - Deploy to [Fly.io](https://fly.io) using [Docker][docker] container
 - Ready for multi-tenant (multiple subdomains with a single codebase)
 - Healthcheck endpoint for [Fly backups region fallbacks][fly-io]
+- Custom [Express][expressjs] server for production
 - Styling with [Tailwind CSS][tailwindcss], [clsx][clsx], and [tailwind-merge][tailwind-merge]
 - Code formatting and linting with [Biome][biome]
 - Static Types with [TypeScript][typescript]
@@ -69,6 +70,7 @@ See the [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT) file
 [biome]: https://biomejs.dev
 [clsx]: https://www.npmjs.com/package/clsx
 [docker]: https://docs.docker.com/engine/install
+[expressjs]: https://expressjs.com/
 [fly-io]: https://fly.io/docs/reference/configuration/#services-http_checks
 [license-apache]: https://choosealicense.com/licenses/apache-2.0/
 [license-mit]: https://choosealicense.com/licenses/mit/
