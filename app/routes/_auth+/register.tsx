@@ -6,22 +6,24 @@ import { clx } from '#/utils/ui-helper'
 
 import { SocialLogin } from './__social'
 
-export const meta: MetaFunction = () => [{ title: 'Sign in - Sosialink' }]
+export const meta: MetaFunction = () => [{ title: 'Create Account - Sosialink' }]
 
-export default function SignInPage() {
+export default function SignUpPage() {
   return (
     <main className="mx-auto w-full max-w-md p-6">
       <div className="mt-7 rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-black">
         <div className="p-4 sm:p-7">
           <div className="text-center">
-            <h1 className="block font-bold text-2xl text-gray-800 dark:text-white">Welcome Back</h1>
+            <h1 className="block font-bold text-2xl text-gray-800 dark:text-white">
+              Create Account
+            </h1>
             <p className="mt-3 text-gray-600 text-sm dark:text-gray-300">
-              Don&apos;t have an account yet?{' '}
+              Already have an account?{' '}
               <Link
-                to="/register"
+                to="/login"
                 className="font-medium text-primary-600 hover:underline focus:outline-none dark:text-primary-500"
               >
-                Sign up here
+                Sign in here
               </Link>
             </p>
           </div>
@@ -91,20 +93,15 @@ export default function SignInPage() {
                   <div className="inline-flex w-full items-center justify-between">
                     <div className="ms-2.5">
                       <label htmlFor="remember-me" className="text-sm dark:text-white">
-                        Remember me
+                        I accept the{' '}
+                        <Link
+                          to="/terms"
+                          newTab
+                          className="text-primary-600 hover:underline focus:rounded focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-primary-500 dark:hover:text-primary-600"
+                        >
+                          Terms and Conditions
+                        </Link>
                       </label>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <label htmlFor="password" className="sr-only">
-                        Password
-                      </label>
-                      <Link
-                        to="#"
-                        className="text-primary-600 text-sm decoration-2 hover:underline dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        tabIndex={-1}
-                      >
-                        Forgot password?
-                      </Link>
                     </div>
                   </div>
                 </div>
@@ -115,7 +112,7 @@ export default function SignInPage() {
               </div>
             </form>
             {/* End Form */}
-            <SocialLogin label="Or, login with" />
+            <SocialLogin label="Or, signup with" />
           </div>
         </div>
       </div>
