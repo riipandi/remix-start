@@ -27,7 +27,7 @@ Learn more about [Remix Stacks][remix-stacks].
 pnpm create remix --template riipandi/remix-start app_name
 ```
 
-Read the [CONTRIBUTING.md](./CONTRIBUTING.md) to get started with the project.
+To get started with setting up this project, refer to [CONTRIBUTING.md](./CONTRIBUTING.md) for step-by-step instructions.
 
 ## 🧑🏻‍💻 Development
 
