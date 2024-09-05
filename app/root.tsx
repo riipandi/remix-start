@@ -49,7 +49,10 @@ export function Layout({ children }: PropsWithChildren) {
         <Links />
       </head>
       <body className={bodyClassName} suppressHydrationWarning>
-        {children}
+        <a href="#main" className="skiplink">
+          Skip to main content
+        </a>
+        <div id="main">{children}</div>
         <ScrollRestoration />
         <Scripts />
       </body>

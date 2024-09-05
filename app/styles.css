@@ -23,21 +23,14 @@
 @layer utilities {
   /* Skip link */
   .skiplink {
-    @apply h-px overflow-hidden absolute w-px focus:rounded-lg focus:text-gray-900 focus:h-auto focus:w-auto focus:no-underline focus:m-1 focus:px-4 focus:py-2;
+    @apply absolute px-2 py-4 flex w-44 justify-center items-center size-px overflow-hidden text-sm;
     clip: rect(1px, 1px, 1px, 1px);
   }
   .skiplink:focus {
+    @apply rounded-lg text-gray-900 h-auto w-auto no-underline m-1 px-4 py-2;
     clip: auto;
   }
-  .skiplink:focus,
-  .skiplink:active {
-    border: none;
-    outline: none;
-  }
+  .skiplink:focus, .skiplink:active { border: none; outline: none; }
   /* Debug element */
-  .debug {
-    border-width: 1px;
-    border-style: dashed;
-    border-color: #f87171;
-  }
+  .debug { border-width: 1px; border-style: dashed; border-color: #f87171; }
 }
