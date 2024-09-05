@@ -1,4 +1,4 @@
-import Button from '#/components/Button'
+import { Button } from '#/components/base-ui'
 
 import './header.css'
 

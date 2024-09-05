@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 
-import Button from '#/components/Button'
+import { Button, type ButtonProps } from '#/components/base-ui'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -22,7 +22,7 @@ const meta = {
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked.
   // @ref: https://storybook.js.org/docs/essentials/actions#action-args
   args: { onClick: fn() },
-} satisfies Meta<typeof Button>
+} satisfies Meta<ButtonProps>
 
 export default meta
 type Story = StoryObj<typeof meta>
