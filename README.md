@@ -14,6 +14,7 @@ Learn more about [Remix Stacks][remix-stacks].
 ## What's in the stack?
 
 - Deploy to [Fly.io](https://fly.io) using [Docker][docker] container
+- Ready for multi-tenant (multiple subdomains with a single codebase)
 - Healthcheck endpoint for [Fly backups region fallbacks][fly-io]
 - Styling with [Tailwind CSS][tailwindcss], [clsx][clsx], and [tailwind-merge][tailwind-merge]
 - Code formatting and linting with [Biome][biome]
