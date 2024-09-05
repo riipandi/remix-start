@@ -1,9 +1,4 @@
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaDescriptor,
-  MetaFunction,
-} from '@remix-run/node'
+import type { LinksFunction, LoaderFunction, MetaDescriptor, MetaFunction } from '@remix-run/node'
 import {
   Links,
   Meta,
@@ -24,7 +19,7 @@ import styles from './styles.css?url'
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }]
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader: LoaderFunction = async ({ request }) => {
   return json({
     // Dynamic Canonical URL: https://sergiodxa.com/tutorials/add-dynamic-canonical-url-to-remix-routes
     meta: [{ tagName: 'link', rel: 'canonical', href: request.url }] satisfies MetaDescriptor[],

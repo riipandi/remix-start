@@ -1,6 +1,6 @@
 import { type LinkProps, Link as RouterLink } from '@remix-run/react'
 import type React from 'react'
-import { forwardRef, useMemo } from 'react'
+import { forwardRef } from 'react'
 import { clx } from '#/utils/ui-helper'
 
 interface CustomLinkProps extends LinkProps {
@@ -31,11 +31,9 @@ const Link = forwardRef(function Component(
   const NEW_TAB_TARGET = '_blank'
   const DEFAULT_TARGET = '_self'
 
-  const linkClassName = useMemo(() => clx(className), [className])
-
   return (
     <RouterLink
-      className={linkClassName}
+      className={clx(className)}
       rel={newTab ? NEW_TAB_REL : undefined}
       target={newTab ? NEW_TAB_TARGET : DEFAULT_TARGET}
       ref={ref}
