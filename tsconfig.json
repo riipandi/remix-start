@@ -113,6 +113,6 @@
             "~/*": ["./public/*"]
         }
     },
-    "include": ["env.d.ts", "**/*.ts", "**/*.tsx"], // Files to include in compilation
-    "exclude": ["node_modules", "build"] // Files to exclude from compilation
+    "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules", "build"]
 }

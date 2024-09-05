@@ -32,6 +32,7 @@ FROM base AS pruner
 ENV NODE_ENV $NODE_ENV
 
 COPY --from=builder /srv/.npmrc /srv/.npmrc
+COPY --from=builder /srv/server.js /srv/server.js
 COPY --from=builder /srv/package.json /srv/package.json
 COPY --from=builder /srv/pnpm-lock.yaml /srv/pnpm-lock.yaml
 COPY --from=builder /srv/build/client /srv/build/client
@@ -82,4 +83,4 @@ USER nonroot:nonroot
 EXPOSE $PORT
 
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/usr/local/bin/pnpm", "start"]
+CMD ["/usr/local/bin/node", "server.js"]
