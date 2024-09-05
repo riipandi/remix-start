@@ -78,7 +78,6 @@ const app = express()
 app.disable('x-powered-by')
 
 app.use(compression({ level: 6, threshold: 0 }))
-app.use(helmet())
 
 app.use(
   rateLimit({
@@ -97,10 +96,54 @@ app.use(express.static('public', { maxAge: '1h' }))
 app.use(morgan('tiny'))
 
 app.use((_req, res, next) => {
-  res.locals.nonce = Math.random().toString(36).substring(2)
+  const nonce = Math.random().toString(36).substring(2)
+  res.locals.nonce = nonce
+  // res.setHeader('Content-Security-Policy', getContentSecurityPolicy(nonce))
   next()
 })
 
+const connectSource = process.env.NODE_ENV === 'development' ? ['ws://localhost:*'] : []
+const imgSources = ['https://avatar.vercel.sh', 'https://loremflickr.com']
+const fontSources = ['https://cdn.jsdelivr.net']
+
+let scriptSrc
+if (process.env.NODE_ENV === 'development') {
+  // Allow the <LiveReload /> component to load without a nonce in the error pages
+  scriptSrc = ["'self'", "'report-sample'", "'unsafe-inline'"]
+} else if (typeof nonce === 'string' && nonce.length > 40) {
+  scriptSrc = ["'self'", "'report-sample'", `'nonce-${nonce}'`]
+} else {
+  scriptSrc = ["'self'", "'report-sample'", "'unsafe-inline'"]
+}
+
+app.use(
+  helmet({
+    xPoweredBy: false,
+    contentSecurityPolicy: {
+      directives: {
+        'base-uri': ["'self'"],
+        'child-src': ["'self'"],
+        'connect-src': ["'self'", ...connectSource],
+        'default-src': ["'self'"],
+        'font-src': ["'self'", ...fontSources],
+        'form-action': ["'self'"],
+        'frame-ancestors': ["'none'"],
+        'frame-src': ["'self'"],
+        'img-src': ["'self'", 'data:', ...imgSources],
+        'manifest-src': ["'self'"],
+        'media-src': ["'self'"],
+        'object-src': ["'none'"],
+        'script-src': [...scriptSrc, "'unsafe-eval'"], // 'unsafe-eval' required for DOMPurify
+        // 'script-src': ["'strict-dynamic'", (_req, res) => `'nonce-${res.locals.nonce}'`],
+        // 'script-src-elem': ["'strict-dynamic'", (_req, res) => `'nonce-${res.locals.nonce}'`],
+        'style-src': ["'self'", "'report-sample'", "'unsafe-inline'"],
+        'worker-src': ["'self'", 'blob:', ...imgSources],
+        // 'require-trusted-types-for': ["'script'"],
+        // 'trusted-types': ['default', 'dompurify'],
+      },
+    },
+  })
+)
 app.use((err, _req, res, _next) => {
   console.error(err.stack)
   res.status(500).send(`Something went wrong: ${err.message}`)

@@ -1,4 +1,4 @@
-import type { HeadersFunction, LoaderFunction, MetaFunction } from '@remix-run/node'
+import type { HeadersFunction, LoaderFunction, MetaDescriptor, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Button } from '#/components/base-ui'
@@ -10,7 +10,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   let host = request.headers.get('host')
   if (!host) throw new Error('Missing host')
 
-  const domain = process.env.DOMAIN || 'example.com'
+  const domain = process.env.APP_DOMAIN || 'example.com'
   const baseDomain = process.env.NODE_ENV === 'development' ? 'localhost:3000' : domain
 
   console.debug('Original host:', host)
@@ -20,7 +20,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   if (!isSubdomain) {
     console.debug('Not a subdomain, returning default page')
-    return json({ isDefault: true, domain })
+
+    const meta = [
+      { title: 'Remix Start' },
+      { name: 'description', content: 'Welcome to Remix Start' },
+    ] satisfies MetaDescriptor[]
+
+    return json({ isDefault: true, domain, meta })
   }
 
   // Handle localhost by replacing 'localhost' with the domain name
@@ -65,25 +71,21 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   console.debug('Returning data for site:', currentSite)
 
-  return json({ isDefault: false, domain, sites, currentSite })
+  const meta = [{ title: `@${currentSite.slug} on Remix Start` }] satisfies MetaDescriptor[]
+
+  return json({ isDefault: false, domain, sites, currentSite, meta })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (data.isDefault) {
-    return [{ title: 'Remix Start' }, { name: 'description', content: 'Welcome to Remix Start' }]
-  }
-  return [
-    { title: data.currentSite.name },
-    { name: 'description', content: data.currentSite.description },
-  ]
+  if (!data?.user) return data?.meta ?? []
+  const title = `${data.user.firstName} ${data.user.lastName} on Remix Start`
+  return [{ title }, ...(data.meta ?? [])]
 }
 
 export const headers: HeadersFunction = () => ({ 'Cache-Control': 'max-age=3600, s-maxage=3600' })
 
 export default function IndexPage() {
   const data = useLoaderData<typeof loader>()
-
-  console.debug('data', data)
 
   if (!data || data.isDefault) {
     return (
