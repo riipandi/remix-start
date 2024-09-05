@@ -26,7 +26,8 @@ runs:
     - uses: pnpm/action-setup@v4
       with:
         version: ${{ inputs.pnpmVersion }}
-        run_install: false
+        run_install: |
+          - args: [--global, node-jq]
 
     - name: Get pnpm store directory
       shell: bash

@@ -6,7 +6,7 @@ import { clx } from '#/utils/ui-helper'
 
 import { SocialLogin } from './__social'
 
-export const meta: MetaFunction = () => [{ title: 'Create Account - Sosialink' }]
+export const meta: MetaFunction = () => [{ title: 'Create Account - Remix Start' }]
 
 export default function SignUpPage() {
   return (

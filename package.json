@@ -31,7 +31,7 @@
         "e2e-test:safari": "playwright test --headed --project Safari",
         "e2e-test:mobile": "playwright test --headed --project 'Mobile Chrome'",
         "e2e-test:report": "playwright show-report playwright-report",
-        "e2e-test:install": "playwright install-deps",
+        "e2e-test:install": "playwright install --with-deps",
         "e2e-test:ui": "playwright test --ui",
         "preinstall": "npx only-allow pnpm",
         "prepare": "lefthook install || true",

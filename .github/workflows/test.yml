@@ -38,9 +38,19 @@ jobs:
       - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
         name: Test and build
         run: |
-          pnpm install
-          pnpm test
-          pnpm build
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm test && pnpm test:coverage && pnpm build
+
+      - name: Upload tests-results if exists
+        run: echo "TEST_RESULTS_EXISTS=$([ -d "tests-results" ] && echo "true" || echo "false")" >> $GITHUB_ENV
+
+      - name: Upload tests-results
+        uses: actions/upload-artifact@v4
+        if: env.TEST_RESULTS_EXISTS == 'true'
+        with:
+          name: tests-results-${{ matrix.node-version }}
+          path: tests-results/
+          retention-days: 14
 
   e2e-test:
     name: E2E Test
@@ -54,18 +64,40 @@ jobs:
       - name: Run actions/setup-sdk@local
         uses: ./.github/setup-sdk
 
-      - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+      - name: Get installed Playwright version
+        id: playwright-version
+        #  |
+        run: |
+          PLAYWRIGHT_VERSION=$(jq -r '.devDependencies["@playwright/test"]? // "Package not found"' package.json | sed 's/^[^0-9]*//')
+          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
+          echo "Playwright version: $PLAYWRIGHT_VERSION"
 
-      - name: Install Playwright Browsers
+      - name: Cache playwright binaries
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Playwright install
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: pnpm exec playwright test
+      - name: Playwright install-deps
+        run: pnpm exec playwright install-deps
 
-      - uses: actions/upload-artifact@v4
+      - name: Run Playwright tests
+        run: |
+          NODE_ENV=production pnpm build
+          pnpm exec playwright test
+
+      - name: Upload playwright-report
+        uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-${{ github.run_id }}
           path: playwright-report/
-          retention-days: 30
+          retention-days: 14

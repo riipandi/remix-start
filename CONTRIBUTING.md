@@ -109,7 +109,7 @@ pnpm docker:images
 
 ```sh
 # Run API Docker container in foreground
-docker run --rm -it -p 3000:3000 --name sosialink --env-file .env sosialink
+docker run --rm -it -p 3000:3000 --name remix-start --env-file .env remix-start
 ```
 
 ### Push Images
@@ -123,7 +123,7 @@ echo $REGISTRY_TOKEN | docker login ghcr.io --username YOUR_USERNAME --password-
 Push docker image:
 
 ```sh
-docker push ghcr.io/riipandi/sosialink:latest
+docker push ghcr.io/riipandi/remix-start:latest
 ```
 
 ## 🚀 Deployment

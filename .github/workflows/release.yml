@@ -37,7 +37,9 @@ jobs:
 
       - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
         name: Install and build
-        run: pnpm install && pnpm build
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm build
 
       - name: Release new version
         uses: softprops/action-gh-release@v2
