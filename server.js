@@ -8,6 +8,7 @@
  * ╰─➤ $ pnpm add -D @types/express @types/compression @types/morgan
  */
 
+import 'dotenv/config'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
