@@ -38,8 +38,11 @@ jobs:
       - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
         name: Test and build
         run: |
+          cp .env.example .env
           pnpm install --frozen-lockfile --ignore-scripts
-          pnpm test && pnpm test:coverage && pnpm build
+          pnpm run test
+          pnpm run test:coverage
+          pnpm run build
 
       - name: Upload tests-results if exists
         run: echo "TEST_RESULTS_EXISTS=$([ -d "tests-results" ] && echo "true" || echo "false")" >> $GITHUB_ENV
@@ -91,6 +94,7 @@ jobs:
 
       - name: Run Playwright tests
         run: |
+          cp .env.example .env
           NODE_ENV=production pnpm build
           pnpm exec playwright test
 
