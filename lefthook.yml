@@ -18,11 +18,11 @@ pre-commit:
   parallel: true
   commands:
     check:
-      glob: "*.{js,ts,jsx,tsx}"
+      glob: "*.{js,ts,jsx,tsx,json},package.json"
       exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
       run: pnpm exec biome check {staged_files} --write
     lint:
-      glob: "*.{js,ts,jsx,tsx}"
+      glob: "*.{js,ts,jsx,tsx,json},package.json"
       exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
       run: pnpm exec biome lint {staged_files} --write
   # scripts:
