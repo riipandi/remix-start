@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1.4
 
 # Arguments with default value (for build).
+ARG RUN_IMAGE=gcr.io/distroless/nodejs20-debian12
 ARG PLATFORM=linux/amd64
 ARG NODE_ENV=production
 ARG NODE_VERSION=20
@@ -8,7 +9,7 @@ ARG NODE_VERSION=20
 # -----------------------------------------------------------------------------
 # Base image with pnpm package manager.
 # -----------------------------------------------------------------------------
-FROM --platform=${PLATFORM} node:${NODE_VERSION}-alpine AS base
+FROM --platform=${PLATFORM} node:${NODE_VERSION}-bookworm-slim AS base
 ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 ENV LEFTHOOK=0 CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
 RUN corepack enable && corepack prepare pnpm@latest-9 --activate
@@ -22,8 +23,8 @@ FROM base AS builder
 # Copy the source files
 COPY --chown=node:node . .
 
-RUN apk update && apk add --no-cache tini jq libc6-compat
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --ignore-scripts && pnpm build
+RUN apt update && apt -yqq install tini jq
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install && pnpm build
 
 # -----------------------------------------------------------------------------
 # Compile the application and install production only dependencies.
@@ -39,14 +40,16 @@ COPY --from=builder /srv/build/client /srv/build/client
 COPY --from=builder /srv/build/server /srv/build/server
 
 # Install production dependencies and cleanup node_modules.
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install \
-    --prod --frozen-lockfile --ignore-scripts && pnpm prune \
-    --prod && pnpm dlx clean-modules clean --yes
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod \
+    --frozen-lockfile --ignore-scripts && pnpm prune --prod \
+    --ignore-scripts && pnpm dlx clean-modules clean --yes \
+    "!**/@libsql/**" && chmod +x /srv/server.js
 
 # -----------------------------------------------------------------------------
 # Production image, copy build output files and run the application.
+# @ref: https://hackernoon.com/mastering-distroless-a-guide-to-building-secure-and-efficient-docker-images
 # -----------------------------------------------------------------------------
-FROM base AS runner
+FROM --platform=${PLATFORM} $RUN_IMAGE AS runner
 LABEL org.opencontainers.image.source="https://github.com/riipandi/remix-start"
 
 # ----- Read application environment variables --------------------------------
@@ -66,21 +69,20 @@ ENV APP_BASE_URL=$APP_BASE_URL \
 
 # ----- Read application environment variables --------------------------------
 
-# Don't run production as root.
-RUN addgroup --system --gid 1001 nonroot && adduser --system --uid 1001 nonroot
-
 # Copy the build output files from the pruner stage.
 COPY --chown=nonroot:nonroot --from=pruner /pnpm /pnpm
 COPY --chown=nonroot:nonroot --from=pruner /srv /srv
 
 # Copy some utilities from builder image.
-COPY --from=builder /sbin/tini /sbin/tini
+COPY --from=builder /usr/bin/tini /usr/bin/tini
 
 # Define the host and port to listen on.
+ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH"
 ENV NODE_ENV=$NODE_ENV HOST=0.0.0.0 PORT=3000
 
+WORKDIR /srv
 USER nonroot:nonroot
 EXPOSE $PORT
 
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/usr/local/bin/node", "server.js"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["/nodejs/bin/node", "server.js"]

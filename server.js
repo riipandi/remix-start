@@ -1,3 +1,13 @@
+#!/usr/bin/env node
+
+/**
+ * This script is used to start the Remix development server.
+ * Based on https://github.com/kentcdodds/nonce-remix-issue
+ *
+ * ╰─➤ $ pnpm add @remix-run/express express compression morgan helmet express-rate-limit
+ * ╰─➤ $ pnpm add -D @types/express @types/compression @types/morgan
+ */
+
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
