@@ -11,11 +11,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!host) throw new Error('Missing host')
 
   const domain = process.env.DOMAIN || 'example.com'
+  const baseDomain = process.env.NODE_ENV === 'development' ? 'localhost:3000' : domain
 
   console.debug('Original host:', host)
 
   // Check if it's a subdomain
-  const isSubdomain = host.endsWith(`.${domain}`) && !host.startsWith('www.')
+  const isSubdomain = host.endsWith(`.${baseDomain}`) && !host.startsWith('www.')
 
   if (!isSubdomain) {
     console.debug('Not a subdomain, returning default page')
