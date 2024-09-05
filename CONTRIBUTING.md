@@ -52,6 +52,21 @@ tailscale funnel status
 
 Reference: https://www.twilio.com/blog/expose-localhost-to-internet-with-tunnel
 
+## 🔰 Database Migration
+
+> TODO: add more information here
+
+## Testing
+
+### Unit Testing
+
+```sh
+pnpm test            # Run unit tests
+pnpm test:coverage   # Run unit tests and generate coverage report
+pnpm test:report     # View the unit test report
+pnpm test:ui         # Launch the unit test runner UI
+```
+
 ### E2E Testing
 
 ```sh
@@ -65,10 +80,6 @@ pnpm e2e-test:mobile    # Run end-to-end tests for mobile devices
 
 pnpm e2e-test:report    # Generate and view the E2E test report
 ```
-
-## 🔰 Database Migration
-
-> TODO: add more information here
 
 ## 🐳 Docker Container
 
@@ -98,7 +109,7 @@ pnpm docker:images
 
 ```sh
 # Run API Docker container in foreground
-docker run --rm -it -p 3000:3000 --name remix-start --env-file .env remix-start
+docker run --rm -it -p 3000:3000 --name sosialink --env-file .env sosialink
 ```
 
 ### Push Images
@@ -112,7 +123,7 @@ echo $REGISTRY_TOKEN | docker login ghcr.io --username YOUR_USERNAME --password-
 Push docker image:
 
 ```sh
-docker push ghcr.io/riipandi/remix-start:latest
+docker push ghcr.io/riipandi/sosialink:latest
 ```
 
 ## 🚀 Deployment
