@@ -10,13 +10,17 @@ const EnvSchema = v.object({
   APP_DOMAIN: v.string(),
   APP_BASE_URL: v.string(),
   APP_SECRET_KEY: v.string(),
-  APP_LOG_LEVEL: v.string(),
-  DATABASE_URL: v.string(),
-  SMTP_HOST: v.string(),
-  SMTP_PORT: v.number(),
-  SMTP_USERNAME: v.string(),
-  SMTP_PASSWORD: v.string(),
-  SMTP_EMAIL_FROM: v.string(),
+  APP_LOG_LEVEL: v.optional(v.picklist(['info', 'warn', 'error', 'debug'] as const), 'info'),
+  DATABASE_URL: v.pipe(
+    v.string(),
+    v.nonEmpty('Please enter the database url.'),
+    v.url('The url is badly formatted.')
+  ),
+  SMTP_HOST: v.optional(v.string(), 'localhost'),
+  SMTP_PORT: v.optional(v.number(), 1025),
+  SMTP_USERNAME: v.optional(v.string()),
+  SMTP_PASSWORD: v.optional(v.string()),
+  SMTP_EMAIL_FROM: v.optional(v.string(), 'Remix Mailer <mailer@example.com>'),
 })
 
 declare global {
