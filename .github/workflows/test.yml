@@ -86,7 +86,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Playwright install
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        # if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --with-deps
 
       - name: Playwright install-deps
@@ -98,10 +98,10 @@ jobs:
           NODE_ENV=production pnpm build
           pnpm exec playwright test
 
-      - name: Upload playwright-report
+      - name: Upload e2e-test-report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report-${{ github.run_id }}
-          path: playwright-report/
+          name: e2e-test-report-${{ github.run_id }}
+          path: tests-results/e2e/
           retention-days: 14

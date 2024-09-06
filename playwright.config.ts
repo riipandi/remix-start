@@ -14,12 +14,12 @@ export const STORAGE_STATE = path.join(__dirname, '.playwright/user.json')
 export default defineConfig({
   quiet: !!process.env.CI,
   testDir: './tests-e2e',
-  outputDir: './playwright-report',
+  outputDir: './tests-results/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [['html', { open: 'never', outputDir: './playwright-report' }]],
+  reporter: [['html', { open: 'never', outputFolder: './tests-results/e2e' }], ['list']],
   use: {
     baseURL: process.env.URL || 'http://127.0.0.1:3000',
     ...devices['Desktop Chrome'],
@@ -45,7 +45,7 @@ export default defineConfig({
     : {
         command: 'pnpm run build && pnpm run preview',
         reuseExistingServer: !process.env.CI,
-        timeout: 10_000,
+        timeout: process.env.CI ? 10_000 : 8000,
         port: 3000,
       },
 })
