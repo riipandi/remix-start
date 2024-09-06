@@ -24,7 +24,8 @@ FROM base AS builder
 COPY --chown=node:node . .
 
 RUN apt update && apt -yqq install tini jq
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install && pnpm build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install \
+    --ignore-scripts && pnpm build
 
 # -----------------------------------------------------------------------------
 # Compile the application and install production only dependencies.
@@ -34,9 +35,9 @@ ENV NODE_ENV $NODE_ENV
 
 # Required source files
 COPY --from=builder /srv/.npmrc /srv/.npmrc
+COPY --from=builder /srv/package.json /srv/package.json
 COPY --from=builder /srv/server /srv/server
 COPY --from=builder /srv/public /srv/public
-COPY --from=builder /srv/package.json /srv/package.json
 
 # Generated files
 COPY --from=builder /srv/pnpm-lock.yaml /srv/pnpm-lock.yaml

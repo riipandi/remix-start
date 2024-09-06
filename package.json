@@ -21,7 +21,7 @@
         "preview": "node --watch ./server/server.js",
         "start": "remix-serve ./build/server/index.js",
         "generate:key": "openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 40 | head -n 1",
-        "docker:build": "docker build -f Dockerfile.alpine . -t $npm_package_name:latest -t $npm_package_name:$npm_package_version",
+        "docker:build": "docker build -f Dockerfile . -t $npm_package_name:latest -t $npm_package_name:$npm_package_version",
         "docker:images": "docker image list --filter reference=$npm_package_name:$npm_package_version --filter reference=$npm_package_name:latest",
         "docker:run": "docker run --add-host=localhost:host-gateway --rm -it -p 3000:3000 --env-file .env --name $npm_package_name $npm_package_name:$npm_package_version",
         "docker:shell": "docker run --add-host=localhost:host-gateway --rm -it -p 3000:3000 --env-file .env --entrypoint /bin/bash $npm_package_name:$npm_package_version",
