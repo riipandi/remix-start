@@ -4,7 +4,7 @@
  * This script is used to start the Remix development server.
  * Based on https://github.com/kentcdodds/nonce-remix-issue
  *
- * ╰─➤ $ pnpm add @remix-run/express express compression morgan helmet express-rate-limit
+ * ╰─➤ $ pnpm add @remix-run/express express compression morgan helmet express-rate-limit picocolors
  * ╰─➤ $ pnpm add -D @types/express @types/compression @types/morgan
  */
 
@@ -98,7 +98,7 @@ app.use(express.static(PUBLIC_DIR, { maxAge: '1h' }))
 app.use(
   morgan('short', {
     stream: {
-      write: (message) => logger('INFO', message.trim()),
+      write: (message) => logger.info(message.trim()),
     },
   })
 )
@@ -153,7 +153,7 @@ app.use(
   })
 )
 app.use((err, _req, res, _next) => {
-  logger('ERROR', err.stack)
+  logger.error(err.stack)
   res.status(500).send(`Something went wrong: ${err.message}`)
 })
 
@@ -182,9 +182,9 @@ const onListen = () => {
   const localUrl = `http://localhost:${PORT}`
   const networkUrl = address ? `http://${address}:${PORT}` : null
   if (networkUrl) {
-    logger('INFO', `[remix-express] ${localUrl} (${networkUrl})`)
+    logger.info(`[remix-express] ${localUrl} (${networkUrl})`)
   } else {
-    logger('INFO', `[remix-express] ${localUrl}`)
+    logger.info(`[remix-express] ${localUrl}`)
   }
 }
 

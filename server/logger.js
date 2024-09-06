@@ -1,12 +1,12 @@
-import { default as pico } from 'picocolors'
+import pico from 'picocolors'
 
 /**
- * Formats the current timestamp for logs.
- * @param {Date} [date] Optional date to use for the timestamp. Defaults to the current date.
- * @param {boolean} [localtime=true] Whether to use local time or UTC. Defaults to local time.
+ * Generates a formatted timestamp string.
+ * @param {Date} [date] - Optional Date object. Defaults to current date/time.
+ * @param {boolean} [localtime=true] - Whether to use local time. Defaults to true.
  * @returns {string} Formatted timestamp string.
  */
-export function logTimestamp(date, localtime = true) {
+function logTimestamp(date, localtime = true) {
   const now = date ?? new Date()
   const useUTC = !localtime
 
@@ -21,10 +21,10 @@ export function logTimestamp(date, localtime = true) {
 }
 
 /**
- * Parse the log level to return a color-coded string.
- * TODO: Replace with `node:utils.styleText` for Node >= 21.
- * @param {string} level The log level to parse.
- * @returns {string} A color-coded log level string.
+ * TODO replace with `node:utils.styleText` (requires node >= 21)
+ * Parses the log level and returns a colored string representation.
+ * @param {string} level - The log level.
+ * @returns {string} Colored string representation of the log level.
  */
 const parseLogLevel = (level) => {
   const colors = {
@@ -38,12 +38,12 @@ const parseLogLevel = (level) => {
 }
 
 /**
- * Logs a message with a given log level and optional arguments.
- * @param {string} level The log level (INFO, WARN, ERROR, DEBUG, QUERY).
- * @param {string} message The message to log.
- * @param {...any} args Additional arguments to log.
+ * Logs a message with the specified log level.
+ * @param {string} level - The log level.
+ * @param {string} message - The message to log.
+ * @param {...any} args - Additional arguments to log.
  */
-export default function logger(level, message, ...args) {
+function log(level, message, ...args) {
   const logPrefix = `${logTimestamp()} ${parseLogLevel(level)}`
   const logMethod = {
     INFO: console.info,
@@ -55,10 +55,39 @@ export default function logger(level, message, ...args) {
   const logFunc = logMethod[level] || console.log
   const logMessage = level === 'INFO' || level === 'WARN' ? ` ${message}` : message
 
-  // If log level is DEBUG and environment is not set to 'debug', do not print the log.
-  if (level === 'DEBUG' && process.env.APP_LOG_LEVEL?.toLowerCase() !== 'debug') {
+  if (level === 'DEBUG' && process.env.APP_LOG_LEVEL?.toLowerCase() === 'silent') {
     return
   }
 
   logFunc(logPrefix, logMessage, ...args)
 }
+
+/**
+ * An object that provides methods for logging messages with different log levels.
+ *
+ * The available log levels are:
+ * - `info`: For informational messages.
+ * - `warn`: For warning messages.
+ * - `error`: For error messages.
+ * - `debug`: For debug messages.
+ * - `query`: For logging SQL queries.
+ * - `silent`: Suppresses all logging.
+ *
+ * Example usage:
+ *  logger.info('This is an info message');
+ *  logger.debug('This is a debug message');
+ *  logger.error('This is an error message', { someError: 'details' });
+ *  logger.warn('This is a warning');
+ *  logger.query('SELECT * FROM users');
+ *
+ * Each method takes a message string and optional additional arguments to be logged.
+ */
+const logger = {
+  info: (message, ...args) => log('INFO', message, ...args),
+  warn: (message, ...args) => log('WARN', message, ...args),
+  error: (message, ...args) => log('ERROR', message, ...args),
+  debug: (message, ...args) => log('DEBUG', message, ...args),
+  query: (message, ...args) => log('QUERY', message, ...args),
+}
+
+export default logger

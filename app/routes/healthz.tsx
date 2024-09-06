@@ -17,7 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     ])
     return new Response('🫡 All is well!')
   } catch (error: unknown) {
-    logger('ERROR', 'healthcheck ❌', { error })
+    logger.error('healthcheck ❌', { error })
     return new Response('🔥 Unhealthy', { status: 500 })
   }
 }

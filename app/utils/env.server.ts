@@ -34,9 +34,9 @@ declare global {
 export function init() {
   try {
     const parsed = v.parse(EnvSchema, process.env)
-    logger('DEBUG', 'EnvSchema', parsed)
+    logger.debug('EnvSchema', parsed)
   } catch (error) {
-    logger('ERROR', '❌ Invalid environment variables:', error)
+    logger.error('❌ Invalid environment variables:', error)
     throw new Error('Invalid environment variables')
   }
 }

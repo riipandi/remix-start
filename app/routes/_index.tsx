@@ -14,13 +14,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   const domain = process.env.APP_DOMAIN || 'example.com'
   const baseDomain = process.env.NODE_ENV === 'development' ? 'localhost:3000' : domain
 
-  logger('DEBUG', 'Original host:', host)
+  logger.debug('Original host:', host)
 
   // Check if it's a subdomain
   const isSubdomain = host.endsWith(`.${baseDomain}`) && !host.startsWith('www.')
 
   if (!isSubdomain) {
-    logger('DEBUG', 'Not a subdomain, returning default page')
+    logger.debug('Not a subdomain, returning default page')
 
     const meta = [
       { title: 'Remix Start' },
@@ -33,13 +33,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   // Handle localhost by replacing 'localhost' with the domain name
   if (host.includes('localhost')) {
     host = host.replace(/localhost:\d+/, domain)
-    logger('DEBUG', 'Transformed host for localhost:', host)
+    logger.debug('Transformed host for localhost:', host)
   }
 
   // Extract the subdomain (slug) from the host
   if (host.endsWith(`.${domain}`)) {
     host = host.replace(`.${domain}`, '')
-    logger('DEBUG', 'Subdomain (slug):', host)
+    logger.debug('Subdomain (slug):', host)
   }
 
   // Sample list of sites; ideally, this would come from a database
@@ -66,11 +66,11 @@ export const loader: LoaderFunction = async ({ request }) => {
   const currentSite = sites.find((site) => site.slug === host)
 
   if (!currentSite) {
-    logger('DEBUG', 'Site not found for slug:', host)
+    logger.debug('Site not found for slug:', host)
     throw new Response(null, { status: 404, statusText: 'Not Found' })
   }
 
-  logger('DEBUG', 'Returning data for site:', currentSite)
+  logger.debug('Returning data for site:', currentSite)
 
   const meta = [{ title: `@${currentSite.slug} on Remix Start` }] satisfies MetaDescriptor[]
 
