@@ -31,9 +31,13 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --ignore-scripts 
 FROM base AS pruner
 ENV NODE_ENV $NODE_ENV
 
+# Required source files
 COPY --from=builder /srv/.npmrc /srv/.npmrc
-COPY --from=builder /srv/server.js /srv/server.js
+COPY --from=builder /srv/server /srv/server
+COPY --from=builder /srv/public /srv/public
 COPY --from=builder /srv/package.json /srv/package.json
+
+# Generated files
 COPY --from=builder /srv/pnpm-lock.yaml /srv/pnpm-lock.yaml
 COPY --from=builder /srv/build/client /srv/build/client
 COPY --from=builder /srv/build/server /srv/build/server
@@ -42,7 +46,7 @@ COPY --from=builder /srv/build/server /srv/build/server
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod \
     --frozen-lockfile --ignore-scripts && pnpm prune --prod \
     --ignore-scripts && pnpm dlx clean-modules clean --yes \
-    "!**/@libsql/**" && chmod +x /srv/server.js
+    "!**/@libsql/**" && chmod +x /srv/server/server.js
 
 # -----------------------------------------------------------------------------
 # Production image, copy build output files and run the application.
@@ -84,4 +88,4 @@ USER nonroot:nonroot
 EXPOSE $PORT
 
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/usr/local/bin/node", "server.js"]
+CMD ["/usr/local/bin/node", "server/server.js"]

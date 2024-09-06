@@ -5,6 +5,7 @@
 
 import 'dotenv/config'
 import * as v from 'valibot'
+import { logger } from './common'
 
 const EnvSchema = v.object({
   NODE_ENV: v.picklist(['production', 'development', 'test'] as const),
@@ -33,9 +34,9 @@ declare global {
 export function init() {
   try {
     const parsed = v.parse(EnvSchema, process.env)
-    console.debug('EnvSchema', parsed)
+    logger('DEBUG', 'EnvSchema', parsed)
   } catch (error) {
-    console.error('❌ Invalid environment variables:', error)
+    logger('ERROR', '❌ Invalid environment variables:', error)
     throw new Error('Invalid environment variables')
   }
 }

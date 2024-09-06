@@ -4,6 +4,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Button } from '#/components/base-ui'
 import { Link } from '#/components/link'
 import type { Site } from '#/types/site'
+import { logger } from '#/utils/common'
 import { clx } from '#/utils/ui-helper'
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -13,13 +14,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   const domain = process.env.APP_DOMAIN || 'example.com'
   const baseDomain = process.env.NODE_ENV === 'development' ? 'localhost:3000' : domain
 
-  console.debug('Original host:', host)
+  logger('DEBUG', 'Original host:', host)
 
   // Check if it's a subdomain
   const isSubdomain = host.endsWith(`.${baseDomain}`) && !host.startsWith('www.')
 
   if (!isSubdomain) {
-    console.debug('Not a subdomain, returning default page')
+    logger('DEBUG', 'Not a subdomain, returning default page')
 
     const meta = [
       { title: 'Remix Start' },
@@ -32,13 +33,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   // Handle localhost by replacing 'localhost' with the domain name
   if (host.includes('localhost')) {
     host = host.replace(/localhost:\d+/, domain)
-    console.debug('Transformed host for localhost:', host)
+    logger('DEBUG', 'Transformed host for localhost:', host)
   }
 
   // Extract the subdomain (slug) from the host
   if (host.endsWith(`.${domain}`)) {
     host = host.replace(`.${domain}`, '')
-    console.debug('Subdomain (slug):', host)
+    logger('DEBUG', 'Subdomain (slug):', host)
   }
 
   // Sample list of sites; ideally, this would come from a database
@@ -65,11 +66,11 @@ export const loader: LoaderFunction = async ({ request }) => {
   const currentSite = sites.find((site) => site.slug === host)
 
   if (!currentSite) {
-    console.debug('Site not found for slug:', host)
+    logger('DEBUG', 'Site not found for slug:', host)
     throw new Response(null, { status: 404, statusText: 'Not Found' })
   }
 
-  console.debug('Returning data for site:', currentSite)
+  logger('DEBUG', 'Returning data for site:', currentSite)
 
   const meta = [{ title: `@${currentSite.slug} on Remix Start` }] satisfies MetaDescriptor[]
 

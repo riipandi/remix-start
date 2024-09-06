@@ -40,14 +40,14 @@ export default defineConfig({
     setupFiles: ['./tests/setup-test.ts'],
     includeSource: ['./app/**/*.{js,jsx,ts,tsx}'],
     exclude: ['node_modules', 'tests-e2e'],
-    reporters: process.env.CI ? ['json'] : ['default', 'html'],
+    reporters: process.env.CI ? ['html', 'github-actions'] : ['html', 'default'],
     outputFile: {
       json: './tests-results/vitest-results.json',
       html: './tests-results/index.html',
     },
     coverage: {
       provider: 'istanbul',
-      reporter: process.env.CI ? ['json'] : ['html-spa'],
+      reporter: ['html-spa', 'text-summary'],
       reportsDirectory: './tests-results/coverage',
       include: ['app/**/*.{js,jsx,ts,tsx}'],
       cleanOnRerun: true,

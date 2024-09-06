@@ -19,13 +19,15 @@ import express from 'express'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import logger from './logger.js'
 
 installGlobals()
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const BUILD_DIR = path.join(__dirname, 'build')
+const BUILD_DIR = path.join(__dirname, '../build')
+const PUBLIC_DIR = path.join(__dirname, '../public')
 
 const staticOptions = {
   immutable: true,
@@ -91,9 +93,15 @@ app.use(express.static('build/client', staticOptions))
 
 // Everything else (like favicon.ico) is cached for an hour.
 // You may want to be more aggressive with this caching.
-app.use(express.static('public', { maxAge: '1h' }))
+app.use(express.static(PUBLIC_DIR, { maxAge: '1h' }))
 
-app.use(morgan('tiny'))
+app.use(
+  morgan('short', {
+    stream: {
+      write: (message) => logger('INFO', message.trim()),
+    },
+  })
+)
 
 app.use((_req, res, next) => {
   const nonce = Math.random().toString(36).substring(2)
@@ -145,7 +153,7 @@ app.use(
   })
 )
 app.use((err, _req, res, _next) => {
-  console.error(err.stack)
+  logger('ERROR', err.stack)
   res.status(500).send(`Something went wrong: ${err.message}`)
 })
 
@@ -174,9 +182,9 @@ const onListen = () => {
   const localUrl = `http://localhost:${PORT}`
   const networkUrl = address ? `http://${address}:${PORT}` : null
   if (networkUrl) {
-    console.info(`[remix-express] ${localUrl} (${networkUrl})`)
+    logger('INFO', `[remix-express] ${localUrl} (${networkUrl})`)
   } else {
-    console.info(`[remix-express] ${localUrl}`)
+    logger('INFO', `[remix-express] ${localUrl}`)
   }
 }
 
