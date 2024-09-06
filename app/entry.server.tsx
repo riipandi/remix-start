@@ -15,6 +15,7 @@ import { isbot } from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
 import { NonceProvider } from '#/context/providers/nonce-provider'
 import { getEnv } from '#/utils/env.server'
+import { logger } from './utils/common'
 
 global.ENV = getEnv()
 
@@ -113,7 +114,7 @@ function handleBrowserRequest(...args: DocRequestArgs) {
         },
         onError(err: unknown) {
           didError = true
-          console.error(err)
+          logger.error(err)
         },
       }
     )
@@ -138,9 +139,9 @@ export function handleError(
     return
   }
   if (error instanceof Error) {
-    console.error(error.stack)
+    logger.error(error.stack)
   } else {
-    console.error(error)
+    logger.error(error)
   }
 }
 

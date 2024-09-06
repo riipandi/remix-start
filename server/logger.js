@@ -40,7 +40,7 @@ const parseLogLevel = (level) => {
 /**
  * Logs a message with the specified log level.
  * @param {string} level - The log level.
- * @param {string} message - The message to log.
+ * @param {string | unknown} message - The message to log.
  * @param {...any} args - Additional arguments to log.
  */
 function log(level, message, ...args) {

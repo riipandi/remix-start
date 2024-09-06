@@ -45,7 +45,7 @@ const parseLogLevel = (level: LogLevel): string => {
  * @param message - The message to log.
  * @param args - Additional arguments to log.
  */
-function log(level: LogLevel, message: string, ...args: unknown[]): void {
+function log(level: LogLevel, message: string | unknown, ...args: unknown[]): void {
   const logPrefix = `${logTimestamp()} ${parseLogLevel(level)}`
   const logMethod = {
     INFO: console.info,
@@ -85,9 +85,9 @@ function log(level: LogLevel, message: string, ...args: unknown[]): void {
  * Each method takes a message string and optional additional arguments to be logged.
  */
 export const logger = {
-  info: (message: string, ...args: unknown[]) => log('INFO', message, ...args),
-  warn: (message: string, ...args: unknown[]) => log('WARN', message, ...args),
-  error: (message: string, ...args: unknown[]) => log('ERROR', message, ...args),
-  debug: (message: string, ...args: unknown[]) => log('DEBUG', message, ...args),
-  query: (message: string, ...args: unknown[]) => log('QUERY', message, ...args),
+  info: (message: string | unknown, ...args: unknown[]) => log('INFO', message, ...args),
+  warn: (message: string | unknown, ...args: unknown[]) => log('WARN', message, ...args),
+  error: (message: string | unknown, ...args: unknown[]) => log('ERROR', message, ...args),
+  debug: (message: string | unknown, ...args: unknown[]) => log('DEBUG', message, ...args),
+  query: (message: string | unknown, ...args: unknown[]) => log('QUERY', message, ...args),
 }
