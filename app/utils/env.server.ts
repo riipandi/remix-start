@@ -3,6 +3,7 @@
  * Credits to Kent C. Dodds: https://github.com/kentcdodds/kentcdodds.com
  */
 
+import 'dotenv/config'
 import * as v from 'valibot'
 
 const EnvSchema = v.object({
