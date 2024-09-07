@@ -45,8 +45,8 @@ importers:
         specifier: ^5.1.17
         version: 5.1.17
       lucide-react:
-        specifier: ^0.438.0
-        version: 0.438.0(react@18.3.1)
+        specifier: ^0.439.0
+        version: 0.439.0(react@18.3.1)
       morgan:
         specifier: ^1.10.0
         version: 1.10.0
@@ -76,8 +76,8 @@ importers:
         specifier: 1.8.3
         version: 1.8.3
       '@playwright/test':
-        specifier: ^1.46.1
-        version: 1.46.1
+        specifier: ^1.47.0
+        version: 1.47.0
       '@remix-run/dev':
         specifier: ^2.11.2
         version: 2.11.2(@remix-run/react@2.11.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4))(@remix-run/serve@2.11.2(typescript@5.5.4))(@types/node@22.5.4)(typescript@5.5.4)(vite@5.4.3(@types/node@22.5.4))
@@ -153,6 +153,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.45)
+      git-cliff:
+        specifier: ^2.5.0
+        version: 2.5.0
       happy-dom:
         specifier: ^15.7.3
         version: 15.7.3
@@ -163,8 +166,8 @@ importers:
         specifier: ^17.1.1
         version: 17.1.1
       playwright:
-        specifier: ^1.46.1
-        version: 1.46.1
+        specifier: ^1.47.0
+        version: 1.47.0
       postcss:
         specifier: ^8.4.45
         version: 8.4.45
@@ -1261,8 +1264,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@playwright/test@1.46.1':
-    resolution: {integrity: sha512-Fq6SwLujA/DOIvNC2EL/SojJnkKf/rAwJ//APpJJHRyMi1PdKrY3Az+4XNQ51N4RTbItbIByQ0jgd1tayq1aeA==}
+  '@playwright/test@1.47.0':
+    resolution: {integrity: sha512-SgAdlSwYVpToI4e/IH19IHHWvoijAYH5hu2MWSXptRypLSnzj51PcGD+rsOXFayde4P9ZLi+loXVwArg6IUkCA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -2751,6 +2754,41 @@ packages:
     resolution: {integrity: sha512-8EHPljDvs7qKykr6uw8b+lqLiUc/vUg+KVTI0uND4s63TdsZM2Xus3mflvF0DDG9SiM4RlCkFGL+7aAjRmV7KA==}
     hasBin: true
 
+  git-cliff-darwin-arm64@2.5.0:
+    resolution: {integrity: sha512-mIw8CZRRRVFB7HWLYESAlvLjXSoqMThyhbdCbVJYEZw2Qxx2UhldEkGv62+qLAhjYwG7GfoeByDqwXGS9rWe7Q==}
+    cpu: [arm64]
+    os: [darwin]
+
+  git-cliff-darwin-x64@2.5.0:
+    resolution: {integrity: sha512-YPoE+rAgdRea4apauK25yDqNDJYvZtoqE8FBKuKRo9AY+btqZMVgxN6UNf9Ea4jQtDQOTqhpYUpM0czk9z4GgQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  git-cliff-linux-arm64@2.5.0:
+    resolution: {integrity: sha512-KJCD7tpH+LJw7XrKhi+jPWFxEGqsxUDUmNLeSjGGptkbXx+LXNFTqTdvQHCeFWSybKMuBnEcou8qEfYTDIcrIg==}
+    cpu: [arm64]
+    os: [linux]
+
+  git-cliff-linux-x64@2.5.0:
+    resolution: {integrity: sha512-jvyfCRy758iHRvbsM6VmGWqOm0OczQLDI/r6w/OdAoRIt5vQiZJbJFJaMLqzEJRtN8g4hTrEZ+5EYbFY1BMVDQ==}
+    cpu: [x64]
+    os: [linux]
+
+  git-cliff-windows-arm64@2.5.0:
+    resolution: {integrity: sha512-t+5ikWPEJuVbDfVWU/Ckbno9qKA6FOQuM9gnRi7tjnXXDoEwdgwZVvCHB3p3dmcgzzmRA1RRAhS27CNJMTB42Q==}
+    cpu: [arm64]
+    os: [win32]
+
+  git-cliff-windows-x64@2.5.0:
+    resolution: {integrity: sha512-rKCowa6k79bdujEa9/s+PSk3M5ViNZISFp4NK+0Ac6yoCDN0ylgvhHRUhSoxLjJ73an40Rg+I83Q92HPKklVGw==}
+    cpu: [x64]
+    os: [win32]
+
+  git-cliff@2.5.0:
+    resolution: {integrity: sha512-HOWY+f5YyK3fYylYY7N8tdd+qPPK7cuInkyY1PVMRsU4c2JT8TM2rvxpVDa6p5uD5MlZ/4mZ7E8RLux99TapQQ==}
+    engines: {node: '>=18.19 || >=20.6 || >=21'}
+    hasBin: true
+
   github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
 
@@ -3286,8 +3324,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  lucide-react@0.438.0:
-    resolution: {integrity: sha512-uq6yCB+IzVfgIPMK8ibkecXSWTTSOMs9UjUgZigfrDCVqgdwkpIgYg1fSYnf0XXF2AoSyCJZhoZXQwzoai7VGw==}
+  lucide-react@0.439.0:
+    resolution: {integrity: sha512-PafSWvDTpxdtNEndS2HIHxcNAbd54OaqSYJO90/b63rab2HWYqDbH194j0i82ZFdWOAcf0AHinRykXRRK2PJbw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
 
@@ -3853,13 +3891,13 @@ packages:
   pkg-types@1.2.0:
     resolution: {integrity: sha512-+ifYuSSqOQ8CqP4MbZA5hDpb97n3E8SVWdJe+Wms9kj745lmd3b7EZJiqvmLwAlmRfjrI7Hi5z3kdBJ93lFNPA==}
 
-  playwright-core@1.46.1:
-    resolution: {integrity: sha512-h9LqIQaAv+CYvWzsZ+h3RsrqCStkBHlgo6/TJlFst3cOTlLghBQlJwPOZKQJTKNaD3QIB7aAVQ+gfWbN3NXB7A==}
+  playwright-core@1.47.0:
+    resolution: {integrity: sha512-1DyHT8OqkcfCkYUD9zzUTfg7EfTd+6a8MkD/NWOvjo0u/SCNd5YmY/lJwFvUZOxJbWNds+ei7ic2+R/cRz/PDg==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.46.1:
-    resolution: {integrity: sha512-oPcr1yqoXLCkgKtD5eNUPLiN40rYEM39odNpIb6VE6S7/15gJmA1NzVv6zJYusV0e7tzvkU/utBFNa/Kpxmwng==}
+  playwright@1.47.0:
+    resolution: {integrity: sha512-jOWiRq2pdNAX/mwLiwFYnPHpEZ4rM+fRSQpRHwEwZlP2PUANvL3+aJOF/bvISMhFD30rqMxUB4RJx9aQbfh4Ww==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -6090,9 +6128,9 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@playwright/test@1.46.1':
+  '@playwright/test@1.47.0':
     dependencies:
-      playwright: 1.46.1
+      playwright: 1.47.0
 
   '@polka/url@1.0.0-next.25': {}
 
@@ -7902,6 +7940,35 @@ snapshots:
       pathe: 1.1.2
       tar: 6.2.1
 
+  git-cliff-darwin-arm64@2.5.0:
+    optional: true
+
+  git-cliff-darwin-x64@2.5.0:
+    optional: true
+
+  git-cliff-linux-arm64@2.5.0:
+    optional: true
+
+  git-cliff-linux-x64@2.5.0:
+    optional: true
+
+  git-cliff-windows-arm64@2.5.0:
+    optional: true
+
+  git-cliff-windows-x64@2.5.0:
+    optional: true
+
+  git-cliff@2.5.0:
+    dependencies:
+      execa: 8.0.1
+    optionalDependencies:
+      git-cliff-darwin-arm64: 2.5.0
+      git-cliff-darwin-x64: 2.5.0
+      git-cliff-linux-arm64: 2.5.0
+      git-cliff-linux-x64: 2.5.0
+      git-cliff-windows-arm64: 2.5.0
+      git-cliff-windows-x64: 2.5.0
+
   github-slugger@2.0.0: {}
 
   glob-parent@5.1.2:
@@ -8413,7 +8480,7 @@ snapshots:
 
   lru-cache@7.18.3: {}
 
-  lucide-react@0.438.0(react@18.3.1):
+  lucide-react@0.439.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 
@@ -9132,11 +9199,11 @@ snapshots:
       mlly: 1.7.1
       pathe: 1.1.2
 
-  playwright-core@1.46.1: {}
+  playwright-core@1.47.0: {}
 
-  playwright@1.46.1:
+  playwright@1.47.0:
     dependencies:
-      playwright-core: 1.46.1
+      playwright-core: 1.47.0
     optionalDependencies:
       fsevents: 2.3.2
 

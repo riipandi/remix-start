@@ -28,6 +28,7 @@ $RECYCLE.BIN/
 
 # Remix
 /public/build
+/public/entry.worker.js
 /build
 /dist
 /tmp
@@ -55,6 +56,7 @@ fly*.toml*
 !fly*.example.toml
 
 # Miscellaneous
+RELEASE_NOTE.md
 .unikraft/
 slim.report.json
 stats.html
