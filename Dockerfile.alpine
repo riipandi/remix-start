@@ -36,7 +36,6 @@ ENV NODE_ENV $NODE_ENV
 COPY --from=builder /srv/.npmrc /srv/.npmrc
 COPY --from=builder /srv/package.json /srv/package.json
 COPY --from=builder /srv/server /srv/server
-COPY --from=builder /srv/public /srv/public
 
 # Generated files
 COPY --from=builder /srv/pnpm-lock.yaml /srv/pnpm-lock.yaml

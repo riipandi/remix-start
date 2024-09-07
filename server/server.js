@@ -25,10 +25,9 @@ installGlobals()
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
 const BUILD_DIR = path.join(__dirname, '../build')
-const PUBLIC_DIR = path.join(__dirname, '../public')
 
+// You may want to be more aggressive with this caching.
 const staticOptions = {
   immutable: true,
   maxAge: '1y',
@@ -90,10 +89,6 @@ app.use(
 
 // Remix fingerprints its assets so we can cache forever.
 app.use(express.static('build/client', staticOptions))
-
-// Everything else (like favicon.ico) is cached for an hour.
-// You may want to be more aggressive with this caching.
-app.use(express.static(PUBLIC_DIR, { maxAge: '1h' }))
 
 app.use(
   morgan('short', {
