@@ -83,6 +83,7 @@ COPY --from=builder /usr/bin/tini /usr/bin/tini
 # Define the host and port to listen on.
 ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH"
 ENV NODE_ENV=$NODE_ENV HOST=0.0.0.0 PORT=3000
+ENV TINI_SUBREAPER=true
 
 WORKDIR /srv
 USER nonroot:nonroot

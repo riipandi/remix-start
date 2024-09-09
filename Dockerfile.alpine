@@ -83,6 +83,7 @@ COPY --from=builder /sbin/tini /sbin/tini
 
 # Define the host and port to listen on.
 ENV NODE_ENV=$NODE_ENV HOST=0.0.0.0 PORT=3000
+ENV TINI_SUBREAPER=true
 
 USER nonroot:nonroot
 EXPOSE $PORT
