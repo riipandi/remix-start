@@ -18,7 +18,7 @@ export default function SignInPage() {
             <p className="mt-3 text-gray-600 text-sm dark:text-gray-300">
               Don&apos;t have an account yet?{' '}
               <Link
-                to="/register"
+                to="/signup"
                 className="font-medium text-primary-600 hover:underline focus:outline-none dark:text-primary-500"
               >
                 Sign up here

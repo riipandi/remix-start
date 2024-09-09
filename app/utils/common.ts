@@ -1,6 +1,7 @@
 import pico from 'picocolors'
+import type { LogLevel } from './env.server'
 
-export type LogLevel = 'INFO' | 'WARN' | 'ERROR' | 'DEBUG' | 'QUERY'
+export type EnumValues<Type> = Type[keyof Type]
 
 /**
  * Generates a formatted timestamp string.
@@ -22,22 +23,27 @@ function logTimestamp(date?: Date, localtime = true): string {
   return pico.dim(`[${year}-${month}-${day} ${hours}:${minutes}:${seconds}]`)
 }
 
-/**
- * TODO replace with `node:utils.styleText` (requires node >= 21)
- * Parses the log level and returns a colored string representation.
- * @param level - The log level.
- * @returns Colored string representation of the log level.
- */
-const parseLogLevel = (level: LogLevel): string => {
-  const colors = {
-    INFO: pico.green,
-    WARN: pico.yellow,
-    ERROR: pico.red,
-    DEBUG: pico.magenta,
-    QUERY: pico.blue,
-  }
-  return colors[level] ? colors[level](level) : pico.gray(level)
+// Constants for log colors
+const LOG_COLORS: Record<LogLevel, (text: string) => string> = {
+  info: pico.green,
+  warn: pico.yellow,
+  error: pico.red,
+  debug: pico.magenta,
+  query: pico.blue,
 }
+
+// Constants for log methods with uppercase keys
+const LOG_METHODS: Record<string, (...args: unknown[]) => void> = {
+  INFO: console.info,
+  WARN: console.warn,
+  ERROR: console.error,
+  DEBUG: console.debug,
+  QUERY: console.log,
+}
+
+// Fallback constants
+const DEFAULT_COLOR = pico.gray
+const DEFAULT_LOG_METHOD = console.log
 
 /**
  * Logs a message with the specified log level.
@@ -46,22 +52,34 @@ const parseLogLevel = (level: LogLevel): string => {
  * @param args - Additional arguments to log.
  */
 function log(level: LogLevel, message: string | unknown, ...args: unknown[]): void {
-  const logPrefix = `${logTimestamp()} ${parseLogLevel(level)}`
-  const logMethod = {
-    INFO: console.info,
-    WARN: console.warn,
-    ERROR: console.error,
-    DEBUG: console.debug,
-    QUERY: console.log,
-  }
-  const logFunc = logMethod[level] || console.log
-  const logMessage = level === 'INFO' || level === 'WARN' ? ` ${message}` : message
+  // Determine log color and method
+  const colorFunc = LOG_COLORS[level] || DEFAULT_COLOR
+  const logFunc = LOG_METHODS[level.toUpperCase()] || DEFAULT_LOG_METHOD
 
-  if (level === 'DEBUG' && process.env.APP_LOG_LEVEL?.toLowerCase() === 'silent') {
+  // Strip newlines, tabs, and 4 spaces from string content but keep the color formatting
+  const stripNewLinesAndSpaces = (content: unknown) =>
+    typeof content === 'string'
+      ? content
+          .replace(/\r?\n|\r/g, '') // Remove newlines
+          .replace(/\t/g, '') // Remove tabs
+          .replace(/ {4}/g, '') // Remove 4 spaces
+      : content // If not a string, return the content as-is
+
+  // Build the log message
+  const cleanedMessage = stripNewLinesAndSpaces(message)
+  const logPrefix = `${logTimestamp()} ${colorFunc(level.toUpperCase())}`
+  const logMessage = ['info', 'warn'].includes(level) ? ` ${cleanedMessage}` : cleanedMessage
+
+  // Handle silent mode for debug logs
+  if (level === 'debug' && process.env.APP_LOG_LEVEL?.toLowerCase() === 'silent') {
     return
   }
 
-  logFunc(logPrefix, logMessage, ...args)
+  // Safely process the additional arguments without cutting off objects or non-strings
+  const strippedArgs = args.map(stripNewLinesAndSpaces)
+
+  // Apply color formatting after stripping newlines and spaces
+  logFunc(logPrefix, logMessage, ...strippedArgs)
 }
 
 /**
@@ -85,9 +103,9 @@ function log(level: LogLevel, message: string | unknown, ...args: unknown[]): vo
  * Each method takes a message string and optional additional arguments to be logged.
  */
 export const logger = {
-  info: (message: string | unknown, ...args: unknown[]) => log('INFO', message, ...args),
-  warn: (message: string | unknown, ...args: unknown[]) => log('WARN', message, ...args),
-  error: (message: string | unknown, ...args: unknown[]) => log('ERROR', message, ...args),
-  debug: (message: string | unknown, ...args: unknown[]) => log('DEBUG', message, ...args),
-  query: (message: string | unknown, ...args: unknown[]) => log('QUERY', message, ...args),
+  info: (message: string | unknown, ...args: unknown[]) => log('info', message, ...args),
+  warn: (message: string | unknown, ...args: unknown[]) => log('warn', message, ...args),
+  error: (message: string | unknown, ...args: unknown[]) => log('error', message, ...args),
+  debug: (message: string | unknown, ...args: unknown[]) => log('debug', message, ...args),
+  query: (message: string | unknown, ...args: unknown[]) => log('query', message, ...args),
 }

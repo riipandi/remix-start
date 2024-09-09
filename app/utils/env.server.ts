@@ -7,12 +7,19 @@ import 'dotenv/config'
 import * as v from 'valibot'
 import { logger } from './common'
 
+/**
+ * Defines the log level for the application.
+ * The log level is determined by the environment variable. If the environment is production,
+ * the log level is set to `info`. Otherwise, the log level is set to verbose `debug`.
+ */
+const LogLevelSchema = v.picklist(['info', 'warn', 'error', 'debug', 'query'] as const)
+
 const EnvSchema = v.object({
   NODE_ENV: v.picklist(['production', 'development', 'test'] as const),
   APP_DOMAIN: v.string(),
   APP_BASE_URL: v.string(),
   APP_SECRET_KEY: v.string(),
-  APP_LOG_LEVEL: v.optional(v.picklist(['info', 'warn', 'error', 'debug'] as const), 'info'),
+  APP_LOG_LEVEL: v.optional(LogLevelSchema, 'info'),
   DATABASE_URL: v.pipe(
     v.string(),
     v.nonEmpty('Please enter the database url.'),
@@ -24,6 +31,8 @@ const EnvSchema = v.object({
   SMTP_PASSWORD: v.optional(v.string()),
   SMTP_EMAIL_FROM: v.optional(v.string(), 'Remix Mailer <mailer@example.com>'),
 })
+
+export type LogLevel = v.InferInput<typeof LogLevelSchema>
 
 declare global {
   namespace NodeJS {
@@ -55,6 +64,7 @@ export function getEnv() {
     NODE_ENV: process.env.NODE_ENV,
     APP_DOMAIN: process.env.APP_DOMAIN,
     APP_BASE_URL: process.env.APP_BASE_URL,
+    APP_LOG_LEVEL: process.env.APP_LOG_LEVEL,
   }
 }
 
