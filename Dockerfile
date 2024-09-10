@@ -11,7 +11,6 @@ ARG NODE_VERSION=20
 # -----------------------------------------------------------------------------
 FROM --platform=${PLATFORM} node:${NODE_VERSION}-bookworm-slim AS base
 ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-ENV LEFTHOOK=0 CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
 RUN corepack enable && corepack prepare pnpm@latest-9 --activate
 WORKDIR /srv
 
@@ -19,6 +18,7 @@ WORKDIR /srv
 # Install dependencies and some toolchains.
 # -----------------------------------------------------------------------------
 FROM base AS builder
+ENV LEFTHOOK=0 CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
 
 # Copy the source files
 COPY --chown=node:node . .
@@ -31,6 +31,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install \
 # Compile the application and install production only dependencies.
 # -----------------------------------------------------------------------------
 FROM base AS pruner
+ENV LEFTHOOK=0 CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
 ENV NODE_ENV $NODE_ENV
 
 # Required source files
