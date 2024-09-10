@@ -60,7 +60,7 @@ app.use(express.static('build/client', staticOptions))
 
 // @see: https://community.fly.io/t/recommended-setting-for-trust-proxy-on-express/6346
 const flyHeaders = function flyHeaders(req, _res, next) {
-  if (process.env.FLY_APP_NAME == null) return next()
+  if (process.env.FLY_ALLOC_ID == null) return next()
 
   req.app.set('trust proxy', true)
 
