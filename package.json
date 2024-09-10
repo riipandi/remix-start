@@ -54,15 +54,15 @@
         "test": "vitest --run"
     },
     "dependencies": {
-        "@remix-run/css-bundle": "^2.11.2",
-        "@remix-run/express": "^2.11.2",
-        "@remix-run/node": "^2.11.2",
-        "@remix-run/react": "^2.11.2",
-        "@remix-run/serve": "^2.11.2",
+        "@remix-run/css-bundle": "^2.12.0",
+        "@remix-run/express": "^2.12.0",
+        "@remix-run/node": "^2.12.0",
+        "@remix-run/react": "^2.12.0",
+        "@remix-run/serve": "^2.12.0",
         "clsx": "^2.1.1",
         "compression": "^1.7.4",
         "dotenv": "^16.4.5",
-        "express": "^4.19.2",
+        "express": "^4.20.0",
         "express-rate-limit": "^7.4.0",
         "helmet": "^7.1.0",
         "isbot": "^5.1.17",
@@ -79,8 +79,8 @@
     "devDependencies": {
         "@biomejs/biome": "1.8.3",
         "@playwright/test": "^1.47.0",
-        "@remix-run/dev": "^2.11.2",
-        "@remix-run/testing": "^2.11.2",
+        "@remix-run/dev": "^2.12.0",
+        "@remix-run/testing": "^2.12.0",
         "@storybook/addon-essentials": "^8.2.9",
         "@storybook/addon-interactions": "^8.2.9",
         "@storybook/addon-links": "^8.2.9",
@@ -115,7 +115,7 @@
         "tailwind-debug-breakpoints": "^1.0.3",
         "tailwindcss": "^3.4.10",
         "tailwindcss-animate": "^1.0.7",
-        "typescript": "^5.5.4",
+        "typescript": "^5.6.2",
         "vite": "^5.4.3",
         "vite-plugin-inspect": "^0.8.7",
         "vite-tsconfig-paths": "^5.0.1",
@@ -124,5 +124,5 @@
     "engines": {
         "node": ">=20.11.1"
     },
-    "packageManager": "pnpm@9.9.0"
+    "packageManager": "pnpm@9.10.0"
 }

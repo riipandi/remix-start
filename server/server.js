@@ -4,12 +4,11 @@
  * This script is used to start the Remix development server.
  * Based on https://github.com/kentcdodds/nonce-remix-issue
  *
- * ╰─➤ $ pnpm add @remix-run/express express compression morgan helmet express-rate-limit picocolors
+ * ╰─➤ $ pnpm add @remix-run/express express compression morgan helmet express-rate-limit
  * ╰─➤ $ pnpm add -D @types/express @types/compression @types/morgan
  */
 
 import 'dotenv/config'
-import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequestHandler } from '@remix-run/express'
@@ -20,6 +19,9 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import logger from './logger.js'
+import { getLoadContext, getLocalIpAddress, getRequestIpAddress } from './utils.js'
+import { parseIntAsBoolean, parseNumber, purgeRequireCache } from './utils.js'
+import { generateCspDirectives } from './utils.js'
 
 installGlobals()
 
@@ -27,7 +29,6 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const BUILD_DIR = path.join(__dirname, '../build')
 
-// You may want to be more aggressive with this caching.
 const staticOptions = {
   immutable: true,
   maxAge: '1y',
@@ -38,62 +39,50 @@ const staticOptions = {
   },
 }
 
-function parseNumber(raw) {
-  if (raw === undefined) return undefined
-  const maybe = Number(raw)
-  if (Number.isNaN(maybe)) return undefined
-  return maybe
-}
-
-function getLocalIpAddress() {
-  return Object.values(os.networkInterfaces())
-    .flat()
-    .find((ip) => ip?.family === 'IPv4' && !ip.internal)?.address
-}
-
-async function purgeRequireCache() {
-  // purge require cache on requests for "server side HMR" this won't let
-  // you have in-memory objects between requests in development,
-  // alternatively you can set up nodemon/pm2-dev to restart the server on
-  // file changes, but then you'll have to reconnect to databases/etc on each
-  // change. We prefer the DX of this, so we've included it for you by default
-  const { createRequire } = await import('node:module')
-  const require = createRequire(import.meta.url)
-
-  for (const key of Object.keys(require.cache)) {
-    if (key.startsWith(BUILD_DIR)) {
-      delete require.cache[key]
-    }
-  }
-}
-
-function getLoadContext(_req, res) {
-  return {
-    nonce: res.locals.nonce,
-  }
-}
-
 const app = express()
 
-// http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
+// @see: http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable('x-powered-by')
 
 app.use(compression({ level: 6, threshold: 0 }))
 
-app.use(
-  rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per window
-  })
-)
+if (process.env.ENABLE_RATE_LIMIT === 'true' || parseIntAsBoolean(process.env.ENABLE_RATE_LIMIT)) {
+  app.use(
+    rateLimit({
+      windowMs: 60 * 1000 * 15, // 15 minutes
+      max: 1000, // limit request for each IP per window
+    })
+  )
+}
 
 // Remix fingerprints its assets so we can cache forever.
 app.use(express.static('build/client', staticOptions))
 
+// @see: https://community.fly.io/t/recommended-setting-for-trust-proxy-on-express/6346
+const flyHeaders = function flyHeaders(req, _res, next) {
+  if (process.env.FLY_APP_NAME == null) return next()
+
+  req.app.set('trust proxy', true)
+
+  preferHeader(req, 'Fly-Client-IP', 'X-Forwarded-For')
+  preferHeader(req, 'Fly-Forwarded-Port', 'X-Forwarded-Port')
+  preferHeader(req, 'Fly-Forwarded-Proto', 'X-Forwarded-Protocol')
+  preferHeader(req, 'Fly-Forwarded-Ssl', 'X-Forwarded-Ssl')
+
+  return next()
+}
+
+app.use(flyHeaders)
+
+morgan.token('remote-addr', function getRemoteAddr(req) {
+  return getRequestIpAddress(req)
+})
+
 app.use(
   morgan('short', {
+    skip: (req) => req.method === 'HEAD',
     stream: {
-      write: (message) => logger.info(message.trim()),
+      write: (message) => logger.server(message.trim()),
     },
   })
 )
@@ -105,50 +94,17 @@ app.use((_req, res, next) => {
   next()
 })
 
-const connectSource = process.env.NODE_ENV === 'development' ? ['ws://localhost:*'] : []
-const imgSources = ['https://avatar.vercel.sh', 'https://loremflickr.com']
-const fontSources = ['https://cdn.jsdelivr.net']
-
-let scriptSrc
-if (process.env.NODE_ENV === 'development') {
-  // Allow the <LiveReload /> component to load without a nonce in the error pages
-  scriptSrc = ["'self'", "'report-sample'", "'unsafe-inline'"]
-} else if (typeof nonce === 'string' && nonce.length > 40) {
-  scriptSrc = ["'self'", "'report-sample'", `'nonce-${nonce}'`]
-} else {
-  scriptSrc = ["'self'", "'report-sample'", "'unsafe-inline'"]
-}
-
 app.use(
   helmet({
     xPoweredBy: false,
     contentSecurityPolicy: {
-      directives: {
-        'base-uri': ["'self'"],
-        'child-src': ["'self'"],
-        'connect-src': ["'self'", ...connectSource],
-        'default-src': ["'self'"],
-        'font-src': ["'self'", ...fontSources],
-        'form-action': ["'self'"],
-        'frame-ancestors': ["'none'"],
-        'frame-src': ["'self'"],
-        'img-src': ["'self'", 'data:', ...imgSources],
-        'manifest-src': ["'self'"],
-        'media-src': ["'self'"],
-        'object-src': ["'none'"],
-        'script-src': [...scriptSrc, "'unsafe-eval'"], // 'unsafe-eval' required for DOMPurify
-        // 'script-src': ["'strict-dynamic'", (_req, res) => `'nonce-${res.locals.nonce}'`],
-        // 'script-src-elem': ["'strict-dynamic'", (_req, res) => `'nonce-${res.locals.nonce}'`],
-        'style-src': ["'self'", "'report-sample'", "'unsafe-inline'"],
-        'worker-src': ["'self'", 'blob:', ...imgSources],
-        // 'require-trusted-types-for': ["'script'"],
-        // 'trusted-types': ['default', 'dompurify'],
-      },
+      directives: generateCspDirectives(),
     },
   })
 )
+
 app.use((err, _req, res, _next) => {
-  logger.error(err.stack)
+  logger.error('[SERVER]', err.stack)
   res.status(500).send(`Something went wrong: ${err.message}`)
 })
 
@@ -177,9 +133,9 @@ const onListen = () => {
   const localUrl = `http://localhost:${PORT}`
   const networkUrl = address ? `http://${address}:${PORT}` : null
   if (networkUrl) {
-    logger.info(`[remix-express] ${localUrl} (${networkUrl})`)
+    logger.server(`[remix-express] ${localUrl} (${networkUrl})`)
   } else {
-    logger.info(`[remix-express] ${localUrl}`)
+    logger.server(`[remix-express] ${localUrl}`)
   }
 }
 

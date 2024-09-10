@@ -27,6 +27,7 @@ const LOG_COLORS = {
   error: pico.red,
   debug: pico.magenta,
   query: pico.blue,
+  server: pico.cyan,
 }
 
 // Constants for log methods with uppercase keys
@@ -36,11 +37,14 @@ const LOG_METHODS = {
   ERROR: console.error,
   DEBUG: console.debug,
   QUERY: console.log,
+  SERVER: console.log,
 }
 
 // Fallback constants
 const DEFAULT_COLOR = pico.gray
 const DEFAULT_LOG_METHOD = console.log
+const LOG_LEVELS = Object.keys(LOG_METHODS)
+const MAX_LEVEL_LENGTH = Math.max(...LOG_LEVELS.map((level) => level.length))
 
 /**
  * Logs a message with the specified log level.
@@ -64,8 +68,9 @@ function log(level, message, ...args) {
 
   // Build the log message
   const cleanedMessage = stripNewLinesAndSpaces(message)
-  const logPrefix = `${logTimestamp()} ${colorFunc(level.toUpperCase())}`
-  const logMessage = ['info', 'warn'].includes(level) ? ` ${cleanedMessage}` : cleanedMessage
+  const paddedLevel = level.toUpperCase().padEnd(MAX_LEVEL_LENGTH)
+  const logPrefix = `${logTimestamp()} ${colorFunc(paddedLevel)}`
+  const logMessage = ` ${cleanedMessage}` // Space after prefix for consistent alignment
 
   // Handle silent mode for debug logs
   if (level === 'debug' && process.env.APP_LOG_LEVEL?.toLowerCase() === 'silent') {
@@ -96,6 +101,7 @@ function log(level, message, ...args) {
  *  logger.error('This is an error message', { someError: 'details' });
  *  logger.warn('This is a warning');
  *  logger.query('SELECT * FROM users');
+ *  logger.server('This is a server message');
  *
  * Each method takes a message string and optional additional arguments to be logged.
  */
@@ -105,6 +111,7 @@ const logger = {
   error: (message, ...args) => log('error', message, ...args),
   debug: (message, ...args) => log('debug', message, ...args),
   query: (message, ...args) => log('query', message, ...args),
+  server: (message, ...args) => log('server', message, ...args),
 }
 
 export default logger

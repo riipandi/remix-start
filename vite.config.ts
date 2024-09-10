@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 
+import { resolve } from 'node:path'
 import { type VitePluginConfig, vitePlugin as remix } from '@remix-run/dev'
 import { installGlobals } from '@remix-run/node'
 import { flatRoutes } from 'remix-flat-routes'
@@ -33,6 +34,13 @@ export default defineConfig({
   ],
   server: { port: 3000 },
   clearScreen: true,
+  build: {
+    emptyOutDir: true,
+    minify: process.env.NODE_ENV === 'production',
+    chunkSizeWarningLimit: 1024,
+    reportCompressedSize: false,
+    outDir: resolve(__dirname, 'build'),
+  },
   test: {
     environment: 'happy-dom',
     // Additionally, this is to load ".env.test" during vitest

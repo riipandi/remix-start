@@ -39,11 +39,14 @@ const LOG_METHODS: Record<string, (...args: unknown[]) => void> = {
   ERROR: console.error,
   DEBUG: console.debug,
   QUERY: console.log,
+  SERVER: console.log,
 }
 
 // Fallback constants
 const DEFAULT_COLOR = pico.gray
 const DEFAULT_LOG_METHOD = console.log
+const LOG_LEVELS = Object.keys(LOG_METHODS)
+const MAX_LEVEL_LENGTH = Math.max(...LOG_LEVELS.map((level) => level.length))
 
 /**
  * Logs a message with the specified log level.
@@ -67,8 +70,9 @@ function log(level: LogLevel, message: string | unknown, ...args: unknown[]): vo
 
   // Build the log message
   const cleanedMessage = stripNewLinesAndSpaces(message)
-  const logPrefix = `${logTimestamp()} ${colorFunc(level.toUpperCase())}`
-  const logMessage = ['info', 'warn'].includes(level) ? ` ${cleanedMessage}` : cleanedMessage
+  const paddedLevel = level.toUpperCase().padEnd(MAX_LEVEL_LENGTH)
+  const logPrefix = `${logTimestamp()} ${colorFunc(paddedLevel)}`
+  const logMessage = ` ${cleanedMessage}` // Space after prefix for consistent alignment
 
   // Handle silent mode for debug logs
   if (level === 'debug' && process.env.APP_LOG_LEVEL?.toLowerCase() === 'silent') {
