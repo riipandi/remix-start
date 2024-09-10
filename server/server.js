@@ -21,7 +21,7 @@ import morgan from 'morgan'
 import logger from './logger.js'
 import { getLoadContext, getLocalIpAddress, getRequestIpAddress } from './utils.js'
 import { parseIntAsBoolean, parseNumber, purgeRequireCache } from './utils.js'
-import { generateCspDirectives } from './utils.js'
+import { generateCspDirectives, preferHeader } from './utils.js'
 
 installGlobals()
 
