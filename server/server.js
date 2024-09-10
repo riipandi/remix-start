@@ -112,7 +112,7 @@ app.all(
   '*',
   process.env.NODE_ENV === 'development'
     ? async (req, res, next) => {
-        await purgeRequireCache()
+        await purgeRequireCache(BUILD_DIR)
         // `remix build` and `remix dev` output files to a build directory,
         // you need to pass that build to the request handler.
         const { default: build } = await import(BUILD_DIR)

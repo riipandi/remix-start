@@ -78,7 +78,7 @@ export function getLocalIpAddress() {
     .find((ip) => ip?.family === 'IPv4' && !ip.internal)?.address
 }
 
-export async function purgeRequireCache() {
+export async function purgeRequireCache(buildDir) {
   // purge require cache on requests for "server side HMR" this won't let
   // you have in-memory objects between requests in development,
   // alternatively you can set up nodemon/pm2-dev to restart the server on
@@ -88,7 +88,7 @@ export async function purgeRequireCache() {
   const require = createRequire(import.meta.url)
 
   for (const key of Object.keys(require.cache)) {
-    if (key.startsWith(BUILD_DIR)) {
+    if (key.startsWith(buildDir)) {
       delete require.cache[key]
     }
   }
