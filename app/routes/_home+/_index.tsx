@@ -90,7 +90,7 @@ export default function IndexPage() {
 
   if (!data || data.isDefault) {
     return (
-      <div className="mx-auto flex size-full min-h-screen flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8">
+      <>
         <h1 className="block font-bold text-7xl text-gray-800 sm:text-7xl dark:text-white">
           Welcome to Remix
         </h1>
@@ -115,7 +115,7 @@ export default function IndexPage() {
             </Link>
           </Button>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -123,7 +123,7 @@ export default function IndexPage() {
   const { domain, sites, currentSite } = data
 
   return (
-    <div className="mx-auto flex size-full min-h-screen flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8">
+    <>
       <h1 className="block font-bold text-7xl text-gray-800 sm:text-7xl dark:text-white">
         Welcome to Remix
       </h1>
@@ -151,6 +151,6 @@ export default function IndexPage() {
           </Button>
         ))}
       </div>
-    </div>
+    </>
   )
 }

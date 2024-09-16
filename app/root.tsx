@@ -1,20 +1,29 @@
 import type { LinksFunction, LoaderFunction, MetaDescriptor, MetaFunction } from '@remix-run/node'
-import { Links, Meta, Outlet, Scripts, json, useRouteError } from '@remix-run/react'
+import { Links, Meta, Outlet, Scripts, json, useLoaderData, useRouteError } from '@remix-run/react'
 import { ScrollRestoration, isRouteErrorResponse } from '@remix-run/react'
-import { type PropsWithChildren, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import InternalError from '#/components/errors/internal-error'
 import NotFound from '#/components/errors/not-found'
 import { useNonce } from '#/context/providers/nonce-provider'
+import {
+  NonFlashOfWrongThemeEls,
+  ThemeProvider,
+  useTheme,
+} from '#/context/providers/theme-provider'
+import { getThemeSession } from '#/utils/theme.server'
 import { clx } from '#/utils/ui-helper'
 
 import styles from './styles.css?url'
 
 export const loader: LoaderFunction = async ({ request, context }) => {
+  const themeSession = await getThemeSession(request)
+
   return json({
     // Dynamic Canonical URL: https://sergiodxa.com/tutorials/add-dynamic-canonical-url-to-remix-routes
     meta: [{ tagName: 'link', rel: 'canonical', href: request.url }] satisfies MetaDescriptor[],
     nonce: context.nonce as string,
+    theme: themeSession.getTheme(),
     baseUrl: process.env.APP_BASE_URL,
   })
 }
@@ -41,7 +50,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ]
 }
 
-export function Layout({ children }: PropsWithChildren) {
+function App() {
+  const data = useLoaderData<typeof loader>()
+  const [theme] = useTheme()
   const nonce = useNonce()
 
   useEffect(() => {
@@ -77,10 +88,11 @@ export function Layout({ children }: PropsWithChildren) {
   }, [])
 
   return (
-    <html lang="en">
+    <html lang="en" className={clx(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <NonFlashOfWrongThemeEls ssrTheme={Boolean(data.theme)} />
         <Meta />
         <Links />
       </head>
@@ -88,7 +100,9 @@ export function Layout({ children }: PropsWithChildren) {
         <a href="#main" className="skiplink">
           Skip to main content
         </a>
-        <div id="main">{children}</div>
+        <div id="main">
+          <Outlet />
+        </div>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
       </body>
@@ -127,6 +141,11 @@ export function ErrorBoundary() {
   )
 }
 
-export default function App() {
-  return <Outlet />
+export default function AppWithProviders() {
+  const data = useLoaderData<typeof loader>()
+  return (
+    <ThemeProvider specifiedTheme={data.theme}>
+      <App />
+    </ThemeProvider>
+  )
 }

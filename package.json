@@ -19,7 +19,6 @@
         "build:remix": "remix vite:build",
         "dev": "pnpm run --reporter-hide-prefix --color --parallel \"/dev:(?!storybook)/\"",
         "dev:remix": "remix vite:dev",
-        "dev:studio": "drizzle-kit studio --config drizzle.config.ts",
         "dev:storybook": "storybook dev -p 6006 --no-open",
         "preview": "SWCRC=true node --watch --import @swc-node/register/esm-register ./server/server.ts",
         "start": "node --no-warnings ./dist/runner/server.js",

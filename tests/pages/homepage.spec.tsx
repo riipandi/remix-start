@@ -1,7 +1,7 @@
 import { createRemixStub } from '@remix-run/testing'
 import { render, screen, waitFor } from '@testing-library/react'
 import { describe, it } from 'vitest'
-import Index from '#/routes/_index'
+import Index from '#/routes/_home+/_index'
 
 describe('Homepage', () => {
   it('renders correctly', async () => {
