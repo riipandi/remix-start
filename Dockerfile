@@ -79,9 +79,9 @@ COPY --chown=nonroot:nonroot --from=pruner /srv /srv
 COPY --from=builder /usr/bin/tini /usr/bin/tini
 
 # Define the host and port to listen on.
-ARG NODE_ENV=production PORT=3000
+ARG NODE_ENV=production HOST=0.0.0.0 PORT=3000
 ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH"
-ENV NODE_ENV=$NODE_ENV HOST=0.0.0.0 PORT=$PORT
+ENV NODE_ENV=$NODE_ENV HOST=$HOST PORT=$PORT
 ENV TINI_SUBREAPER=true
 
 WORKDIR /srv
