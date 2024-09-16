@@ -1,12 +1,14 @@
 import pico from 'picocolors'
 
+type LogLevel = 'info' | 'warn' | 'error' | 'debug' | 'query' | 'server'
+
 /**
  * Generates a formatted timestamp string.
  * @param date - Optional Date object. Defaults to current date/time.
  * @param localtime - Whether to use local time. Defaults to true.
  * @returns Formatted timestamp string.
  */
-function logTimestamp(date, localtime = true) {
+function logTimestamp(date?: Date, localtime = true): string {
   const now = date ?? new Date()
   const useUTC = !localtime
 
@@ -21,7 +23,7 @@ function logTimestamp(date, localtime = true) {
 }
 
 // Constants for log colors
-const LOG_COLORS = {
+const LOG_COLORS: Record<LogLevel, (text: string) => string> = {
   info: pico.green,
   warn: pico.yellow,
   error: pico.red,
@@ -31,7 +33,7 @@ const LOG_COLORS = {
 }
 
 // Constants for log methods with uppercase keys
-const LOG_METHODS = {
+const LOG_METHODS: Record<string, (...args: unknown[]) => void> = {
   INFO: console.info,
   WARN: console.warn,
   ERROR: console.error,
@@ -52,13 +54,13 @@ const MAX_LEVEL_LENGTH = Math.max(...LOG_LEVELS.map((level) => level.length))
  * @param message - The message to log.
  * @param args - Additional arguments to log.
  */
-function log(level, message, ...args) {
+function log(level: LogLevel, message: string | unknown, ...args: unknown[]): void {
   // Determine log color and method
   const colorFunc = LOG_COLORS[level] || DEFAULT_COLOR
   const logFunc = LOG_METHODS[level.toUpperCase()] || DEFAULT_LOG_METHOD
 
   // Strip newlines, tabs, and 4 spaces from string content but keep the color formatting
-  const stripNewLinesAndSpaces = (content) =>
+  const stripNewLinesAndSpaces = (content: unknown) =>
     typeof content === 'string'
       ? content
           .replace(/\r?\n|\r/g, '') // Remove newlines
@@ -101,17 +103,16 @@ function log(level, message, ...args) {
  *  logger.error('This is an error message', { someError: 'details' });
  *  logger.warn('This is a warning');
  *  logger.query('SELECT * FROM users');
- *  logger.server('This is a server message');
  *
  * Each method takes a message string and optional additional arguments to be logged.
  */
-const logger = {
-  info: (message, ...args) => log('info', message, ...args),
-  warn: (message, ...args) => log('warn', message, ...args),
-  error: (message, ...args) => log('error', message, ...args),
-  debug: (message, ...args) => log('debug', message, ...args),
-  query: (message, ...args) => log('query', message, ...args),
-  server: (message, ...args) => log('server', message, ...args),
+export const logger = {
+  info: (message: string | unknown, ...args: unknown[]) => log('info', message, ...args),
+  warn: (message: string | unknown, ...args: unknown[]) => log('warn', message, ...args),
+  error: (message: string | unknown, ...args: unknown[]) => log('error', message, ...args),
+  debug: (message: string | unknown, ...args: unknown[]) => log('debug', message, ...args),
+  query: (message: string | unknown, ...args: unknown[]) => log('query', message, ...args),
+  server: (message: string | unknown, ...args: unknown[]) => log('server', message, ...args),
 }
 
 export default logger

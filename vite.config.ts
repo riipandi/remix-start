@@ -15,6 +15,7 @@ installGlobals()
 const isTestOrStorybook = process.env.NODE_ENV === 'test' || process.argv[1]?.includes('storybook')
 
 const RemixConfig: VitePluginConfig = {
+  buildDirectory: resolve(__dirname, 'dist/remix'),
   ignoredRouteFiles: ['**/.*'],
   serverModuleFormat: 'esm',
   routes(defineRoutes) {
@@ -39,7 +40,6 @@ export default defineConfig({
     minify: process.env.NODE_ENV === 'production',
     chunkSizeWarningLimit: 1024,
     reportCompressedSize: false,
-    outDir: resolve(__dirname, 'build'),
   },
   test: {
     environment: 'happy-dom',

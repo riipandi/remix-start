@@ -1,7 +1,13 @@
 import pico from 'picocolors'
 import type { LogLevel } from './env.server'
 
-export type EnumValues<Type> = Type[keyof Type]
+/**
+ * Determines if the current environment is a browser.
+ * @returns `true` if the current environment is a browser, `false` otherwise.
+ */
+export function isBrowser() {
+  return typeof window !== 'undefined'
+}
 
 /**
  * Generates a formatted timestamp string.
@@ -75,7 +81,10 @@ function log(level: LogLevel, message: string | unknown, ...args: unknown[]): vo
   const logMessage = ` ${cleanedMessage}` // Space after prefix for consistent alignment
 
   // Handle silent mode for debug logs
-  if (level === 'debug' && process.env.APP_LOG_LEVEL?.toLowerCase() === 'silent') {
+  const env = isBrowser() ? window.ENV : process.env
+  const isDebugSilent = level === 'debug' && env.APP_LOG_LEVEL?.toLowerCase() === 'silent'
+
+  if (isDebugSilent) {
     return
   }
 

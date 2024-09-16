@@ -1,5 +1,5 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+    "$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
     "organizeImports": {
         "enabled": true
     },
@@ -28,14 +28,6 @@
                 "useJsxKeyInIterable": "error"
             },
             "nursery": {
-                "noConsole": {
-                    "level": "off",
-                    "fix": "none"
-                },
-                "noDuplicateAtImportRules": "error",
-                "noDuplicateJsonKeys": "error",
-                "noEmptyBlock": "warn",
-                "noUnknownUnit": "error",
                 "useSortedClasses": {
                     "level": "warn",
                     "fix": "safe",
@@ -72,7 +64,16 @@
                     "fix": "none"
                 },
                 "noDebugger": "off",
-                "noExplicitAny": "off"
+                "noExplicitAny": "off",
+                "noConsole": {
+                    "level": "warn",
+                    "fix": "none",
+                    "options": {
+                        "allow": ["assert", "error", "info", "warn", "debug"]
+                    }
+                },
+                "noDuplicateAtImportRules": "error",
+                "noEmptyBlock": "warn"
             }
         }
     },
@@ -115,6 +116,6 @@
     "files": {
         "ignoreUnknown": true,
         "include": ["**/*.js", "**/*.mjs", "**/*.ts", "**/*.tsx", "**/*.css", "**/*.json"],
-        "ignore": [".github", ".husky", ".vscode", "build", "public"]
+        "ignore": [".github", ".husky", ".vscode", "build", "dist", "public"]
     }
 }

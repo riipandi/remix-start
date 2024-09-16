@@ -13,6 +13,7 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+*tsbuildinfo
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -56,6 +57,7 @@ fly*.toml*
 !fly*.example.toml
 
 # Miscellaneous
+vite.config.ts.*
 RELEASE_NOTE.md
 .unikraft/
 slim.report.json

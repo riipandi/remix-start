@@ -15,7 +15,7 @@ import { logger } from './common'
 const LogLevelSchema = v.picklist(['info', 'warn', 'error', 'debug', 'query'] as const)
 
 const EnvSchema = v.object({
-  NODE_ENV: v.picklist(['production', 'development', 'test'] as const),
+  NODE_ENV: v.optional(v.picklist(['production', 'development', 'test'] as const), 'development'),
   APP_DOMAIN: v.string(),
   APP_BASE_URL: v.string(),
   APP_SECRET_KEY: v.string(),
@@ -26,7 +26,16 @@ const EnvSchema = v.object({
     v.url('The url is badly formatted.')
   ),
   SMTP_HOST: v.optional(v.string(), 'localhost'),
-  SMTP_PORT: v.optional(v.number(), 1025),
+  SMTP_PORT: v.nullable(
+    v.pipe(
+      v.string(),
+      v.transform((input) => {
+        const parsed = Number.parseInt(input.toString())
+        return Number.isNaN(parsed) ? 1025 : parsed
+      })
+    ),
+    '1025'
+  ),
   SMTP_USERNAME: v.optional(v.string()),
   SMTP_PASSWORD: v.optional(v.string()),
   SMTP_EMAIL_FROM: v.optional(v.string(), 'Remix Mailer <mailer@example.com>'),
@@ -40,7 +49,7 @@ declare global {
   }
 }
 
-export function init() {
+export function initEnv() {
   try {
     const parsed = v.parse(EnvSchema, process.env)
     logger.debug('EnvSchema', parsed)
@@ -59,7 +68,7 @@ export function init() {
  * wish to be included in the client.
  * @returns all public ENV variables
  */
-export function getEnv() {
+export function getClientEnv() {
   return {
     NODE_ENV: process.env.NODE_ENV,
     APP_DOMAIN: process.env.APP_DOMAIN,
@@ -68,7 +77,7 @@ export function getEnv() {
   }
 }
 
-type ENV = ReturnType<typeof getEnv>
+type ENV = ReturnType<typeof getClientEnv>
 
 declare global {
   var ENV: ENV

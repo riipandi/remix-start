@@ -14,10 +14,12 @@ import { RemixServer } from '@remix-run/react'
 import { isbot } from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
 import { NonceProvider } from '#/context/providers/nonce-provider'
-import { getEnv } from '#/utils/env.server'
+import { getClientEnv, initEnv } from '#/utils/env.server'
 import { logger } from './utils/common'
 
-global.ENV = getEnv()
+initEnv()
+
+global.ENV = getClientEnv()
 
 const ABORT_DELAY = 5000
 

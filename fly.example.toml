@@ -1,7 +1,7 @@
 # @ref: https://fly.io/docs/reference/configuration
 
 app = "CHANGEME_APP_NAME"
-primary_region = "sjc"
+primary_region = "sin"
 kill_signal = "SIGINT"
 kill_timeout = 5
 swap_size_mb = 512
@@ -10,9 +10,10 @@ console_command = "/bin/sh"
 [build]
   dockerfile = "Dockerfile"
 
-[build.args]
-  NODE_VERSION = "20"
-  NODE_ENV = "production"
+  [build.args]
+    NODE_VERSION = "20"
+    NODE_ENV = "production"
+    R2_UPLOAD_ENABLED = "true"
 
 [deploy]
   # https://fly.io/docs/apps/deploy/#deployment-strategy
@@ -20,6 +21,7 @@ console_command = "/bin/sh"
 
 [env]
   NODE_ENV = "production"
+  DATABASE_AUTO_MIGRATE = "true"
 
 [http_service]
   internal_port = 3000
@@ -38,11 +40,11 @@ console_command = "/bin/sh"
     versions = ["TLSv1.2", "TLSv1.3"]
     default_self_signed = false
 
-[[http_service.checks]]
-  grace_period = "10s"
-  interval = "30s"
-  method = "GET"
-  timeout = "5s"
-  path = "/healthz"
-  protocol = "http"
-  tls_skip_verify = true
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/healthz"
+    protocol = "http"
+    tls_skip_verify = true

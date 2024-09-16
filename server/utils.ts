@@ -1,4 +1,6 @@
+import { createRequire } from 'node:module'
 import os from 'node:os'
+import type { Request, Response } from 'express'
 import {
   cspConnectSource,
   cspFontSource,
@@ -33,27 +35,21 @@ const IP_HEADERS = [
   // you can add more matching headers here ...
 ]
 
-export function getRequestIpAddress(request) {
+export function getRequestIpAddress(request: Request) {
   const headers = request.headers
 
   for (const header of IP_HEADERS) {
-    const value = headers[header]
-    if (value) {
+    const value = headers[header.toLowerCase()]
+    if (typeof value === 'string') {
       const parts = value.split(/\s*,\s*/g)
       return parts[0] ?? null
     }
   }
 
-  const client = request.connection ?? request.socket ?? request.info
-
-  if (client) {
-    return client.remoteAddress ?? null
-  }
-
-  return null
+  return request.socket?.remoteAddress ?? null
 }
 
-export function preferHeader(request, from, to) {
+export function preferHeader(request: Request, from: string, to: string) {
   const preferredValue = request.get(from.toLowerCase())
   if (preferredValue == null) return
 
@@ -61,14 +57,14 @@ export function preferHeader(request, from, to) {
   request.headers[to.toLowerCase()] = preferredValue
 }
 
-export function parseNumber(raw) {
+export function parseNumber(raw: string | undefined) {
   if (raw === undefined) return undefined
   const maybe = Number(raw)
   if (Number.isNaN(maybe)) return undefined
   return maybe
 }
 
-export function parseIntAsBoolean(value) {
+export function parseIntAsBoolean(value: string) {
   return !!Number.parseInt(value, 10)
 }
 
@@ -78,13 +74,12 @@ export function getLocalIpAddress() {
     .find((ip) => ip?.family === 'IPv4' && !ip.internal)?.address
 }
 
-export async function purgeRequireCache(buildDir) {
+export async function purgeRequireCache(buildDir: string) {
   // purge require cache on requests for "server side HMR" this won't let
   // you have in-memory objects between requests in development,
   // alternatively you can set up nodemon/pm2-dev to restart the server on
   // file changes, but then you'll have to reconnect to databases/etc on each
   // change. We prefer the DX of this, so we've included it for you by default
-  const { createRequire } = await import('node:module')
   const require = createRequire(import.meta.url)
 
   for (const key of Object.keys(require.cache)) {
@@ -94,7 +89,7 @@ export async function purgeRequireCache(buildDir) {
   }
 }
 
-export function getLoadContext(_req, res) {
+export function getLoadContext(_req: Request, res: Response) {
   return {
     nonce: res.locals.nonce,
   }

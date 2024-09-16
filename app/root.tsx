@@ -45,6 +45,7 @@ export function Layout({ children }: PropsWithChildren) {
   const nonce = useNonce()
 
   useEffect(() => {
+    // Dynamic favicon, changed when dark mode changes or switches to other tab.
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const favicon = document.querySelector('link[rel="icon"][id="favicon-svg"]') as HTMLLinkElement
     const FAVICON_URLS = { LIGHT: '/favicon.ico', DARK: '/favicon.svg', INACTIVE: '/favicon.png' }

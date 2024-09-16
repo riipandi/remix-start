@@ -13,12 +13,11 @@ Optionally, you can use [Docker Slim][docker-slim] to reduce the container image
 ### Up and Running
 
 1. Install the required toolchain & SDK: [Node.js][nodejs], [pnpm][pnpm], and [Docker][docker].
-2. Install required project dependencies: `pnpm install`
-3. Create `.env` file or copy from `.env.example`, then configure required variables.
-4. Generate application secret key: `pnpm generate:key`
+2. Create `.env` file or copy from `.env.example`, then configure required variables.
+3. Generate application secret key: `pnpm generate:key`
+4. Install required project dependencies: `pnpm install`
 5. Start the database server and local SMTP server: `pnpm pre-dev`
-6. Prepare database migrations: `pnpm db:generate`
-7. Run project in development mode: `pnpm dev`
+6. Run project in development mode: `pnpm dev`
 
 If you don't have OpenSSL installed, an alternative option for generating a secret key
 is to use [1password][1password] to create a random secret.

@@ -3,7 +3,6 @@
 # Arguments with default value (for build).
 ARG RUN_IMAGE=gcr.io/distroless/nodejs20-debian12
 ARG PLATFORM=linux/amd64
-ARG NODE_ENV=production
 ARG NODE_VERSION=20
 
 # -----------------------------------------------------------------------------
@@ -31,24 +30,22 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install \
 # Compile the application and install production only dependencies.
 # -----------------------------------------------------------------------------
 FROM base AS pruner
-ENV LEFTHOOK=0 CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
-ENV NODE_ENV $NODE_ENV
+ENV LEFTHOOK=0 PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true NODE_ENV=production
 
 # Required source files
-COPY --from=builder /srv/.npmrc /srv/.npmrc
 COPY --from=builder /srv/package.json /srv/package.json
-COPY --from=builder /srv/server /srv/server
+COPY --from=builder /srv/.npmrc /srv/.npmrc
 
 # Generated files
 COPY --from=builder /srv/pnpm-lock.yaml /srv/pnpm-lock.yaml
-COPY --from=builder /srv/build/client /srv/build/client
-COPY --from=builder /srv/build/server /srv/build/server
+COPY --from=builder /srv/dist/runner /srv/dist/runner
+COPY --from=builder /srv/dist/remix /srv/dist/remix
 
 # Install production dependencies and cleanup node_modules.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod \
     --frozen-lockfile --ignore-scripts && pnpm prune --prod \
     --ignore-scripts && pnpm dlx clean-modules clean --yes \
-    "!**/@libsql/**" && chmod +x /srv/server/server.js
+    "!**/@libsql/**" && chmod +x /srv/dist/runner/server.js
 
 # -----------------------------------------------------------------------------
 # Production image, copy build output files and run the application.
@@ -82,8 +79,9 @@ COPY --chown=nonroot:nonroot --from=pruner /srv /srv
 COPY --from=builder /usr/bin/tini /usr/bin/tini
 
 # Define the host and port to listen on.
+ARG NODE_ENV=production PORT=3000
 ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH"
-ENV NODE_ENV=$NODE_ENV HOST=0.0.0.0 PORT=3000
+ENV NODE_ENV=$NODE_ENV HOST=0.0.0.0 PORT=$PORT
 ENV TINI_SUBREAPER=true
 
 WORKDIR /srv
@@ -91,4 +89,4 @@ USER nonroot:nonroot
 EXPOSE $PORT
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["/nodejs/bin/node", "server/server.js"]
+CMD ["/nodejs/bin/node", "/srv/dist/runner/server.js"]

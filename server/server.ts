@@ -10,31 +10,30 @@
 
 import 'dotenv/config'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { createRequestHandler } from '@remix-run/express'
 import { installGlobals } from '@remix-run/node'
 import compression from 'compression'
+import type { NextFunction, Request, Response } from 'express'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import logger from './logger.js'
 import { getLoadContext, getLocalIpAddress, getRequestIpAddress } from './utils.js'
-import { parseIntAsBoolean, parseNumber, purgeRequireCache } from './utils.js'
 import { generateCspDirectives, preferHeader } from './utils.js'
+import { parseNumber, purgeRequireCache } from './utils.js'
 
 installGlobals()
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const BUILD_DIR = path.join(__dirname, '../build')
+// Get Remix build directory
+const BUILD_DIR = path.join(process.cwd(), 'dist/remix')
 
 const staticOptions = {
   immutable: true,
   maxAge: '1y',
-  setHeaders: (res, path) => {
+  setHeaders: (res: express.Response, path: string) => {
     if (path.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate')
+      res.set('Cache-Control', 'public, max-age=0, must-revalidate')
     }
   },
 }
@@ -46,7 +45,7 @@ app.disable('x-powered-by')
 
 app.use(compression({ level: 6, threshold: 0 }))
 
-if (process.env.ENABLE_RATE_LIMIT === 'true' || parseIntAsBoolean(process.env.ENABLE_RATE_LIMIT)) {
+if (process.env.ENABLE_RATE_LIMIT === 'true') {
   app.use(
     rateLimit({
       windowMs: 60 * 1000 * 15, // 15 minutes
@@ -56,10 +55,10 @@ if (process.env.ENABLE_RATE_LIMIT === 'true' || parseIntAsBoolean(process.env.EN
 }
 
 // Remix fingerprints its assets so we can cache forever.
-app.use(express.static('build/client', staticOptions))
+app.use(express.static(`${BUILD_DIR}/client`, staticOptions))
 
 // @see: https://community.fly.io/t/recommended-setting-for-trust-proxy-on-express/6346
-const flyHeaders = function flyHeaders(req, _res, next) {
+const flyHeaders = function flyHeaders(req: Request, _res: Response, next: NextFunction) {
   if (process.env.FLY_ALLOC_ID == null) return next()
 
   req.app.set('trust proxy', true)
@@ -74,8 +73,8 @@ const flyHeaders = function flyHeaders(req, _res, next) {
 
 app.use(flyHeaders)
 
-morgan.token('remote-addr', function getRemoteAddr(req) {
-  return getRequestIpAddress(req)
+morgan.token('remote-addr', function getRemoteAddr(req: Request) {
+  return getRequestIpAddress(req) as string
 })
 
 app.use(
@@ -103,28 +102,29 @@ app.use(
   })
 )
 
-app.use((err, _req, res, _next) => {
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   logger.error('[SERVER]', err.stack)
   res.status(500).send(`Something went wrong: ${err.message}`)
 })
 
-app.all(
-  '*',
-  process.env.NODE_ENV === 'development'
-    ? async (req, res, next) => {
-        await purgeRequireCache(BUILD_DIR)
-        // `remix build` and `remix dev` output files to a build directory,
-        // you need to pass that build to the request handler.
-        const { default: build } = await import(BUILD_DIR)
-        const mode = process.env.NODE_ENV
-        return createRequestHandler({ build, mode, getLoadContext })(req, res, next)
-      }
-    : createRequestHandler({
-        build: await import(`${BUILD_DIR}/server/index.js`),
-        mode: process.env.NODE_ENV,
-        getLoadContext,
-      })
-)
+async function createRemixHandler() {
+  const mode = process.env.NODE_ENV
+  const serverPath = `${BUILD_DIR}/server/index.js`
+  logger.server('Server running in', mode, 'mode')
+  if (mode === 'development') {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      await purgeRequireCache(BUILD_DIR)
+      const { default: build } = await import(serverPath)
+      return createRequestHandler({ build, mode, getLoadContext })(req, res, next)
+    }
+  }
+  const build = await import(serverPath)
+  return createRequestHandler({ build, mode, getLoadContext })
+}
+
+const remixHandler = await createRemixHandler()
+
+app.all('*', remixHandler)
 
 const PORT = parseNumber(process.env.PORT) ?? 3000
 
