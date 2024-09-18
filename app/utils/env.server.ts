@@ -47,7 +47,23 @@ export const GlobalCookiesOptions: Omit<CookieOptions, 'name' | 'expires'> = {
   sameSite: 'lax',
   httpOnly: true,
   secure: process.env.NODE_ENV !== 'development',
-  secrets: [process.env.APP_SECRET_KEY],
+  secrets: process.env.NODE_ENV !== 'development' ? [process.env.APP_SECRET_KEY] : [],
+  encode: (val) => {
+    try {
+      return atob(val) // Decode the Base64 cookie value
+    } catch (error) {
+      logger.error('Failed to encode cookie:', error)
+      return val // Return original value if encoding fails
+    }
+  },
+  decode: (val) => {
+    try {
+      return btoa(val) // Encode the cookie value to Base64
+    } catch (error) {
+      logger.error('Failed to decode cookie:', error)
+      return val // Return original value if decoding fails
+    }
+  },
 }
 
 export type LogLevel = v.InferInput<typeof LogLevelSchema>

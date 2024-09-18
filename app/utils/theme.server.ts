@@ -23,7 +23,9 @@ const themeStorage = createCookieSessionStorage({
  * @returns An object with methods to get, set, and commit the theme.
  */
 async function getThemeSession(request: Request) {
-  const session = await themeStorage.getSession(request.headers.get('Cookie'))
+  const cookiesHeader = request.headers.get('Cookie')
+  const session = await themeStorage.getSession(cookiesHeader)
+
   return {
     getTheme: () => {
       const themeValue = session.get('theme')
