@@ -5,11 +5,8 @@
 
 import { useFetcher } from '@remix-run/react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import type { Dispatch, ReactNode, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
-/**
- * Enum representing available themes
- */
 enum Theme {
   DARK = 'dark',
   LIGHT = 'light',
@@ -23,32 +20,38 @@ type ThemeContextType = [Theme | null, Dispatch<SetStateAction<Theme | null>>]
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 const prefersLightMQ = '(prefers-color-scheme: light)'
+const prefersDarkMQ = '(prefers-color-scheme: dark)'
 
-/**
- * Get the preferred theme based on system preferences
- */
-const getPreferredTheme = (): Theme =>
-  window.matchMedia(prefersLightMQ).matches ? Theme.LIGHT : Theme.DARK
+const getPreferredTheme = (): Theme => {
+  if (typeof window === 'object') {
+    if (window.matchMedia(prefersLightMQ).matches) return Theme.LIGHT
+    if (window.matchMedia(prefersDarkMQ).matches) return Theme.DARK
+  }
+  return Theme.SYSTEM
+}
 
-/**
- * ThemeProvider component to manage theme state
- */
-function ThemeProvider({
-  children,
-  specifiedTheme,
-}: {
-  children: ReactNode
-  specifiedTheme: Theme | null
-}) {
+const getThemeFromSystem = (): Theme.LIGHT | Theme.DARK => {
+  return window.matchMedia(prefersLightMQ).matches ? Theme.LIGHT : Theme.DARK
+}
+
+interface ThemeProviderProps {
+  children: React.ReactNode
+  specifiedTheme?: Theme
+}
+
+function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme | null>(() => {
     if (specifiedTheme && themes.includes(specifiedTheme)) {
       return specifiedTheme
     }
-    return typeof window === 'object' ? getPreferredTheme() : null
+    if (typeof window === 'object') {
+      return specifiedTheme === Theme.SYSTEM ? getThemeFromSystem() : getPreferredTheme()
+    }
+    return null
   })
 
-  const mountRun = useRef(false)
   const persistTheme = useFetcher()
+  const mountRun = useRef(false)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: need to render once
   useEffect(() => {
@@ -56,71 +59,60 @@ function ThemeProvider({
       mountRun.current = true
       return
     }
-    if (theme) {
-      persistTheme.submit({ theme }, { action: 'set-theme', method: 'POST' })
+    const newTheme = theme === Theme.SYSTEM ? getThemeFromSystem() : theme
+    if (newTheme) {
+      persistTheme.submit({ theme: newTheme }, { action: 'set-theme', method: 'POST' })
+      document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
+      document.documentElement.classList.add(newTheme)
     }
   }, [theme])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(prefersLightMQ)
-    const handleChange = () => setTheme(mediaQuery.matches ? Theme.LIGHT : Theme.DARK)
+    const handleChange = () => {
+      if (theme === Theme.SYSTEM) {
+        const newTheme = getThemeFromSystem()
+        setTheme(newTheme)
+        document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
+        document.documentElement.classList.add(newTheme)
+      }
+    }
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  }, [theme])
 
   return <ThemeContext.Provider value={[theme, setTheme]}>{children}</ThemeContext.Provider>
 }
 
-// Client-side theme detection and application
-const clientThemeCode = `
-;(() => {
-  const theme = window.matchMedia(${JSON.stringify(prefersLightMQ)}).matches ? 'light' : 'dark';
-  const cl = document.documentElement.classList;
-  const themeAlreadyApplied = cl.contains('light') || cl.contains('dark');
-
-  if (themeAlreadyApplied) {
-    // this script shouldn't exist if the theme is already applied!
-    console.warn("Hi there, could you let Matt know you're seeing this message? Thanks!");
-  } else {
-    cl.add(theme);
-  }
-
-  const meta = document.querySelector('meta[name=color-scheme]');
-
-  if (meta) {
-    if (theme === 'dark') {
-      meta.content = 'dark light';
-    } else if (theme === 'light') {
-      meta.content = 'light dark';
-    }
-  } else {
-    console.warn("Hey, could you let Matt know you're seeing this message? Thanks!");
-  }
-})();
-`
-
-/**
- * Component to prevent flash of wrong theme
- */
 function NonFlashOfWrongThemeEls({ ssrTheme }: { ssrTheme: boolean }) {
   const [theme] = useTheme()
+  const resolvedTheme = theme === Theme.SYSTEM ? getThemeFromSystem() : theme
 
   return (
     <>
-      <meta name="color-scheme" content={theme === Theme.LIGHT ? 'light dark' : 'dark light'} />
+      <meta
+        name="color-scheme"
+        content={resolvedTheme === Theme.LIGHT ? 'light dark' : 'dark light'}
+      />
       {!ssrTheme && (
         <script
           // biome-ignore lint/security/noDangerouslySetInnerHtml: required for clientThemeCode
-          dangerouslySetInnerHTML={{ __html: clientThemeCode }}
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const theme = ${JSON.stringify(resolvedTheme)};
+                const cl = document.documentElement.classList;
+                cl.remove('light', 'dark');
+                cl.add(theme);
+              })();
+            `,
+          }}
         />
       )}
     </>
   )
 }
 
-/**
- * Hook to access the current theme and theme setter
- */
 function useTheme(): ThemeContextType {
   const context = useContext(ThemeContext)
   if (context === undefined) {
@@ -129,9 +121,6 @@ function useTheme(): ThemeContextType {
   return context
 }
 
-/**
- * Type guard to check if a value is a valid Theme
- */
 function isTheme(value: unknown): value is Theme {
   return typeof value === 'string' && themes.includes(value as Theme)
 }
