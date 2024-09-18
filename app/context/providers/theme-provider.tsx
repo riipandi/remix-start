@@ -84,17 +84,21 @@ function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
 
 function NonFlashOfWrongThemeEls({ ssrTheme }: { ssrTheme: boolean }) {
   const [theme] = useTheme()
-  const resolvedTheme = theme === Theme.SYSTEM ? getThemeFromSystem() : theme
+
+  // Client-side theme resolution only
+  const resolvedTheme =
+    typeof window !== 'undefined' && theme === Theme.SYSTEM ? getThemeFromSystem() : theme
+
+  // Handle color scheme for light/dark
+  const colorScheme =
+    resolvedTheme === Theme.LIGHT ? 'light' : resolvedTheme === Theme.DARK ? 'dark' : 'light dark'
 
   return (
     <>
-      <meta
-        name="color-scheme"
-        content={resolvedTheme === Theme.LIGHT ? 'light dark' : 'dark light'}
-      />
+      <meta name="color-scheme" content={ssrTheme ? 'light' : colorScheme} />
       {!ssrTheme && (
         <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: required for clientThemeCode
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
