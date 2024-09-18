@@ -4,7 +4,7 @@
  */
 
 import { createCookieSessionStorage } from '@remix-run/node'
-import { Theme, isTheme } from '#/context/providers/theme-provider'
+import { Theme, type ThemeType, isTheme } from '#/context/providers/theme-provider'
 import { GlobalCookiesOptions } from '#/utils/env.server'
 
 // Expired in 720 hours / 30 days from now
@@ -31,7 +31,7 @@ async function getThemeSession(request: Request) {
       const themeValue = session.get('theme')
       return isTheme(themeValue) ? themeValue : Theme.SYSTEM
     },
-    setTheme: (theme: Theme) => session.set('theme', theme),
+    setTheme: (theme: ThemeType) => session.set('theme', theme),
     commit: () => themeStorage.commitSession(session, { expires: cookiesExpiry }),
   }
 }

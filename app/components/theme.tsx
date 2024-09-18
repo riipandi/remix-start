@@ -1,33 +1,17 @@
-import { useState } from 'react'
-import { Theme, useTheme } from '#/context/providers/theme-provider'
+import { Theme, type ThemeType, useTheme } from '#/context/providers/theme-provider'
 import { clx } from '#/utils/ui-helper'
-
-const themes = [
-  { id: Theme.LIGHT, name: 'Light' },
-  { id: Theme.DARK, name: 'Dark' },
-  { id: Theme.SYSTEM, name: 'System' },
-] as const
-
-type ThemeOption = (typeof themes)[number]
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useTheme()
-  const [selectedTheme, setSelectedTheme] = useState<ThemeOption>(
-    themes.find((t) => t.id === theme) || themes[0]
-  )
 
   const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newTheme = themes.find((theme) => theme.id === (event.target.value as Theme))
-    if (newTheme) {
-      setSelectedTheme(newTheme)
-      setTheme(newTheme.id)
-    }
+    setTheme(event.target.value as ThemeType)
   }
 
   return (
     <div className="relative">
       <select
-        value={selectedTheme.id}
+        value={theme || Theme.SYSTEM}
         onChange={handleThemeChange}
         className={clx(
           'w-full appearance-none rounded-lg border px-3 py-1.5 pr-8 text-sm focus:outline-none',
@@ -35,9 +19,9 @@ export default function ThemeSwitcher() {
           'dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-primary-400'
         )}
       >
-        {themes.map((theme) => (
-          <option key={theme.id} value={theme.id}>
-            {theme.name}
+        {Object.entries(Theme).map(([key, value]) => (
+          <option key={value} value={value}>
+            {key.charAt(0) + key.slice(1).toLowerCase()}
           </option>
         ))}
       </select>

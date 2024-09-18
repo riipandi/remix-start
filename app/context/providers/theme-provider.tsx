@@ -1,116 +1,107 @@
-/*!
- * Portions of this file are based on code from `mattstobbs/remix-dark-mode`.
- * Credits to Matt Stobbs: https://github.com/mattstobbs/remix-dark-mode
- */
-
 import { useFetcher, useRevalidator } from '@remix-run/react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import type { EnumValues } from '#/utils/common'
 
-enum Theme {
-  DARK = 'dark',
-  LIGHT = 'light',
-  SYSTEM = 'system',
-}
+const Theme = {
+  DARK: 'dark',
+  LIGHT: 'light',
+  SYSTEM: 'system',
+} as const
 
-type ThemeContextType = [Theme | null, Dispatch<SetStateAction<Theme | null>>]
+type ThemeType = EnumValues<typeof Theme>
+
+type ThemeContextType = [ThemeType | null, Dispatch<SetStateAction<ThemeType | null>>]
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-const themes: Theme[] = Object.values(Theme)
 const prefersLightMQ = '(prefers-color-scheme: light)'
-const prefersDarkMQ = '(prefers-color-scheme: dark)'
 
-const getPreferredTheme = (): Theme => {
+const getTheme = (): ThemeType => {
   if (typeof window === 'undefined') return Theme.SYSTEM
-  if (window.matchMedia(prefersLightMQ).matches) return Theme.LIGHT
-  if (window.matchMedia(prefersDarkMQ).matches) return Theme.DARK
-  return Theme.SYSTEM
-}
-
-const getThemeFromSystem = (): Theme.LIGHT | Theme.DARK => {
-  if (typeof window === 'undefined') return Theme.LIGHT
   return window.matchMedia(prefersLightMQ).matches ? Theme.LIGHT : Theme.DARK
 }
 
 interface ThemeProviderProps {
   children: React.ReactNode
-  specifiedTheme?: EnumValues<typeof Theme>
+  specifiedTheme?: ThemeType
 }
 
-function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme | null>(() => {
-    if (specifiedTheme && themes.includes(specifiedTheme)) {
-      return specifiedTheme
-    }
-    return null
-  })
-
+function useThemeEffect(theme: ThemeType | null) {
   const { revalidate } = useRevalidator()
   const persistTheme = useFetcher()
-  const mountRun = useRef(false)
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: need to render once
+  const setThemeClass = useCallback((newTheme: ThemeType) => {
+    document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
+    document.documentElement.classList.add(newTheme)
+  }, [])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: render once
   useEffect(() => {
-    if (!mountRun.current) {
-      mountRun.current = true
-      setTheme(specifiedTheme || getPreferredTheme())
-      return
-    }
     if (theme) {
       persistTheme.submit({ theme }, { action: 'set-theme', method: 'POST' })
-      const resolvedTheme = theme === Theme.SYSTEM ? getThemeFromSystem() : theme
-      document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
-      document.documentElement.classList.add(resolvedTheme)
+      const resolvedTheme = theme === Theme.SYSTEM ? getTheme() : theme
+      setThemeClass(resolvedTheme)
     }
-  }, [theme, specifiedTheme])
+  }, [theme])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const mediaQuery = window.matchMedia(prefersLightMQ)
     const handleChange = () => {
       if (theme === Theme.SYSTEM) {
-        const newTheme = getThemeFromSystem()
-        document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
-        document.documentElement.classList.add(newTheme)
+        setThemeClass(getTheme())
       }
       revalidate()
     }
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [theme, revalidate])
+  }, [theme, revalidate, setThemeClass])
+}
+
+function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
+  const [theme, setTheme] = useState<ThemeType | null>(() => {
+    if (specifiedTheme && Object.values(Theme).includes(specifiedTheme)) {
+      return specifiedTheme
+    }
+    return null
+  })
+
+  const mountRun = useRef(false)
+
+  useEffect(() => {
+    if (!mountRun.current) {
+      mountRun.current = true
+      setTheme(specifiedTheme ?? getTheme())
+    }
+  }, [specifiedTheme])
+
+  useThemeEffect(theme)
 
   return <ThemeContext.Provider value={[theme, setTheme]}>{children}</ThemeContext.Provider>
 }
 
 function NonFlashOfWrongThemeEls({ ssrTheme }: { ssrTheme: boolean }) {
   const [theme] = useTheme()
-
-  // Client-side theme resolution only
-  const resolvedTheme =
-    typeof window !== 'undefined' && theme === Theme.SYSTEM ? getThemeFromSystem() : theme
-
-  // Handle color scheme for light/dark
+  const resolvedTheme = theme === Theme.SYSTEM ? getTheme() : theme
   const colorScheme =
     resolvedTheme === Theme.LIGHT ? 'light' : resolvedTheme === Theme.DARK ? 'dark' : 'light dark'
+
+  const setThemeScript = `
+    (function() {
+      const theme = ${JSON.stringify(resolvedTheme)};
+      const cl = document.documentElement.classList;
+      cl.remove('light', 'dark');
+      cl.add(theme);
+    })();
+  `
 
   return (
     <>
       <meta name="color-scheme" content={ssrTheme ? 'light' : colorScheme} />
       {!ssrTheme && (
         <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const theme = ${JSON.stringify(resolvedTheme)};
-                const cl = document.documentElement.classList;
-                cl.remove('light', 'dark');
-                cl.add(theme);
-              })();
-            `,
-          }}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Inline script is necessary for theme initialization
+          dangerouslySetInnerHTML={{ __html: setThemeScript }}
         />
       )}
     </>
@@ -125,8 +116,8 @@ function useTheme(): ThemeContextType {
   return context
 }
 
-function isTheme(value: unknown): value is Theme {
-  return typeof value === 'string' && themes.includes(value as Theme)
+function isTheme(value: unknown): value is ThemeType {
+  return typeof value === 'string' && Object.values(Theme).includes(value as ThemeType)
 }
 
-export { Theme, isTheme, NonFlashOfWrongThemeEls, ThemeProvider, useTheme }
+export { Theme, type ThemeType, isTheme, NonFlashOfWrongThemeEls, ThemeProvider, useTheme }

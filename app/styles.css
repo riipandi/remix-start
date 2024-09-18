@@ -18,7 +18,7 @@
 @layer base {
     html,
     body {
-        @apply size-full min-h-screen antialiased scroll-smooth dark:bg-gray-950;
+        @apply size-full min-h-screen antialiased scroll-smooth bg-white dark:bg-gray-950;
     }
 }
 
