@@ -13,6 +13,7 @@ import type { Dispatch, ReactNode, SetStateAction } from 'react'
 enum Theme {
   DARK = 'dark',
   LIGHT = 'light',
+  SYSTEM = 'system',
 }
 
 const themes: Theme[] = Object.values(Theme)
@@ -46,18 +47,19 @@ function ThemeProvider({
     return typeof window === 'object' ? getPreferredTheme() : null
   })
 
-  const persistTheme = useFetcher()
   const mountRun = useRef(false)
+  const persistTheme = useFetcher()
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: need to render once
   useEffect(() => {
     if (!mountRun.current) {
       mountRun.current = true
       return
     }
     if (theme) {
-      persistTheme.submit({ theme }, { action: 'set-theme', method: 'post' })
+      persistTheme.submit({ theme }, { action: 'set-theme', method: 'POST' })
     }
-  }, [theme, persistTheme])
+  }, [theme])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(prefersLightMQ)
