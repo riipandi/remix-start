@@ -3,7 +3,7 @@
  * Credits to Matt Stobbs: https://github.com/mattstobbs/remix-dark-mode
  */
 
-import { useFetcher } from '@remix-run/react'
+import { useFetcher, useRevalidator } from '@remix-run/react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import type { EnumValues } from '#/utils/common'
@@ -47,6 +47,7 @@ function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
     return null
   })
 
+  const { revalidate } = useRevalidator()
   const persistTheme = useFetcher()
   const mountRun = useRef(false)
 
@@ -74,10 +75,11 @@ function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
         document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
         document.documentElement.classList.add(newTheme)
       }
+      revalidate()
     }
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [theme])
+  }, [theme, revalidate])
 
   return <ThemeContext.Provider value={[theme, setTheme]}>{children}</ThemeContext.Provider>
 }
