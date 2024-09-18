@@ -6,6 +6,7 @@
 import { useFetcher } from '@remix-run/react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
+import type { EnumValues } from '#/utils/common'
 
 enum Theme {
   DARK = 'dark',
@@ -13,39 +14,35 @@ enum Theme {
   SYSTEM = 'system',
 }
 
-const themes: Theme[] = Object.values(Theme)
-
 type ThemeContextType = [Theme | null, Dispatch<SetStateAction<Theme | null>>]
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+const themes: Theme[] = Object.values(Theme)
 const prefersLightMQ = '(prefers-color-scheme: light)'
 const prefersDarkMQ = '(prefers-color-scheme: dark)'
 
 const getPreferredTheme = (): Theme => {
-  if (typeof window === 'object') {
-    if (window.matchMedia(prefersLightMQ).matches) return Theme.LIGHT
-    if (window.matchMedia(prefersDarkMQ).matches) return Theme.DARK
-  }
+  if (typeof window === 'undefined') return Theme.SYSTEM
+  if (window.matchMedia(prefersLightMQ).matches) return Theme.LIGHT
+  if (window.matchMedia(prefersDarkMQ).matches) return Theme.DARK
   return Theme.SYSTEM
 }
 
 const getThemeFromSystem = (): Theme.LIGHT | Theme.DARK => {
+  if (typeof window === 'undefined') return Theme.LIGHT
   return window.matchMedia(prefersLightMQ).matches ? Theme.LIGHT : Theme.DARK
 }
 
 interface ThemeProviderProps {
   children: React.ReactNode
-  specifiedTheme?: Theme
+  specifiedTheme?: EnumValues<typeof Theme>
 }
 
 function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme | null>(() => {
     if (specifiedTheme && themes.includes(specifiedTheme)) {
       return specifiedTheme
-    }
-    if (typeof window === 'object') {
-      return specifiedTheme === Theme.SYSTEM ? getThemeFromSystem() : getPreferredTheme()
     }
     return null
   })
@@ -57,22 +54,23 @@ function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
   useEffect(() => {
     if (!mountRun.current) {
       mountRun.current = true
+      setTheme(specifiedTheme || getPreferredTheme())
       return
     }
-    const newTheme = theme === Theme.SYSTEM ? getThemeFromSystem() : theme
-    if (newTheme) {
-      persistTheme.submit({ theme: newTheme }, { action: 'set-theme', method: 'POST' })
+    if (theme) {
+      persistTheme.submit({ theme }, { action: 'set-theme', method: 'POST' })
+      const resolvedTheme = theme === Theme.SYSTEM ? getThemeFromSystem() : theme
       document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
-      document.documentElement.classList.add(newTheme)
+      document.documentElement.classList.add(resolvedTheme)
     }
-  }, [theme])
+  }, [theme, specifiedTheme])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     const mediaQuery = window.matchMedia(prefersLightMQ)
     const handleChange = () => {
       if (theme === Theme.SYSTEM) {
         const newTheme = getThemeFromSystem()
-        setTheme(newTheme)
         document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
         document.documentElement.classList.add(newTheme)
       }
@@ -125,4 +123,4 @@ function isTheme(value: unknown): value is Theme {
   return typeof value === 'string' && themes.includes(value as Theme)
 }
 
-export { isTheme, NonFlashOfWrongThemeEls, Theme, ThemeProvider, useTheme }
+export { Theme, isTheme, NonFlashOfWrongThemeEls, ThemeProvider, useTheme }

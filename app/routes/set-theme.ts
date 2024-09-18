@@ -5,7 +5,6 @@
 
 import { type ActionFunctionArgs, json, redirect } from '@remix-run/node'
 import { isTheme } from '#/context/providers/theme-provider'
-import { logger } from '#/utils/common'
 import { getThemeSession } from '#/utils/theme.server'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -24,8 +23,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   themeSession.setTheme(theme)
 
   const cookiesValue = await themeSession.commit()
-
-  logger.debug('cookiesValue', cookiesValue)
 
   return json({ success: true }, { headers: { 'Set-Cookie': cookiesValue } })
 }
