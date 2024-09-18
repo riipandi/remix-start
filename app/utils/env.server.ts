@@ -4,6 +4,7 @@
  */
 
 import 'dotenv/config'
+import type { CookieOptions } from '@remix-run/node'
 import * as v from 'valibot'
 import { logger } from './common'
 
@@ -40,6 +41,14 @@ const EnvSchema = v.object({
   SMTP_PASSWORD: v.optional(v.string()),
   SMTP_EMAIL_FROM: v.optional(v.string(), 'Remix Mailer <mailer@example.com>'),
 })
+
+export const GlobalCookiesOptions: Omit<CookieOptions, 'name' | 'expires'> = {
+  path: '/',
+  sameSite: 'lax',
+  httpOnly: true,
+  secure: process.env.NODE_ENV !== 'development',
+  secrets: [process.env.APP_SECRET_KEY],
+}
 
 export type LogLevel = v.InferInput<typeof LogLevelSchema>
 

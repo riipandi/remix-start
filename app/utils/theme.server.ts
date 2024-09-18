@@ -3,35 +3,18 @@
  * Credits to Matt Stobbs: https://github.com/mattstobbs/remix-dark-mode
  */
 
-import { type CookieOptions, createCookieSessionStorage } from '@remix-run/node'
+import { createCookieSessionStorage } from '@remix-run/node'
 import { Theme, isTheme } from '#/context/providers/theme-provider'
+import { GlobalCookiesOptions } from '#/utils/env.server'
 
-/**
- * Determines if the application is running in development mode.
- */
-const isDevelopment = process.env.NODE_ENV === 'development'
-const expirationTime = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
-
-/**
- * Configuration options for the theme cookie.
- */
-const cookiesOptions: Omit<CookieOptions, 'name' | 'expires'> = {
-  path: '/',
-  sameSite: 'lax',
-  secure: !isDevelopment,
-  secrets: !isDevelopment ? [process.env.APP_SECRET_KEY] : undefined,
-  httpOnly: true,
-}
+// Expired in 720 hours / 30 days from now
+const cookiesExpiry = new Date(Date.now() + 3600 * 1000 * 720)
 
 /**
  * Creates a session storage for managing theme preferences.
  */
 const themeStorage = createCookieSessionStorage({
-  cookie: {
-    name: 'remix_start_theme',
-    expires: expirationTime,
-    ...cookiesOptions,
-  },
+  cookie: { name: 'remix_start_theme', ...GlobalCookiesOptions },
 })
 
 /**
@@ -47,7 +30,7 @@ async function getThemeSession(request: Request) {
       return isTheme(themeValue) ? themeValue : Theme.DARK
     },
     setTheme: (theme: Theme) => session.set('theme', theme),
-    commit: () => themeStorage.commitSession(session, cookiesOptions),
+    commit: () => themeStorage.commitSession(session, { expires: cookiesExpiry }),
   }
 }
 
