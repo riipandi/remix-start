@@ -1,6 +1,8 @@
 import pico from 'picocolors'
 import type { LogLevel } from './env.server'
 
+export type EnumValues<Type> = Type[keyof Type]
+
 /**
  * Determines if the current environment is a browser.
  * @returns `true` if the current environment is a browser, `false` otherwise.

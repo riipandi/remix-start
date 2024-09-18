@@ -13,9 +13,9 @@
         // "disableReferencedProjectLoad": true,             // Reduce automatic project loading
 
         /* Language and Environment */
-        "target": "ES2022", // Set JavaScript language version
-        "lib": ["DOM", "DOM.Iterable", "ES2022"], // Specify library files to include
-        "jsx": "react-jsx", // Specify JSX code generation
+        "target": "ES2022",                                  // Set JavaScript language version
+        "lib": ["DOM", "DOM.Iterable", "ES2022"],            // Specify library files to include
+        "jsx": "react-jsx",                                  // Specify JSX code generation
         // "experimentalDecorators": true,                   // Enable experimental decorator support
         // "emitDecoratorMetadata": true,                    // Emit decorator metadata
         // "jsxFactory": "",                                 // Specify JSX factory function
@@ -24,7 +24,7 @@
         // "reactNamespace": "",                             // Specify React namespace
         // "noLib": true,                                    // Disable including default lib files
         // "useDefineForClassFields": true,                  // Use define semantics for class fields
-        "moduleDetection": "auto", // Control module detection method
+        "moduleDetection": "auto",                           // Control module detection method
 
         /* Modules */
         "module": "ESNext",                                  // Specify module code generation
@@ -74,7 +74,7 @@
         // "declarationDir": "./",                           // Output directory for generated declarations
 
         /* Interop Constraints */
-        "verbatimModuleSyntax": true,                        // Do not transform imports/exports
+        "verbatimModuleSyntax": true,                        // Do not transform imports/exports, enforced 'type-only' imports
         "allowSyntheticDefaultImports": true,                // Allow default imports from modules with no default export
         "esModuleInterop": true,                             // Emit additional JavaScript for CommonJS modules
         // "preserveSymlinks": true,                         // Do not resolve symlinks to their real path
@@ -95,7 +95,7 @@
         // "exactOptionalPropertyTypes": true,               // Enable strict checking of optional property types
         // "noImplicitReturns": true,                        // Report error when not all code paths return a value
         // "noFallthroughCasesInSwitch": true,               // Report errors for fallthrough cases in switch
-        // "noUncheckedIndexedAccess": true,                 // Include 'undefined' in index signature results
+        "noUncheckedIndexedAccess": true,                    // Include 'undefined' in index signature results, make indexing stricter
         // "noImplicitOverride": true,                       // Ensure overriding members are marked with override
         // "noPropertyAccessFromIndexSignature": true,       // Require explicit indexing when accessing properties
         // "allowUnusedLabels": true,                        // Do not report errors on unused labels
