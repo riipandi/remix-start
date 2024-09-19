@@ -50,7 +50,8 @@ export const GlobalCookiesOptions: Omit<CookieOptions, 'name' | 'expires'> = {
   secrets: process.env.NODE_ENV !== 'development' ? [process.env.APP_SECRET_KEY] : [],
   encode: (val) => {
     try {
-      return atob(val) // Decode the Base64 cookie value
+      // Decode the Base64 cookie value in development mode
+      return process.env.NODE_ENV === 'development' ? atob(val) : val
     } catch (error) {
       logger.error('Failed to encode cookie:', error)
       return val // Return original value if encoding fails
@@ -58,7 +59,8 @@ export const GlobalCookiesOptions: Omit<CookieOptions, 'name' | 'expires'> = {
   },
   decode: (val) => {
     try {
-      return btoa(val) // Encode the cookie value to Base64
+      // Encode the cookie value to Base64 in development mode
+      return process.env.NODE_ENV === 'development' ? btoa(val) : val
     } catch (error) {
       logger.error('Failed to decode cookie:', error)
       return val // Return original value if decoding fails

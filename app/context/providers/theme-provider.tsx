@@ -31,6 +31,7 @@ function useThemeEffect(theme: ThemeType | null) {
   const { revalidate } = useRevalidator()
   const persistTheme = useFetcher()
 
+  // FIXME glitch on first load in dark mode
   const setThemeClass = useCallback((newTheme: ThemeType) => {
     document.documentElement.classList.remove(Theme.LIGHT, Theme.DARK)
     document.documentElement.classList.add(newTheme)
@@ -43,7 +44,7 @@ function useThemeEffect(theme: ThemeType | null) {
       const resolvedTheme = theme === Theme.SYSTEM ? getTheme() : theme
       setThemeClass(resolvedTheme)
     }
-  }, [theme])
+  }, [theme, setThemeClass])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(prefersLightMQ)
