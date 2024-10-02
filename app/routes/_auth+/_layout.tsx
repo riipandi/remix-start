@@ -1,6 +1,9 @@
-import { Outlet } from '@remix-run/react'
+import { Link, Outlet, useLocation } from '@remix-run/react'
+import { clx } from '#/utils/ui-helper'
 
 export default function AuthLayout() {
+  const { pathname } = useLocation()
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="flex h-screen justify-center">
@@ -23,7 +26,37 @@ export default function AuthLayout() {
           </div>
         </div>
         <div className="relative mx-auto flex w-full max-w-md items-center px-6 lg:w-2/5">
-          <Outlet />
+          <main className="w-full max-w-md">
+            <div className="mx-auto flex justify-center">
+              <img
+                src="/favicon.svg"
+                className="h-7 w-auto sm:h-10 dark:invert"
+                alt="Remix Start"
+              />
+            </div>
+
+            <div className="mt-8 flex items-center justify-center px-8">
+              {[
+                { href: '/login', label: 'sign in' },
+                { href: '/signup', label: 'sign up' },
+              ].map(({ href, label }) => (
+                <Link
+                  key={href}
+                  to={href}
+                  className={clx(
+                    pathname === href
+                      ? 'border-primary-500 dark:border-primary-400 dark:text-white'
+                      : 'border-gray-400 text-gray-800 dark:text-gray-400',
+                    'w-1/2 border-b pb-4 text-center font-medium capitalize'
+                  )}
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+
+            <Outlet />
+          </main>
         </div>
       </div>
     </div>
