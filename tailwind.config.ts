@@ -15,14 +15,14 @@ const TailwindConfig: Config = {
       },
       colors: {
         black: '#000d1a',
-        gray: colors.gray,
+        gray: colors.neutral,
         primary: colors.indigo,
       },
     },
     debugScreens: {
       position: ['bottom', 'right'],
       borderTopLeftRadius: '4px',
-      printSize: true,
+      printSize: false,
       prefix: '',
     },
   },

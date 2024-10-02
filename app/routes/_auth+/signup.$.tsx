@@ -1,126 +1,122 @@
 import type { MetaFunction } from '@remix-run/node'
 import * as Lucide from 'lucide-react'
-import { Button } from '#/components/base-ui'
 import { Link } from '#/components/link'
-import { clx } from '#/utils/ui-helper'
-
 import { SocialLogin } from './__social'
 
 export const meta: MetaFunction = () => [{ title: 'Create Account - Remix Start' }]
 
 export default function SignUpPage() {
   return (
-    <main className="mx-auto w-full max-w-md p-6">
-      <div className="mt-7 rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-black">
-        <div className="p-4 sm:p-7">
-          <div className="text-center">
-            <h1 className="block font-bold text-2xl text-gray-800 dark:text-white">
-              Create Account
-            </h1>
-            <p className="mt-3 text-gray-600 text-sm dark:text-gray-300">
-              Already have an account?{' '}
+    <form className="w-full max-w-md">
+      <div className="mx-auto flex justify-center">
+        <img src="/favicon.svg" className="h-7 w-auto sm:h-10 dark:invert" alt="Remix Start" />
+      </div>
+      <div className="mt-8 flex items-center justify-center">
+        <Link
+          to="/login"
+          className="w-1/3 border-b pb-4 text-center font-medium text-gray-500 capitalize dark:border-gray-400 dark:text-gray-300"
+        >
+          sign in
+        </Link>
+        <Link
+          to="/signup"
+          className="w-1/3 border-primary-500 border-b-2 pb-4 text-center font-medium text-gray-800 capitalize dark:border-primary-400 dark:text-white"
+        >
+          sign up
+        </Link>
+      </div>
+      <div className="relative mt-8 flex items-center">
+        <span className="absolute">
+          <Lucide.User className="mx-3 size-5 text-gray-300 dark:text-gray-500" strokeWidth={1.8} />
+        </span>
+        <input
+          type="text"
+          className="block w-full rounded-lg border bg-white px-11 py-2.5 text-gray-700 focus:border-primary-400 focus:outline-none focus:ring focus:ring-primary-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-primary-300"
+          placeholder="Username"
+        />
+      </div>
+
+      <div className="relative mt-4 flex items-center">
+        <span className="absolute">
+          <Lucide.Mail className="mx-3 size-5 text-gray-300 dark:text-gray-500" strokeWidth={1.8} />
+        </span>
+        <input
+          type="email"
+          className="block w-full rounded-lg border bg-white px-11 py-2.5 text-gray-700 focus:border-primary-400 focus:outline-none focus:ring focus:ring-primary-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-primary-300"
+          placeholder="Email address"
+        />
+      </div>
+      <div className="relative mt-4 flex items-center">
+        <span className="absolute">
+          <Lucide.Lock className="mx-3 size-5 text-gray-300 dark:text-gray-500" strokeWidth={1.8} />
+        </span>
+        <input
+          type="password"
+          className="block w-full rounded-lg border bg-white px-10 py-2.5 text-gray-700 focus:border-primary-400 focus:outline-none focus:ring focus:ring-primary-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-primary-300"
+          placeholder="Password"
+        />
+      </div>
+      <div className="relative mt-4 flex items-center">
+        <span className="absolute">
+          <Lucide.Lock className="mx-3 size-5 text-gray-300 dark:text-gray-500" strokeWidth={1.8} />
+        </span>
+        <input
+          type="password"
+          className="block w-full rounded-lg border bg-white px-10 py-2.5 text-gray-700 focus:border-primary-400 focus:outline-none focus:ring focus:ring-primary-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-primary-300"
+          placeholder="Confirm Password"
+        />
+      </div>
+
+      <label
+        htmlFor="dropzone-file"
+        className="mx-auto my-6 flex cursor-pointer items-center rounded-lg border-2 border-dashed bg-white px-3 py-2.5 text-center dark:border-gray-600 dark:bg-gray-900"
+      >
+        <Lucide.Upload className="size-5 text-gray-300 dark:text-gray-500" strokeWidth={1.8} />
+        <h2 className="mx-3 text-gray-400">Profile Photo</h2>
+        <input id="dropzone-file" type="file" className="hidden" />
+      </label>
+
+      <div className="mt-4 flex items-center">
+        <div className="flex">
+          <input
+            id="remember-me"
+            name="remember-me"
+            type="checkbox"
+            className="pointer-events-none mt-0.5 shrink-0 rounded border-gray-200 text-primary-600 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:focus:ring-offset-gray-800 dark:checked:border-primary-500 dark:checked:bg-primary-500"
+          />
+        </div>
+        <div className="inline-flex w-full items-center justify-between">
+          <div className="ms-2.5">
+            <label htmlFor="remember-me" className="text-sm dark:text-white">
+              I accept the{' '}
               <Link
-                to="/login"
-                className="font-medium text-primary-600 hover:underline focus:outline-none dark:text-primary-500"
+                to="/terms"
+                newTab
+                className="text-primary-600 hover:underline focus:rounded focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-primary-500 dark:hover:text-primary-600"
               >
-                Sign in here
+                Terms and Conditions
               </Link>
-            </p>
-          </div>
-          <div className="mt-5 lg:mt-7">
-            {/* Form */}
-            <form>
-              <div className="grid gap-y-4">
-                {/* Form Group */}
-                <div>
-                  <label htmlFor="email" className="sr-only">
-                    Email address
-                  </label>
-                  <div className="relative flex flex-col gap-1">
-                    <label htmlFor="email" className="text-sm dark:text-white">
-                      Email Address
-                    </label>
-                    <div className="relative flex flex-col">
-                      <input
-                        type="email"
-                        placeholder="somebody@example.com"
-                        className="block w-full rounded-lg border-gray-200 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:ring-gray-600"
-                        required
-                      />
-                      <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3">
-                        <Lucide.AlertCircle className={clx('hidden', 'size-5 text-red-500')} />
-                      </div>
-                    </div>
-                  </div>
-                  <p className="mt-2 hidden text-red-600 text-xs" id="email-error">
-                    Please include a valid email address
-                  </p>
-                </div>
-                {/* End Form Group */}
-                {/* Form Group */}
-                <div>
-                  <div className="relative flex flex-col gap-1">
-                    <label htmlFor="password" className="text-sm dark:text-white">
-                      Password
-                    </label>
-                    <div className="relative flex flex-col">
-                      <input
-                        type="password"
-                        placeholder="************"
-                        className="block w-full rounded-lg border-gray-200 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:ring-gray-600"
-                        required
-                      />
-                      <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3">
-                        <Lucide.AlertCircle className={clx('hidden', 'size-5 text-red-500')} />
-                      </div>
-                    </div>
-                  </div>
-                  <p className="mt-2 hidden text-red-600 text-xs" id="password-error">
-                    8+ characters required
-                  </p>
-                </div>
-                {/* End Form Group */}
-                {/* Checkbox */}
-                <div className="flex items-center">
-                  <div className="flex">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="pointer-events-none mt-0.5 shrink-0 rounded border-gray-200 text-primary-600 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:focus:ring-offset-gray-800 dark:checked:border-primary-500 dark:checked:bg-primary-500"
-                    />
-                  </div>
-                  <div className="inline-flex w-full items-center justify-between">
-                    <div className="ms-2.5">
-                      <label htmlFor="remember-me" className="text-sm dark:text-white">
-                        I accept the{' '}
-                        <Link
-                          to="/terms"
-                          newTab
-                          className="text-primary-600 hover:underline focus:rounded focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-primary-500 dark:hover:text-primary-600"
-                        >
-                          Terms and Conditions
-                        </Link>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                {/* End Checkbox */}
-                <Button type="submit" variant="primary">
-                  Continue
-                </Button>
-              </div>
-            </form>
-            {/* End Form */}
-            <SocialLogin label="Or, signup with" />
+            </label>
           </div>
         </div>
       </div>
-      <div className="mt-6 text-center">
+
+      <div className="mt-6">
+        <button
+          type="button"
+          className="w-full transform rounded-lg bg-primary-500 px-6 py-2.5 font-medium text-sm text-white capitalize tracking-wide transition-colors duration-300 hover:bg-primary-400 focus:outline-none focus:ring focus:ring-primary-300 focus:ring-opacity-50"
+        >
+          Continue
+        </button>
+      </div>
+
+      <SocialLogin label="Or, sign up with" separatorPlacement="top" />
+
+      <div className="mt-10 text-center">
         <Link to="/" className="text-sm hover:underline dark:text-white">
           Back to homepage
         </Link>
       </div>
-    </main>
+    </form>
   )
 }

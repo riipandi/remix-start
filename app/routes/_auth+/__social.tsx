@@ -1,14 +1,24 @@
-export function SocialLogin({ label }: { label: string }) {
+import { clx } from '#/utils/ui-helper'
+
+interface SocialLoginProps {
+  label: string
+  separatorPlacement: 'top' | 'bottom'
+  className?: string
+}
+
+export function SocialLogin({ label, separatorPlacement, className }: SocialLoginProps) {
   return (
-    <>
-      <div className="flex items-center py-5 text-gray-400 text-xs uppercase before:me-6 before:flex-[1_1_0%] before:border-gray-200 before:border-t after:ms-6 after:flex-[1_1_0%] after:border-gray-200 after:border-t dark:text-gray-500 dark:after:border-gray-600 dark:before:border-gray-600">
-        {label}
-      </div>
+    <div className={clx(className)}>
+      {separatorPlacement === 'top' && (
+        <div className="flex items-center py-6 text-gray-400 text-xs uppercase before:me-6 before:flex-[1_1_0%] before:border-gray-200 before:border-t after:ms-6 after:flex-[1_1_0%] after:border-gray-200 after:border-t dark:text-gray-500 dark:after:border-gray-600 dark:before:border-gray-600">
+          {label}
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <button
           type="button"
-          className="inline-flex w-full items-center justify-center gap-x-2 rounded-lg border border-gray-200 bg-white px-3 py-2 font-medium text-gray-800 text-sm shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 dark:hover:bg-gray-800"
+          className="inline-flex w-full items-center justify-center gap-x-2 rounded-lg border border-gray-200 bg-white px-3 py-2.5 font-medium text-gray-800 text-sm shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 dark:hover:bg-gray-800"
         >
           <svg className="h-auto w-4" width={46} height={47} viewBox="0 0 46 47" fill="none">
             <path
@@ -32,7 +42,7 @@ export function SocialLogin({ label }: { label: string }) {
         </button>
         <button
           type="button"
-          className="inline-flex w-full items-center justify-center gap-x-2 rounded-lg border border-gray-200 bg-white px-3 py-2 font-medium text-gray-800 text-sm shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 dark:hover:bg-gray-800"
+          className="inline-flex w-full items-center justify-center gap-x-2 rounded-lg border border-gray-200 bg-white px-3 py-2.5 font-medium text-gray-800 text-sm shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 dark:hover:bg-gray-800"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -52,6 +62,12 @@ export function SocialLogin({ label }: { label: string }) {
           GitHub
         </button>
       </div>
-    </>
+
+      {separatorPlacement === 'bottom' && (
+        <div className="flex items-center py-6 text-gray-400 text-xs uppercase before:me-6 before:flex-[1_1_0%] before:border-gray-200 before:border-t after:ms-6 after:flex-[1_1_0%] after:border-gray-200 after:border-t dark:text-gray-500 dark:after:border-gray-600 dark:before:border-gray-600">
+          {label}
+        </div>
+      )}
+    </div>
   )
 }
