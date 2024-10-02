@@ -12,7 +12,8 @@
         "**/dist": true,
     },
     "tailwindCSS.experimental.classRegex": [
-        ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+        // https://www.tailwind-variants.org/docs/getting-started#intellisense-setup-optional
+        ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"],
         "cn\\(([^)]*)\\)", // cn(xxx)
         "clx\\(([^)]*)\\)", // clx(xxx)
         "cx\\(([^)]*)\\)", // cx(xxx)
