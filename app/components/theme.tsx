@@ -1,7 +1,8 @@
+import * as Lucide from 'lucide-react'
 import { Theme, type ThemeType, useTheme } from '#/context/providers/theme-provider'
 import { clx } from '#/utils/ui-helper'
 
-export default function ThemeSwitcher() {
+export function ThemeSelector() {
   const [theme, setTheme] = useTheme()
 
   const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -26,5 +27,33 @@ export default function ThemeSwitcher() {
         ))}
       </select>
     </div>
+  )
+}
+
+export function ThemeSwitcher({ className }: { className?: string }) {
+  const [theme, setTheme] = useTheme()
+
+  const toggleTheme = () => {
+    setTheme(theme === Theme.DARK ? Theme.LIGHT : Theme.DARK)
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className={clx(
+        '-m-2.5 rounded-lg p-2 text-gray-800 hover:text-white dark:text-gray-300',
+        'hover:bg-gray-700 dark:hover:bg-gray-800',
+        'transition-colors duration-200',
+        className
+      )}
+    >
+      {theme === Theme.DARK ? (
+        <Lucide.MoonStar className="size-5" strokeWidth={1.8} />
+      ) : (
+        <Lucide.Sun className="size-5" strokeWidth={1.8} />
+      )}
+      <span className="sr-only">Toggle theme</span>
+    </button>
   )
 }

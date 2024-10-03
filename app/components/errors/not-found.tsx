@@ -11,7 +11,7 @@ export default function NotFound({ status, statusText }: Omit<ErrorResponse, 'da
   useEffect(() => setHasPreviousPage(window.history.length > 1), [])
 
   return (
-    <section className="bg-white dark:bg-gray-900 ">
+    <section className="bg-white dark:bg-gray-900">
       <div className="mx-auto min-h-screen max-w-7xl px-6 py-12 lg:flex lg:items-center lg:gap-12">
         <div className="wf-ull lg:w-1/2">
           <p className="font-semibold text-base text-blue-500 dark:text-blue-400">
