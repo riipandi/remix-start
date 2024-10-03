@@ -37,10 +37,30 @@
         border: none;
         outline: none;
     }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .hidden-scrollbar {
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none; /* Firefox */
+    }
+    .hidden-scrollbar::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+    }
+
     /* Debug element */
     .debug {
         border-width: 1px;
         border-style: dashed;
         border-color: #f87171;
+    }
+}
+
+@media (max-width: 640px) {
+    .scrollbar-hide-mobile {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-hide-mobile::-webkit-scrollbar {
+        display: none;
     }
 }
