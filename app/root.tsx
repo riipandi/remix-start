@@ -38,6 +38,7 @@ export const links: LinksFunction = () => [
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const siteTitle = 'Remix Start'
   const siteDescription = 'Welcome to Remix!'
+
   return [
     { title: siteTitle },
     { name: 'description', content: siteDescription },
@@ -59,7 +60,12 @@ function App() {
     // Dynamic favicon, changed when dark mode changes or switches to other tab.
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const favicon = document.querySelector('link[rel="icon"][id="favicon-svg"]') as HTMLLinkElement
-    const FAVICON_URLS = { LIGHT: '/favicon.ico', DARK: '/favicon.svg', INACTIVE: '/favicon.png' }
+
+    const FAVICON_URLS = {
+      LIGHT: '/favicon.svg',
+      DARK: '/favicon-white.svg',
+      INACTIVE: '/favicon-gray.png',
+    }
 
     const updateFavicon = () => {
       const isDarkMode = darkModeMediaQuery.matches

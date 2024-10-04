@@ -6,7 +6,7 @@ This way we can guide you through the process and give feedback.
 
 ## 🏁 Quick Start
 
-You will need `Node.js >=20.11.1`, `pnpm >=9.9.0` and `Docker >= 20.10` installed on your machine.
+You will need `Node.js >=20.11.1`, `pnpm >=9.12.0` and `Docker >= 20.10` installed on your machine.
 
 Optionally, you can use [Docker Slim][docker-slim] to reduce the container image size.
 
