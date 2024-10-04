@@ -61,10 +61,10 @@ export default function AuthLayout() {
                     key={href}
                     to={href}
                     className={clx(
-                      'w-1/2 border-b pb-4 text-center font-medium capitalize',
                       pathname === href
                         ? 'border-primary-500 text-primary-500 dark:border-primary-400 dark:text-white'
-                        : 'border-gray-400 dark:text-gray-400'
+                        : 'border-gray-400 dark:text-gray-400',
+                      'w-1/2 border-b pb-4 text-center font-medium capitalize '
                     )}
                   >
                     {label}

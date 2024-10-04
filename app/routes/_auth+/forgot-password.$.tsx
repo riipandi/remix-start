@@ -8,8 +8,8 @@ export default function ForgotPasswordPage() {
   return (
     <>
       <div className="mt-6 flex flex-col items-center justify-center px-8 text-center sm:mt-8">
-        <h1 className="font-medium text-xl">Forgot your password?</h1>
-        <p className="mt-3 text-gray-500 text-sm">
+        <h1 className="font-medium text-xl dark:text-white">Forgot your password?</h1>
+        <p className="mt-3 text-gray-500 text-sm dark:text-gray-400">
           Don't worry, enter your email address below and we'll send you a link to reset your
           password.
         </p>
