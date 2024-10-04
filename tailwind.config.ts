@@ -16,7 +16,7 @@ const TailwindConfig: Config = {
       colors: {
         black: '#000d1a',
         gray: colors.neutral,
-        primary: colors.indigo,
+        primary: colors.rose,
       },
     },
     debugScreens: {

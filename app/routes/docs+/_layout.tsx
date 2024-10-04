@@ -89,7 +89,17 @@ export default function DocsLayout() {
                   className="group flex flex-row items-center gap-2"
                   aria-label="Remix Start home"
                 >
-                  <img src="/favicon.svg" className="h-8 dark:invert" alt="Remix Start" />
+                  {['light', 'dark'].map((mode) => (
+                    <img
+                      key={mode}
+                      src={`/${mode === 'dark' ? 'favicon-white.svg' : 'favicon.svg'}`}
+                      className={clx(
+                        mode === 'dark' ? 'hidden dark:block' : 'dark:hidden',
+                        `h-8 w-auto sm:h-10`
+                      )}
+                      alt="Remix Start"
+                    />
+                  ))}
                 </Link>
                 <div className="absolute top-[13px] right-2.5 z-20 block md:hidden">
                   <button
