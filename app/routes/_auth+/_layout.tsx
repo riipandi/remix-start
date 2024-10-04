@@ -5,6 +5,13 @@ import { clx } from '#/utils/ui-helper'
 export default function AuthLayout() {
   const { pathname } = useLocation()
 
+  const authLinks = [
+    { href: '/login', label: 'sign in' },
+    { href: '/signup', label: 'sign up' },
+  ]
+
+  const isAuthPage = ['/login', '/signup'].includes(pathname)
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="absolute top-4 right-4 z-50 flex size-10 items-center justify-center">
@@ -32,31 +39,33 @@ export default function AuthLayout() {
         <div className="relative mx-auto flex w-full max-w-md items-center px-6 lg:w-2/5">
           <main className="w-full max-w-md">
             <div className="mx-auto flex justify-center">
-              <img
-                src="/favicon.svg"
-                className="h-12 w-auto sm:h-10 dark:invert"
-                alt="Remix Start"
-              />
+              <Link to="/" title="Back to home">
+                <img
+                  src="/favicon.svg"
+                  className="h-12 w-auto sm:h-10 dark:invert"
+                  alt="Remix Start"
+                />
+              </Link>
             </div>
-            <div className="mt-12 flex items-center justify-center px-8 sm:mt-14">
-              {[
-                { href: '/login', label: 'sign in' },
-                { href: '/signup', label: 'sign up' },
-              ].map(({ href, label }) => (
-                <Link
-                  key={href}
-                  to={href}
-                  className={clx(
-                    pathname === href
-                      ? 'border-primary-500 text-primary-500 dark:border-primary-400 dark:text-white'
-                      : 'border-gray-400 dark:text-gray-400',
-                    'w-1/2 border-b pb-4 text-center font-medium capitalize'
-                  )}
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
+
+            {isAuthPage && (
+              <div className="mt-12 flex items-center justify-center px-8 sm:mt-14">
+                {authLinks.map(({ href, label }) => (
+                  <Link
+                    key={href}
+                    to={href}
+                    className={clx(
+                      'w-1/2 border-b pb-4 text-center font-medium capitalize',
+                      pathname === href
+                        ? 'border-primary-500 text-primary-500 dark:border-primary-400 dark:text-white'
+                        : 'border-gray-400 dark:text-gray-400'
+                    )}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            )}
 
             <Outlet />
           </main>
