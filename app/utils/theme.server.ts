@@ -10,11 +10,13 @@ import { GlobalCookiesOptions } from '#/utils/env.server'
 // Expired in 720 hours / 30 days from now
 const cookiesExpiry = new Date(Date.now() + 3600 * 1000 * 720)
 
+export const THEME_COOKIE_KEY = 'remix_start_theme'
+
 /**
  * Creates a session storage for managing theme preferences.
  */
 const themeStorage = createCookieSessionStorage({
-  cookie: { name: 'remix_start_theme', ...GlobalCookiesOptions },
+  cookie: { name: THEME_COOKIE_KEY, ...GlobalCookiesOptions },
 })
 
 /**

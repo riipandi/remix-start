@@ -98,6 +98,20 @@ export function ErrorBoundary() {
         <title>{pageTitle}</title>
         <Meta />
         <Links />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Inline script is necessary for theme initialization
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var theme = localStorage.getItem('remix_start_theme') || 'system';
+                if (theme === 'system') {
+                  theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                document.documentElement.classList.add(theme);
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={clx(import.meta.env.DEV && 'debug-breakpoints')} suppressHydrationWarning>
         {isRouteErrorResponse(error) ? (

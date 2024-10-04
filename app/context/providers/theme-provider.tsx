@@ -64,8 +64,20 @@ function ThemeProvider({ children, specifiedTheme }: ThemeProviderProps) {
     if (specifiedTheme && Object.values(Theme).includes(specifiedTheme)) {
       return specifiedTheme
     }
+    if (typeof window !== 'undefined') {
+      const localTheme = localStorage.getItem('remix_start_theme') as ThemeType
+      if (localTheme && Object.values(Theme).includes(localTheme)) {
+        return localTheme
+      }
+    }
     return null
   })
+
+  useEffect(() => {
+    if (theme) {
+      localStorage.setItem('remix_start_theme', theme)
+    }
+  }, [theme])
 
   const mountRun = useRef(false)
 

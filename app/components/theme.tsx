@@ -6,7 +6,9 @@ export function ThemeSelector() {
   const [theme, setTheme] = useTheme()
 
   const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTheme(event.target.value as ThemeType)
+    const newTheme = event.target.value as ThemeType
+    setTheme(newTheme)
+    localStorage.setItem('remix_start_theme', newTheme)
   }
 
   return (

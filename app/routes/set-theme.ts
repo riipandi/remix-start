@@ -24,7 +24,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const cookiesValue = await themeSession.commit()
 
-  return json({ success: true }, { headers: { 'Set-Cookie': cookiesValue } })
+  return json(
+    { success: true },
+    {
+      headers: {
+        'Set-Cookie': cookiesValue,
+        'X-Theme': theme,
+      },
+    }
+  )
 }
 
 export const loader = () => redirect('/', { status: 404 })

@@ -47,6 +47,7 @@ export default function SignInPage() {
           </button>
         </div>
       </form>
+
       <SocialLogin label="Or, sign in with" separatorPlacement="top" />
 
       <div className="mt-10 text-center">
