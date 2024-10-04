@@ -1,11 +1,12 @@
 import type { LinksFunction, LoaderFunction, MetaDescriptor, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts, json, useLoaderData, useRouteError } from '@remix-run/react'
 import { ScrollRestoration, isRouteErrorResponse } from '@remix-run/react'
-import { useEffect } from 'react'
 
 import InternalError from '#/components/errors/internal-error'
 import NotFound from '#/components/errors/not-found'
+import { useDynamicFavicon } from '#/context/hooks/useDynamicFavicon'
 import { useNonce } from '#/context/providers/nonce-provider'
+
 import {
   NonFlashOfWrongThemeEls,
   ThemeProvider,
@@ -56,42 +57,7 @@ function App() {
   const [theme] = useTheme()
   const nonce = useNonce()
 
-  useEffect(() => {
-    // Dynamic favicon, changed when dark mode changes or switches to other tab.
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const favicon = document.querySelector('link[rel="icon"][id="favicon-svg"]') as HTMLLinkElement
-
-    const FAVICON_URLS = {
-      LIGHT: '/favicon.svg',
-      DARK: '/favicon-white.svg',
-      INACTIVE: '/favicon-gray.png',
-    }
-
-    const updateFavicon = () => {
-      const isDarkMode = darkModeMediaQuery.matches
-      const isHidden = document.hidden
-
-      if (isHidden) {
-        favicon?.setAttribute('href', FAVICON_URLS.INACTIVE)
-      } else {
-        favicon?.setAttribute('href', isDarkMode ? FAVICON_URLS.DARK : FAVICON_URLS.LIGHT)
-      }
-    }
-
-    const handleDarkModeChange = () => {
-      updateFavicon()
-    }
-
-    darkModeMediaQuery.addEventListener('change', handleDarkModeChange)
-    document.addEventListener('visibilitychange', updateFavicon)
-
-    updateFavicon() // Initial favicon update
-
-    return () => {
-      document.removeEventListener('visibilitychange', updateFavicon)
-      darkModeMediaQuery.removeEventListener('change', handleDarkModeChange)
-    }
-  }, [])
+  useDynamicFavicon()
 
   return (
     <html lang="en" className={clx(theme)}>
