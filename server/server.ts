@@ -9,7 +9,6 @@
  */
 
 import 'dotenv/config'
-import path from 'node:path'
 import { createRequestHandler } from '@remix-run/express'
 import { installGlobals } from '@remix-run/node'
 import compression from 'compression'
@@ -26,7 +25,7 @@ import { parseNumber, purgeRequireCache } from './utils.js'
 installGlobals()
 
 // Get Remix build directory
-const BUILD_DIR = path.join(process.cwd(), 'dist/remix')
+const BUILD_DIR = `${process.cwd()}/dist/remix`
 
 const staticOptions = {
   immutable: true,

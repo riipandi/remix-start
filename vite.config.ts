@@ -1,6 +1,3 @@
-/// <reference types="vitest" />
-
-import { resolve } from 'node:path'
 import { type VitePluginConfig, vitePlugin as remix } from '@remix-run/dev'
 import { installGlobals } from '@remix-run/node'
 import { flatRoutes } from 'remix-flat-routes'
@@ -15,7 +12,7 @@ installGlobals()
 const isTestOrStorybook = process.env.NODE_ENV === 'test' || process.argv[1]?.includes('storybook')
 
 const RemixConfig: VitePluginConfig = {
-  buildDirectory: resolve(__dirname, 'dist/remix'),
+  buildDirectory: './dist/remix',
   ignoredRouteFiles: ['**/.*'],
   serverModuleFormat: 'esm',
   routes(defineRoutes) {

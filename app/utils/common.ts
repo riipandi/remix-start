@@ -1,4 +1,3 @@
-import pico from 'picocolors'
 import type { LogLevel } from './env.server'
 
 export type EnumValues<Type> = Type[keyof Type]
@@ -9,6 +8,18 @@ export type EnumValues<Type> = Type[keyof Type]
  */
 export function isBrowser() {
   return typeof window !== 'undefined'
+}
+
+// Custom color functions using ANSI escape codes
+const colors = {
+  blue: (text: string) => `\x1b[34m${text}\x1b[0m`,
+  dim: (text: string) => `\x1b[2m${text}\x1b[0m`,
+  gray: (text: string) => `\x1b[90m${text}\x1b[0m`,
+  green: (text: string) => `\x1b[32m${text}\x1b[0m`,
+  magenta: (text: string) => `\x1b[35m${text}\x1b[0m`,
+  red: (text: string) => `\x1b[31m${text}\x1b[0m`,
+  yellow: (text: string) => `\x1b[33m${text}\x1b[0m`,
+  cyan: (text: string) => `\x1b[36m${text}\x1b[0m`,
 }
 
 /**
@@ -28,16 +39,16 @@ function logTimestamp(date?: Date, localtime = true): string {
   const minutes = String(useUTC ? now.getUTCMinutes() : now.getMinutes()).padStart(2, '0')
   const seconds = String(useUTC ? now.getUTCSeconds() : now.getSeconds()).padStart(2, '0')
 
-  return pico.dim(`[${year}-${month}-${day} ${hours}:${minutes}:${seconds}]`)
+  return colors.dim(`[${year}-${month}-${day} ${hours}:${minutes}:${seconds}]`)
 }
 
 // Constants for log colors
 const LOG_COLORS: Record<LogLevel, (text: string) => string> = {
-  info: pico.green,
-  warn: pico.yellow,
-  error: pico.red,
-  debug: pico.magenta,
-  query: pico.blue,
+  info: colors.green,
+  warn: colors.yellow,
+  error: colors.red,
+  debug: colors.magenta,
+  query: colors.blue,
 }
 
 // Constants for log methods with uppercase keys
@@ -51,7 +62,7 @@ const LOG_METHODS: Record<string, (...args: unknown[]) => void> = {
 }
 
 // Fallback constants
-const DEFAULT_COLOR = pico.gray
+const DEFAULT_COLOR = colors.gray
 const DEFAULT_LOG_METHOD = console.log
 const LOG_LEVELS = Object.keys(LOG_METHODS)
 const MAX_LEVEL_LENGTH = Math.max(...LOG_LEVELS.map((level) => level.length))
