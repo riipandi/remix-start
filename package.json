@@ -20,7 +20,7 @@
         "dev": "pnpm run --reporter-hide-prefix --color --parallel \"/dev:(?!storybook)/\"",
         "dev:remix": "remix vite:dev",
         "dev:storybook": "storybook dev -p 6006 --no-open",
-        "preview": "pnpm run swcx ./server/server.ts",
+        "preview": "pnpm --silent run swcx ./server/server.ts",
         "start": "node --no-warnings ./dist/runner/server.js",
         "docker:build": "docker build -f Dockerfile . -t $npm_package_name:latest -t $npm_package_name:$npm_package_version",
         "docker:images": "docker image list --filter reference=$npm_package_name:$npm_package_version --filter reference=$npm_package_name:latest",
