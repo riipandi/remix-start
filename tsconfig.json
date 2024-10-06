@@ -50,7 +50,8 @@
         // "maxNodeModuleJsDepth": 1,                        // Maximum depth for checking JavaScript files in node_modules
 
         /* Emit */
-        "declaration": true,                                 // Generate .d.ts files
+        "declaration": false,                                // Generate .d.ts files
+        "disableSizeLimit": false,                           // Disable size limit for incremental compilation
         // "declarationMap": true,                           // Generate sourcemaps for .d.ts files
         // "emitDeclarationOnly": true,                      // Only output .d.ts files
         "sourceMap": true,                                   // Generate source map files
