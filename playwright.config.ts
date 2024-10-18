@@ -1,11 +1,8 @@
 import 'dotenv/config'
-import path, { dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import path from 'node:path'
 import { defineConfig, devices } from '@playwright/test'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
-export const STORAGE_STATE = path.join(__dirname, '.playwright/user.json')
+export const STORAGE_STATE = path.join(import.meta.dirname, '.playwright/user.json')
 
 /**
  * Reference: https://playwright.dev/docs/test-configuration

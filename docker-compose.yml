@@ -2,7 +2,7 @@
 
 services:
   pgsql:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     container_name: remix_pgsql
     hostname: postgres
     restart: unless-stopped
@@ -48,8 +48,26 @@ services:
       # MP_UI_AUTH: 'user1:password1 user2:password2'
       TZ: Asia/Jakarta
 
+  valkey:
+    image: valkey/valkey:8-bookworm
+    container_name: remix_valkey
+    hostname: valkey
+    restart: always
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - VALKEY_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - 6379:6379
+    volumes:
+      - valkey_data:/data:rw
+      # - ./scripts/valkey.conf:/etc/valkey.conf:ro
+    # command: 'valkey-server /etc/valkey.conf --server-threads 2'
+
 volumes:
   pgsql_data:
     driver: local
   mailpit_data:
+    driver: local
+  valkey_data:
     driver: local
