@@ -37,7 +37,7 @@
         "cleanup:deps": "pnpm dlx rimraf pnpm-lock.yaml node_modules",
         "cleanup:test": "pnpm dlx rimraf tests-results playwright-report",
         "cleanup:data": "pnpm dlx rimraf _data",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc -b --noEmit"
     },
     "dependencies": {
         "@radix-ui/react-slot": "^1.1.1",

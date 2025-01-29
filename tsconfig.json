@@ -5,7 +5,6 @@
         "checkJs": true,
         "noEmit": true,
         "skipLibCheck": true,
-        "declaration": false,
         "strict": true,
         "verbatimModuleSyntax": true
     },
