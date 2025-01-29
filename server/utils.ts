@@ -1,13 +1,6 @@
-import { createRequire } from 'node:module'
-import os from 'node:os'
-import type { Request, Response } from 'express'
-import {
-  cspConnectSource,
-  cspFontSource,
-  cspFrameSource,
-  cspImgSources,
-  cspScriptSource,
-} from './constants.js'
+import type { Request } from 'express'
+import { cspConnectSource, cspFrameSource } from './constants.js'
+import { cspFontSource, cspImgSources, cspScriptSource } from './constants.js'
 
 const IP_HEADERS = [
   'CF-Connecting-IP', // Cloudflare
@@ -47,52 +40,6 @@ export function getRequestIpAddress(request: Request) {
   }
 
   return request.socket?.remoteAddress ?? null
-}
-
-export function preferHeader(request: Request, from: string, to: string) {
-  const preferredValue = request.get(from.toLowerCase())
-  if (preferredValue == null) return
-
-  delete request.headers[to]
-  request.headers[to.toLowerCase()] = preferredValue
-}
-
-export function parseNumber(raw: string | undefined) {
-  if (raw === undefined) return undefined
-  const maybe = Number(raw)
-  if (Number.isNaN(maybe)) return undefined
-  return maybe
-}
-
-export function parseIntAsBoolean(value: string) {
-  return !!Number.parseInt(value, 10)
-}
-
-export function getLocalIpAddress() {
-  return Object.values(os.networkInterfaces())
-    .flat()
-    .find((ip) => ip?.family === 'IPv4' && !ip.internal)?.address
-}
-
-export async function purgeRequireCache(buildDir: string) {
-  // purge require cache on requests for "server side HMR" this won't let
-  // you have in-memory objects between requests in development,
-  // alternatively you can set up nodemon/pm2-dev to restart the server on
-  // file changes, but then you'll have to reconnect to databases/etc on each
-  // change. We prefer the DX of this, so we've included it for you by default
-  const require = createRequire(import.meta.url)
-
-  for (const key of Object.keys(require.cache)) {
-    if (key.startsWith(buildDir)) {
-      delete require.cache[key]
-    }
-  }
-}
-
-export function getLoadContext(_req: Request, res: Response) {
-  return {
-    nonce: res.locals.nonce,
-  }
 }
 
 export function generateCspDirectives() {

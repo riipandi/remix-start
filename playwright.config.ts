@@ -1,21 +1,23 @@
-import 'dotenv/config'
-import path from 'node:path'
-import { defineConfig, devices } from '@playwright/test'
-
-export const STORAGE_STATE = path.join(import.meta.dirname, '.playwright/user.json')
-
 /**
  * Reference: https://playwright.dev/docs/test-configuration
  * Example: https://dev.to/this-is-learning/playwright-lets-start-2mdj
  */
+
+import 'dotenv/config'
+import { defineConfig, devices } from '@playwright/test'
+import { resolve } from 'pathe'
+import { isCI } from 'std-env'
+
+export const STORAGE_STATE = resolve('.playwright/user.json')
+
 export default defineConfig({
-  quiet: !!process.env.CI,
+  quiet: !!isCI,
   testDir: './tests-e2e',
   outputDir: './tests-results/e2e',
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  forbidOnly: !!isCI,
+  retries: isCI ? 2 : 0,
+  workers: isCI ? 1 : undefined,
   reporter: [['html', { open: 'never', outputFolder: './tests-results/e2e' }], ['list']],
   use: {
     baseURL: process.env.URL || 'http://127.0.0.1:3000',
@@ -40,8 +42,8 @@ export default defineConfig({
   webServer: process.env.URL
     ? undefined
     : {
-        command: 'pnpm run build && pnpm run preview',
-        reuseExistingServer: !process.env.CI,
+        command: 'pnpm run build:app && pnpm run start',
+        reuseExistingServer: !isCI,
         timeout: 30_000,
         port: 3000,
       },

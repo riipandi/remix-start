@@ -1,7 +1,7 @@
 # @ref: https://fly.io/docs/reference/configuration
 
 app = "CHANGEME_APP_NAME"
-primary_region = "sin"
+primary_region = "sjc"
 kill_signal = "SIGINT"
 kill_timeout = 5
 swap_size_mb = 512
@@ -12,8 +12,7 @@ console_command = "/bin/sh"
 
   [build.args]
     NODE_VERSION = "20"
-    NODE_ENV = "production"
-    R2_UPLOAD_ENABLED = "true"
+    PLATFORM = "linux/amd64"
 
 [deploy]
   # https://fly.io/docs/apps/deploy/#deployment-strategy

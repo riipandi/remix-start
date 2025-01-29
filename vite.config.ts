@@ -1,79 +1,43 @@
-import { type VitePluginConfig, vitePlugin as remix } from '@remix-run/dev'
-import { installGlobals } from '@remix-run/node'
-import { flatRoutes } from 'remix-flat-routes'
+import { reactRouter } from '@react-router/dev/vite'
+import tailwindcss from '@tailwindcss/vite'
+import consola from 'consola'
 import { visualizer } from 'rollup-plugin-visualizer'
-import { defineConfig, loadEnv } from 'vite'
-import inspect from 'vite-plugin-inspect'
+import { isCI, isProduction, isTest } from 'std-env'
+import { type Logger, defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
-
-installGlobals()
 
 // @ref: https://remix.run/docs/en/main/future/vite#plugin-usage-with-other-vite-based-tools-eg-vitest-storybook
 const isTestOrStorybook = process.env.NODE_ENV === 'test' || process.argv[1]?.includes('storybook')
+const isCIOrProduction = isCI || isProduction
 
-const RemixConfig: VitePluginConfig = {
-  buildDirectory: './dist/remix',
-  ignoredRouteFiles: ['**/.*'],
-  serverModuleFormat: 'esm',
-  future: {
-    v3_fetcherPersist: true,
-    v3_lazyRouteDiscovery: true,
-    v3_relativeSplatPath: true,
-    v3_singleFetch: true,
-    v3_throwAbortReason: true,
-  },
-  routes(defineRoutes) {
-    return flatRoutes('routes', defineRoutes, {
-      ignoredRouteFiles: ['.*', '**/*.css', '**/*.test.{js,jsx,ts,tsx}', '**/__*.*'],
-    })
-  },
-}
-
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
-    !isTestOrStorybook && remix(RemixConfig),
-    // `emitFile` is necessary since Remix builds more than one bundle!
-    !process.env.CI && visualizer({ emitFile: true, template: 'treemap' }),
-    inspect({ build: false, open: false }),
+    tailwindcss(),
+    !isTestOrStorybook && reactRouter(),
+    // `emitFile` is necessary since React Router builds more than one bundle!
+    !isCIOrProduction && visualizer({ emitFile: true, template: 'treemap' }),
     tsconfigPaths(),
   ],
-  server: { port: 3000 },
-  clearScreen: true,
+  server: { port: 3000, host: true },
   build: {
+    manifest: true,
     emptyOutDir: true,
-    minify: process.env.NODE_ENV === 'production',
-    chunkSizeWarningLimit: 1024,
+    chunkSizeWarningLimit: 1024 * 4,
     reportCompressedSize: false,
+    minify: isProduction,
+    rollupOptions: isSsrBuild ? { input: './server/app.ts' } : undefined,
+    terserOptions: { format: { comments: false } },
   },
-  test: {
-    environment: 'happy-dom',
-    // Additionally, this is to load ".env.test" during vitest
-    env: loadEnv('test', process.cwd(), ''),
-    setupFiles: ['./tests/setup-test.ts'],
-    includeSource: ['./app/**/*.{js,jsx,ts,tsx}'],
-    exclude: ['node_modules', 'tests-e2e'],
-    reporters: process.env.CI ? ['html', 'github-actions'] : ['html', 'default'],
-    outputFile: {
-      json: './tests-results/vitest-results.json',
-      html: './tests-results/index.html',
-    },
-    coverage: {
-      provider: 'istanbul',
-      reporter: ['html-spa', 'text-summary'],
-      reportsDirectory: './tests-results/coverage',
-      include: ['app/**/*.{js,jsx,ts,tsx}'],
-      cleanOnRerun: true,
-      clean: true,
-      thresholds: {
-        global: {
-          statements: 80,
-          branches: 70,
-          functions: 75,
-          lines: 80,
-        },
-      },
-    },
-    dir: './tests',
-    globals: true,
-  },
-})
+  esbuild: { legalComments: 'inline' },
+  customLogger: !isTest
+    ? ({
+        info: (msg: string) => consola.withTag('vite').info(msg),
+        warn: (msg: string) => consola.withTag('vite').warn(msg),
+        warnOnce: (msg: string) => consola.withTag('vite').warn(msg),
+        error: (msg: string) => consola.withTag('vite').error(msg),
+        clearScreen: () => {},
+        hasErrorLogged: () => true,
+        hasWarned: false,
+      } as Logger)
+    : undefined,
+}))

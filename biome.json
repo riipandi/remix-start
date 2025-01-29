@@ -1,5 +1,5 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
+    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
     "organizeImports": {
         "enabled": true
     },
@@ -11,7 +11,6 @@
     },
     "linter": {
         "enabled": true,
-        "ignore": ["vite-env.d.ts"],
         "rules": {
             "recommended": true,
             "a11y": {
@@ -23,9 +22,16 @@
                 "noUselessFragments": "warn"
             },
             "correctness": {
-                "noUnusedImports": "error",
-                "noUnusedVariables": "error",
-                "useJsxKeyInIterable": "error"
+                "noUnusedImports": {
+                    "level": "off",
+                    "fix": "none"
+                },
+                "noUnusedVariables": {
+                    "level": "warn",
+                    "fix": "none"
+                },
+                "useJsxKeyInIterable": "error",
+                "noUnknownFunction": "off"
             },
             "nursery": {
                 "useSortedClasses": {
@@ -33,7 +39,7 @@
                     "fix": "safe",
                     "options": {
                         "attributes": ["classList"],
-                        "functions": ["cn", "clx", "clsx", "cva", "tw"]
+                        "functions": ["cn", "clx", "clsx", "cva", "tv", "tw"]
                     }
                 }
             },
@@ -41,13 +47,17 @@
                 "noReExportAll": "off"
             },
             "security": {
-                "noDangerouslySetInnerHtmlWithChildren": "warn"
+                "noDangerouslySetInnerHtmlWithChildren": "warn",
+                "noDangerouslySetInnerHtml": "off"
             },
             "style": {
                 "noUnusedTemplateLiteral": "off",
                 "useConsistentArrayType": "warn",
                 "useExportType": "warn",
-                "useImportType": "warn",
+                "useImportType": {
+                    "level": "off",
+                    "fix": "none"
+                },
                 "useFilenamingConvention": {
                     "level": "off",
                     "options": {
@@ -61,7 +71,7 @@
                 "noCommentText": "off",
                 "noConsoleLog": {
                     "level": "info",
-                    "fix": "safe"
+                    "fix": "none"
                 },
                 "noDebugger": "off",
                 "noExplicitAny": "off",
@@ -92,7 +102,7 @@
         "indentStyle": "space",
         "indentWidth": 4,
         "lineWidth": 100,
-        "ignore": ["tsconfig.json"]
+        "ignore": []
     },
     "css": {
         "parser": {
@@ -125,6 +135,6 @@
     "files": {
         "ignoreUnknown": true,
         "include": ["**/*.js", "**/*.mjs", "**/*.ts", "**/*.tsx", "**/*.css", "**/*.json"],
-        "ignore": [".github", ".husky", ".vscode", "build", "dist", "public"]
+        "ignore": [".github", ".output", ".temp", "dist", "public", "_data", "storybook-static"]
     }
 }

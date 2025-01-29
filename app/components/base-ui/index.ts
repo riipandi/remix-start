@@ -1,2 +1,2 @@
-// Base UI components
-export * from './button'
+export * from './button/button'
+export * from './link/link'

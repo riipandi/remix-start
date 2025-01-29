@@ -1,8 +1,7 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node'
-import { logger } from '#/utils/common'
-import { getRequestIpAddress } from '#/utils/request.server'
+import consola from 'consola'
+import type { Route } from './+types/healthz'
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   const host = request.headers.get('X-Forwarded-Host') ?? request.headers.get('host')
   const url = new URL('/', `http://${host}`)
 
@@ -21,7 +20,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const flyMachineId = process.env.FLY_MACHINE_ID
     const flyRequestId = request.headers.get('Fly-Request-Id')
     const serviceId = `${flyRegion}::${flyMachineId}::${flyRequestId}`
-    const clientIpAddr = getRequestIpAddress(request)
+    const clientIpAddr = request.headers.get('X-Client-IP')
     const isHostedOnFly = flyRegion && flyMachineId
 
     const responsePayload = {
@@ -30,9 +29,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ip: clientIpAddr,
     }
 
-    return json(responsePayload, { status: 200, headers: { 'Cache-Control': 'no-store' } })
+    return new Response(JSON.stringify(responsePayload, null, 2), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store',
+      },
+    })
   } catch (error: unknown) {
-    logger.error('healthcheck ❌', { error })
+    consola.error('healthcheck ❌', { error })
     return new Response('Unhealthy', { status: 500, headers: { 'Cache-Control': 'no-store' } })
   }
 }

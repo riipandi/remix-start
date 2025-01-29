@@ -1,12 +1,24 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 import { mergeConfig } from 'vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 const config: StorybookConfig = {
-  stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['./_docs/**/*.mdx', '../app/**/*.mdx', '../app/**/*.stories.@(ts|tsx)'],
   addons: [
+    { name: '@storybook/addon-essentials', options: { backgrounds: false } },
     '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
+    {
+      name: '@storybook/addon-storysource',
+      options: {
+        sourceLoaderOptions: {
+          injectStoryParameters: true,
+        },
+        loaderOptions: {
+          prettierConfig: { printWidth: 80, singleQuote: false },
+        },
+      },
+    },
+    '@storybook/addon-a11y',
   ],
   framework: {
     name: '@storybook/react-vite',
@@ -16,13 +28,11 @@ const config: StorybookConfig = {
     disableTelemetry: true, // 👈 Disables telemetry
     enableCrashReports: false, // 👈 Appends the crash reports to the telemetry events
   },
-  docs: {
-    autodocs: 'tag',
-  },
   async viteFinal(config) {
     return mergeConfig(config, {
+      plugins: [tsconfigPaths()],
       build: {
-        chunkSizeWarningLimit: 1024,
+        chunkSizeWarningLimit: 1024 * 4,
       },
     })
   },

@@ -6,7 +6,7 @@ This way we can guide you through the process and give feedback.
 
 ## 🏁 Quick Start
 
-You will need `Node.js >=20.11.1`, `pnpm >=9.12.0` and `Docker >= 20.10` installed on your machine.
+You will need `Node.js >=20.11.1`, `pnpm >=9.15.0` and `Docker >= 27.4` installed on your machine.
 
 Optionally, you can use [Docker Slim][docker-slim] to reduce the container image size.
 
@@ -24,7 +24,7 @@ is to use [1password][1password] to create a random secret.
 
 Application will run at <http://localhost:3000>
 
-For detailed explanation on how things work, check out [Remix documentation][remix-docs].
+For detailed explanation on how things work, check out [React Router documentation][react-router-docs].
 
 ### OAuth Configuration
 
@@ -137,5 +137,5 @@ Read [Deployment Guide](./DEPLOY.md) for detailed documentation.
 [ngrok]: https://ngrok.com/
 [nodejs]: https://nodejs.org/en/download/
 [pnpm]: https://pnpm.io/installation
-[remix-docs]: https://remix.run/docs
+[react-router-docs]: https://reactrouter.com/start/framework/installation
 [tailscale]: https://tailscale.com/kb/1223/funnel

@@ -5,33 +5,49 @@
 [![Test](https://github.com/riipandi/remix-start/actions/workflows/test.yml/badge.svg)](https://github.com/riipandi/remix-start/actions/workflows/test.yml)
 [![Contribution](https://img.shields.io/badge/Contributions-welcome-gray.svg)](https://github.com/riipandi/remix-start/pulse)
 
-Minimal containerized Remix Stack with Tailwind CSS.
-
-Learn more about [Remix Stacks][remix-stacks].
+Minimal containerized React Router application. Production-ready template for building full-stack React applications using React Router v7.
+This template comes with [Tailwind CSS][tailwindcss] already configured for a simple default starting experience.
 
 ---
 
 ## What's in the stack?
 
+- Server-side rendering
+- Hot Module Replacement (HMR)
+- Asset bundling and optimization
+- [React Router v7][react-router]
 - Deploy to [Fly.io](https://fly.io) using [Docker][docker] container
-- Ready for multi-tenant (multiple subdomains with a single codebase)
 - Healthcheck endpoint for [Fly backups region fallbacks][fly-io]
-- Custom [Express][expressjs] server for production
-- Styling with [Tailwind CSS][tailwindcss], [clsx][clsx], and [tailwind-merge][tailwind-merge]
+- Styling with [Tailwind CSS][tailwindcss] and [Tailwind Variants][tailwind-variants]
+- Production ready [Express][expressjs] server
 - Code formatting and linting with [Biome][biome]
 - Static Types with [TypeScript][typescript]
 - Unit testing with [Vitest][vitest]
+- [Storybook][storybook] for component development
 - E2E testing with [Playwright][playwright]
 
 ## 🏁 Quickstart
 
 ```sh
-pnpm create remix --template riipandi/remix-start app_name
+pnpm create react-router@latest --template riipandi/remix-start app_name
 ```
 
 To get started with setting up this project, refer to [CONTRIBUTING.md](./CONTRIBUTING.md) for step-by-step instructions.
 
 ## 🧑🏻‍💻 Development
+
+If you're familiar with deploying Node applications, the built-in app server is production-ready.
+
+Make sure to deploy the output of `pnpm build`:
+
+```
+├── package.json
+├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
+├── server.js
+├── dist/
+│   ├── client/    # Static assets
+│   └── server/    # Server-side code
+```
 
 This project uses TypeScript for type checking, [Biome][biome] for code formatting
 and linting which is configured in [`biome.json`](./biome.json). It's recommended
@@ -68,16 +84,16 @@ See the [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT) file
 
 <!-- link reference definition -->
 [biome]: https://biomejs.dev
-[clsx]: https://www.npmjs.com/package/clsx
 [docker]: https://docs.docker.com/engine/install
 [expressjs]: https://expressjs.com/
 [fly-io]: https://fly.io/docs/reference/configuration/#services-http_checks
 [license-apache]: https://choosealicense.com/licenses/apache-2.0/
 [license-mit]: https://choosealicense.com/licenses/mit/
 [playwright]: https://playwright.dev
-[remix-stacks]: https://remix.run/docs/en/main/guides/templates#stacks
+[react-router]: https://reactrouter.com
 [riipandi-x]: https://x.com/intent/follow?screen_name=riipandi
-[tailwind-merge]: https://www.npmjs.com/package/tailwind-merge
+[storybook]: https://storybook.js.org
+[tailwind-variants]: https://www.tailwind-variants.org
 [tailwindcss]: https://tailwindcss.com
 [typescript]: https://typescriptlang.org
 [vitest]: https://vitest.dev
