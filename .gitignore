@@ -1,10 +1,13 @@
 /node_modules
+/.rollup.cache
 /.fleet
 /.idea
 /.pnp
 /.cache
 /.output
 /.husky
+/.temp
+/.unikraft
 .pnp.js
 .DS_Store
 .DS_Store?
@@ -18,25 +21,39 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 !.vscode/settings.json
 !.vscode/launch.json
-
 *.bak
 
 # SQLite
 *.sqlite*
 *.sqlite3*
-*.libsql
 *.db
 
-# Remix
-/public/build
-/public/entry.worker.js
-/build
-/dist
-/tmp
+# Projects
+_data/
+build/
+dist/
+.data
+.dist
+.cache
+.output
+.client
+.build
+.react-router
+.wrangler
+
+# Vite & Vitest config
+vite.config.*
+!vite.config.ts
+vitest.config.*
+!vitest.config.ts
+vitest.workspace.*
+!vitest.workspace.ts
 
 # envars
 .env.*
 !.env.example
+compose.env*
+!compose.env.example
 
 # Disable this line in your real app
 /playwright/.cache/
@@ -50,18 +67,16 @@ $RECYCLE.BIN/
 
 # Storybook
 *storybook.log
-/storybook-static/
+storybook-static/
 
-# fly.toml
+# fly.io
 fly*.toml*
 !fly*.example.toml
 
 # Miscellaneous
-vite.config.ts.*
-RELEASE_NOTE.md
-.unikraft/
+pnpm-exec-summary.json
 slim.report.json
-stats.html
+RELEASE_NOTE.md
 
 # Terraform
 .terraform/

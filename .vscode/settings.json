@@ -9,21 +9,28 @@
         "**/.husky": true,
         "**/.output": true,
         "**/build": true,
-        "**/dist": true,
+        "**/dist": true
     },
     "tailwindCSS.experimental.classRegex": [
-        // https://www.tailwind-variants.org/docs/getting-started#intellisense-setup-optional
-        ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"],
-        "cn\\(([^)]*)\\)", // cn(xxx)
+        // @ref: https://github.com/paolotiu/tailwind-intellisense-regex-list
+        ["(?:twMerge|twJoin)\\(([^;]*)[\\);]", "[`'\"`]([^'\"`;]*)[`'\"`]"],
+        ["classList={{([^;]*)}}", "\\s*?[\"'`]([^\"'`]*).*?:"],
+        ["clsx\\(.*?\\)(?!\\])", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
+        ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+        ["tv\\(([^)]*)\\)", "{?\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?}?"],
         "clx\\(([^)]*)\\)", // clx(xxx)
-        "cx\\(([^)]*)\\)", // cx(xxx)
+        "cn\\(([^)]*)\\)", // cn(xxx)
+        "cx\\(([^)]*)\\)" // cx(xxx)
     ],
     "[css]": {
         "editor.defaultFormatter": "biomejs.biome"
     },
+    "[tailwindcss]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
     "[toml]": {
-        "editor.formatOnSave": false,
-        "editor.defaultFormatter": "tamasfe.even-better-toml"
+        "editor.defaultFormatter": "tamasfe.even-better-toml",
+        "editor.formatOnSave": false
     },
     "[markdown]": {
         "editor.defaultFormatter": "darkriszty.markdown-table-prettify"

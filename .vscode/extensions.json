@@ -8,5 +8,5 @@
         "tamasfe.even-better-toml",
         "unifiedjs.vscode-mdx"
     ],
-  "unwantedRecommendations": []
+    "unwantedRecommendations": []
 }

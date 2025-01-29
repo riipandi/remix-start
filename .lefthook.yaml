@@ -1,0 +1,68 @@
+# Refer for explanation to following link:
+# https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
+
+assert_lefthook_installed: true
+skip_lfs: true
+
+output:
+  - success        # Print successful steps
+  - failure        # Print failed steps printing
+  - execution      # Print any execution logs
+  - execution_out  # Print execution output
+  # - meta           # Print lefthook version
+  # - summary        # Print summary block (successful and failed steps)
+  # - empty_summary  # Print summary heading when there are no steps to run
+  # - execution_info # Print `EXECUTE > ...` logging
+  - skips          # Print "skip" (i.e. no files matched)
+
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: "*.{js,ts,jsx,tsx,json}"
+      exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
+      run: pnpm --silent exec biome format {all_files} --write
+    check:
+      glob: "*.{js,ts,jsx,tsx,json}"
+      exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
+      run: pnpm --silent exec biome check {staged_files} --write
+    lint:
+      files: git diff --name-only main
+      glob: "*.{js,ts,jsx,tsx,json}"
+      exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
+      run: pnpm --silent exec biome lint {staged_files} --write
+    typecheck:
+      files: git diff --name-only main
+      glob: "*.{js,ts,jsx,tsx,json}"
+      exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
+      run: pnpm --silent exec tsc -b --noEmit --extendedDiagnostics
+    # test-unit:
+    #   glob: "*.{js,ts,jsx,tsx,json}"
+    #   exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
+    #   run: pnpm --silent test
+    # test-coverage:
+    #   glob: "*.{js,ts,jsx,tsx,json}"
+    #   exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
+    #   run: pnpm --silent test:coverage
+    # test-e2e:
+    #   glob: "*.{js,ts,jsx,tsx,json}"
+    #   exclude: '(^|/)(tests|stories)\.(ts|tsx)$'
+    #   run: pnpm --silent e2e-test:chrome
+    # check-links:
+    #   glob: '*.md'
+    #   run: lychee --max-concurrency 3 {all_files}
+    #   exclude: [CHANGELOG.md, CONTRIBUTING.md]
+
+pre-push:
+  commands:
+    npm-audit:
+      tags: frontend security
+      run: pnpm --silent audit --prod
+
+pre-deploy:
+  parallel: false
+  commands:
+    docker-build:
+      run: |
+        pnpm docker:build
+        pnpm docker:images
