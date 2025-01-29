@@ -2,10 +2,7 @@ import { Welcome } from '../welcome/welcome'
 import type { Route } from './+types/home'
 
 export function meta(_props: Route.MetaArgs) {
-  return [
-    { title: 'New React Router App' },
-    { name: 'description', content: 'Welcome to React Router!' },
-  ]
+  return [{ title: 'Remix Start' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 export function loader({ context }: Route.LoaderArgs) {
