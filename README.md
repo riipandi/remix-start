@@ -23,6 +23,7 @@ This template comes with [Tailwind CSS][tailwindcss] already configured for a si
 - Code formatting and linting with [Biome][biome]
 - Static Types with [TypeScript][typescript]
 - Unit testing with [Vitest][vitest]
+- [Storybook][storybook] for component development
 - E2E testing with [Playwright][playwright]
 
 ## 🏁 Quickstart
@@ -91,6 +92,7 @@ See the [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT) file
 [playwright]: https://playwright.dev
 [react-router]: https://reactrouter.com
 [riipandi-x]: https://x.com/intent/follow?screen_name=riipandi
+[storybook]: https://storybook.js.org
 [tailwind-variants]: https://www.tailwind-variants.org
 [tailwindcss]: https://tailwindcss.com
 [typescript]: https://typescriptlang.org
