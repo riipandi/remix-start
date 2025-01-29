@@ -1,42 +1,6 @@
-import { Button } from '#/components/base-ui'
+import { Button, Link } from '#/components/base-ui'
 import logoDark from './logo-dark.svg'
 import logoLight from './logo-light.svg'
-
-export function Welcome({ message }: { message: string }) {
-  return (
-    <main className="flex h-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-16">
-        <header className="flex flex-col items-center gap-9">
-          <h1 className="leading font-bold text-2xl text-gray-800 dark:text-gray-100">{message}</h1>
-          <div className="w-[500px] max-w-[100vw] p-4">
-            <img src={logoLight} alt="React Router" className="block w-full dark:hidden" />
-            <img src={logoDark} alt="React Router" className="hidden w-full dark:block" />
-          </div>
-        </header>
-        <nav className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-gray-200 p-6 dark:border-gray-700">
-          <p className="text-gray-700 leading-6 dark:text-gray-200">What&apos;s next?</p>
-          <ul>
-            {resources.map(({ href, text, icon }) => (
-              <li key={href}>
-                <Button variant="link" asChild>
-                  <a
-                    className="group flex items-center gap-3 self-stretch p-3 text-blue-700 leading-normal hover:underline dark:text-blue-500"
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {icon}
-                    {text}
-                  </a>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </main>
-  )
-}
 
 const resources = [
   {
@@ -79,3 +43,34 @@ const resources = [
     ),
   },
 ]
+
+export function Welcome({ message }: { message: string }) {
+  return (
+    <main className="flex h-screen items-center justify-center">
+      <div className="flex flex-col items-center gap-16">
+        <header className="flex flex-col items-center gap-9">
+          <h1 className="leading font-bold text-2xl text-gray-800 dark:text-gray-100">{message}</h1>
+          <div className="w-[500px] max-w-[100vw] p-4">
+            <img src={logoLight} alt="React Router" className="block w-full dark:hidden" />
+            <img src={logoDark} alt="React Router" className="hidden w-full dark:block" />
+          </div>
+        </header>
+        <nav className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-gray-200 p-6 dark:border-gray-700">
+          <p className="text-gray-700 leading-6 dark:text-gray-200">What&apos;s next?</p>
+          <ul>
+            {resources.map(({ href, text, icon }) => (
+              <li key={href}>
+                <Button variant="link" asChild>
+                  <Link href={href} newTab>
+                    {icon}
+                    {text}
+                  </Link>
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </main>
+  )
+}
