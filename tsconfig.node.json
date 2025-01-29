@@ -3,13 +3,24 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "composite": true,
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": true,
         "lib": ["ES2023"],
         "module": "ESNext",
+        "moduleDetection": "force",
         "moduleResolution": "bundler",
+        "noEmit": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
         "strict": true,
+        "strictPropertyInitialization": true,
         "target": "ES2023",
         "tsBuildInfoFile": "./.temp/tsconfig.node.tsbuildinfo",
         "types": ["node"]
     },
-    "include": ["server.js", "tailwind.config.ts", "vite.config.ts"]
+    "include": ["server.js", "vite.config.ts", "vitest.config.ts"],
+    "exclude": ["node_modules", "storybook-static", "tests-results"]
 }

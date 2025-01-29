@@ -1,17 +1,35 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
         "composite": true,
+        "disableSizeLimit": false,
         "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "incremental": true,
+        "isolatedModules": true,
         "jsx": "react-jsx",
         "lib": ["DOM", "DOM.Iterable", "ES2023"],
         "module": "ESNext",
-        "moduleResolution": "bundler",
+        "moduleDetection": "force",
+        "moduleResolution": "Bundler",
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noUncheckedIndexedAccess": false,
         "resolveJsonModule": true,
-        "rootDirs": [".", "./.react-router/types"],
+        "rewriteRelativeImportExtensions": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
         "strict": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
         "target": "ES2023",
         "tsBuildInfoFile": "./.temp/tsconfig.app.tsbuildinfo",
+        "useDefineForClassFields": true,
+        "verbatimModuleSyntax": false,
+        "rootDirs": [".", "./.react-router/types"],
         "types": ["vite/client"],
         "baseUrl": ".",
         "paths": {
@@ -25,5 +43,6 @@
         "app/**/.server/**/*",
         "app/**/.client/**/*",
         "server/**/*"
-    ]
+    ],
+    "exclude": ["vite.config.ts", "vitest.config.ts", "storybook-static", "tests-results"]
 }

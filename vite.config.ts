@@ -5,12 +5,17 @@ import { isCI, isProduction } from 'std-env'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
+// @ref: https://remix.run/docs/en/main/future/vite#plugin-usage-with-other-vite-based-tools-eg-vitest-storybook
+const isTestOrStorybook = process.env.NODE_ENV === 'test' || process.argv[1]?.includes('storybook')
+const isCIOrProduction = isCI || isProduction
+
 export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     tailwindcss(),
-    reactRouter(),
+    !isTestOrStorybook && reactRouter(),
+    // `emitFile` is necessary since React Router builds more than one bundle!
+    !isCIOrProduction && visualizer({ emitFile: true, template: 'treemap' }),
     tsconfigPaths(),
-    !isCI && visualizer({ emitFile: true, template: 'treemap' }),
   ],
   server: { port: 3000, host: true },
   build: {

@@ -50,7 +50,7 @@ Make sure to deploy the output of `pnpm build`:
 ├── package.json
 ├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
 ├── server.js
-├── build/
+├── dist/
 │   ├── client/    # Static assets
 │   └── server/    # Server-side code
 ```
