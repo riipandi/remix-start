@@ -1,6 +1,6 @@
+import logoDark from '/images/logo-dark.svg'
+import logoLight from '/images/logo-light.svg'
 import { Button, Link } from '#/components/base-ui'
-import logoDark from './logo-dark.svg'
-import logoLight from './logo-light.svg'
 
 const resources = [
   {

@@ -1,9 +1,7 @@
-import {} from '@react-router/node'
 import consola from 'consola'
-import { LoaderFunctionArgs } from 'react-router'
-// import { getRequestIpAddress } from '#/utils/request.server'
+import type { Route } from './+types/healthz'
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   const host = request.headers.get('X-Forwarded-Host') ?? request.headers.get('host')
   const url = new URL('/', `http://${host}`)
 
@@ -31,8 +29,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ip: clientIpAddr,
     }
 
-    // return json(responsePayload, { status: 200, headers: { 'Cache-Control': 'no-store' } })
-    return responsePayload
+    return new Response(JSON.stringify(responsePayload, null, 2), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store',
+      },
+    })
   } catch (error: unknown) {
     consola.error('healthcheck ❌', { error })
     return new Response('Unhealthy', { status: 500, headers: { 'Cache-Control': 'no-store' } })
