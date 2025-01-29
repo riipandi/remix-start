@@ -1,6 +1,6 @@
 # Remix Start
 
-[![Release](https://img.shields.io/github/v/release/riipandi/remix-start?logo=remix&color=orange)](https://github.com/riipandi/remix-start/releases)
+[![Release](https://img.shields.io/github/v/release/riipandi/remix-start?logo=react-router&color=red&logoColor=white)](https://github.com/riipandi/remix-start/releases)
 [![Languages](https://img.shields.io/github/languages/top/riipandi/remix-start)](https://github.com/riipandi/remix-start)
 [![Test](https://github.com/riipandi/remix-start/actions/workflows/test.yml/badge.svg)](https://github.com/riipandi/remix-start/actions/workflows/test.yml)
 [![Contribution](https://img.shields.io/badge/Contributions-welcome-gray.svg)](https://github.com/riipandi/remix-start/pulse)
