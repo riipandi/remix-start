@@ -5,28 +5,21 @@
 [![Test](https://github.com/riipandi/remix-start/actions/workflows/test.yml/badge.svg)](https://github.com/riipandi/remix-start/actions/workflows/test.yml)
 [![Contribution](https://img.shields.io/badge/Contributions-welcome-gray.svg)](https://github.com/riipandi/remix-start/pulse)
 
-Minimal containerized React Router application. Production-ready template for building full-stack React applications using React Router.
-This template comes with [Tailwind CSS][tailwindcss] already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+Minimal containerized React Router application. Production-ready template for building full-stack React applications using React Router v7.
+This template comes with [Tailwind CSS][tailwindcss] already configured for a simple default starting experience.
 
 ---
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs][react-router]
-
 ## What's in the stack?
 
+- Server-side rendering
+- Hot Module Replacement (HMR)
+- Asset bundling and optimization
+- [React Router v7][react-router]
 - Deploy to [Fly.io](https://fly.io) using [Docker][docker] container
-- Ready for multi-tenant (multiple subdomains with a single codebase)
 - Healthcheck endpoint for [Fly backups region fallbacks][fly-io]
-- Custom [Express][expressjs] server for production
-- Styling with [Tailwind CSS][tailwindcss], [clsx][clsx], and [tailwind-merge][tailwind-merge]
+- Styling with [Tailwind CSS][tailwindcss] and [Tailwind Variants][tailwind-variants]
+- Production ready [Express][expressjs] server
 - Code formatting and linting with [Biome][biome]
 - Static Types with [TypeScript][typescript]
 - Unit testing with [Vitest][vitest]
@@ -90,7 +83,6 @@ See the [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT) file
 
 <!-- link reference definition -->
 [biome]: https://biomejs.dev
-[clsx]: https://www.npmjs.com/package/clsx
 [docker]: https://docs.docker.com/engine/install
 [expressjs]: https://expressjs.com/
 [fly-io]: https://fly.io/docs/reference/configuration/#services-http_checks
@@ -99,7 +91,7 @@ See the [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT) file
 [playwright]: https://playwright.dev
 [react-router]: https://reactrouter.com
 [riipandi-x]: https://x.com/intent/follow?screen_name=riipandi
-[tailwind-merge]: https://www.npmjs.com/package/tailwind-merge
+[tailwind-variants]: https://www.tailwind-variants.org
 [tailwindcss]: https://tailwindcss.com
 [typescript]: https://typescriptlang.org
 [vitest]: https://vitest.dev
