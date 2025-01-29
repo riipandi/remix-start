@@ -1,3 +1,4 @@
+import { Button } from '#/components/base-ui'
 import logoDark from './logo-dark.svg'
 import logoLight from './logo-light.svg'
 
@@ -17,15 +18,17 @@ export function Welcome({ message }: { message: string }) {
           <ul>
             {resources.map(({ href, text, icon }) => (
               <li key={href}>
-                <a
-                  className="group flex items-center gap-3 self-stretch p-3 text-blue-700 leading-normal hover:underline dark:text-blue-500"
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {icon}
-                  {text}
-                </a>
+                <Button variant="link" asChild>
+                  <a
+                    className="group flex items-center gap-3 self-stretch p-3 text-blue-700 leading-normal hover:underline dark:text-blue-500"
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {icon}
+                    {text}
+                  </a>
+                </Button>
               </li>
             ))}
           </ul>
