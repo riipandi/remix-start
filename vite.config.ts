@@ -1,8 +1,9 @@
 import { reactRouter } from '@react-router/dev/vite'
 import tailwindcss from '@tailwindcss/vite'
+import consola from 'consola'
 import { visualizer } from 'rollup-plugin-visualizer'
-import { isCI, isProduction } from 'std-env'
-import { defineConfig } from 'vite'
+import { isCI, isProduction, isTest } from 'std-env'
+import { type Logger, defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 // @ref: https://remix.run/docs/en/main/future/vite#plugin-usage-with-other-vite-based-tools-eg-vitest-storybook
@@ -28,4 +29,15 @@ export default defineConfig(({ isSsrBuild }) => ({
     terserOptions: { format: { comments: false } },
   },
   esbuild: { legalComments: 'inline' },
+  customLogger: !isTest
+    ? ({
+        info: (msg: string) => consola.withTag('vite').info(msg),
+        warn: (msg: string) => consola.withTag('vite').warn(msg),
+        warnOnce: (msg: string) => consola.withTag('vite').warn(msg),
+        error: (msg: string) => consola.withTag('vite').error(msg),
+        clearScreen: () => {},
+        hasErrorLogged: () => true,
+        hasWarned: false,
+      } as Logger)
+    : undefined,
 }))

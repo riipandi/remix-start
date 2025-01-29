@@ -28,7 +28,7 @@ COPY --link --chown=node:node . .
 
 # Install dependencies and build the application.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install \
-    --ignore-scripts && NODE_ENV=production pnpm build
+    --ignore-scripts && NODE_ENV=production pnpm build:app
 
 # -----------------------------------------------------------------------------
 # Cleanup the builder stage and create data directory.

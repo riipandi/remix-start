@@ -1,6 +1,8 @@
 import 'react-router'
 import { createRequestHandler } from '@react-router/express'
 import express from 'express'
+import helmet from 'helmet'
+import { generateCspDirectives } from './utils'
 
 declare module 'react-router' {
   interface AppLoadContext {
@@ -9,6 +11,15 @@ declare module 'react-router' {
 }
 
 export const app = express()
+
+app.use(
+  helmet({
+    xPoweredBy: false,
+    contentSecurityPolicy: {
+      directives: generateCspDirectives(),
+    },
+  })
+)
 
 app.use(
   createRequestHandler({
