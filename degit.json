@@ -1,6 +1,14 @@
 [
     {
         "action": "remove",
-        "files": ["README.md", "_docs"]
+        "files": [
+            ".github",
+            "LICENSE-APACHE",
+            "LICENSE-MIT",
+            "CHANGELOG.md",
+            "CONTRIBUTING.md",
+            "DEPLOY.md",
+            "README.md"
+        ]
     }
 ]

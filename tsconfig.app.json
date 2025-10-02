@@ -27,7 +27,7 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "target": "ES2023",
-        "tsBuildInfoFile": "./.temp/tsconfig.app.tsbuildinfo",
+        "tsBuildInfoFile": "./temp/tsconfig.app.tsbuildinfo",
         "useDefineForClassFields": true,
         "verbatimModuleSyntax": false,
         "rootDirs": [".", "./.react-router/types"],

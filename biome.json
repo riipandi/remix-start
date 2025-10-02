@@ -25,6 +25,7 @@
                 "noSvgWithoutTitle": "off",
                 "useKeyWithClickEvents": "off",
                 "useSemanticElements": "off",
+                "useButtonType": "off",
                 "useValidAnchor": "off"
             },
             "complexity": {
