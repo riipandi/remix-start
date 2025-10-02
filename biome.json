@@ -8,7 +8,7 @@
     },
     "files": {
         "ignoreUnknown": true,
-        "includes": ["**", "!**/dist", "!**/out", "!.react-router", "!.wrangler"]
+        "includes": ["**", "!.react-router", "!.wrangler"]
     },
     "formatter": {
         "enabled": true,

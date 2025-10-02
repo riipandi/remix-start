@@ -75,6 +75,8 @@ fly*.toml*
 !fly*.example.toml
 
 # Miscellaneous
+cloudflare-env.d.ts
+worker-configuration.d.ts
 pnpm-exec-summary.json
 slim.report.json
 RELEASE_NOTE.md
