@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
-@plugin "tailwindcss-motion";
 @variant dark (&:where([data-theme="dark"] *));
 
 @theme {
