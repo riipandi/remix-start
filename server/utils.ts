@@ -1,6 +1,11 @@
 import type { Request } from 'express'
-import { cspConnectSource, cspFrameSource } from './constants.js'
-import { cspFontSource, cspImgSources, cspScriptSource } from './constants.js'
+import {
+  cspConnectSource,
+  cspFontSource,
+  cspFrameSource,
+  cspImgSources,
+  cspScriptSource,
+} from './constants.js'
 
 const IP_HEADERS = [
   'CF-Connecting-IP', // Cloudflare

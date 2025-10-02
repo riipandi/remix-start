@@ -2,8 +2,11 @@
     "editor.defaultFormatter": "biomejs.biome",
     "typescript.enablePromptUseWorkspaceTsdk": false,
     "files.associations": {
+        "*.css": "css",
+        "*.vars": "dotenv",
+        "*.toml.example": "toml",
         "*.yml.example": "yaml",
-        "*.css": "tailwindcss"
+        "wrangler.json": "jsonc"
     },
     "search.exclude": {
         "**/.husky": true,
@@ -12,24 +15,22 @@
         "**/dist": true
     },
     "tailwindCSS.experimental.classRegex": [
+        // @ref: https://www.tailwind-variants.org/docs/getting-started
         // @ref: https://github.com/paolotiu/tailwind-intellisense-regex-list
-        ["(?:twMerge|twJoin)\\(([^;]*)[\\);]", "[`'\"`]([^'\"`;]*)[`'\"`]"],
-        ["classList={{([^;]*)}}", "\\s*?[\"'`]([^\"'`]*).*?:"],
-        ["clsx\\(.*?\\)(?!\\])", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
-        ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-        ["tv\\(([^)]*)\\)", "{?\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?}?"],
-        "clx\\(([^)]*)\\)", // clx(xxx)
-        "cn\\(([^)]*)\\)", // cn(xxx)
-        "cx\\(([^)]*)\\)" // cx(xxx)
+        ["(?:cn|cx|cva|clx|tv)\\(([^;]*)[\\);]", "[`'\"`]([^'\"`;]*)[`'\"`]"],
+        ["classList={{([^;]*)}}", "\\s*?[\"'`]([^\"'`]*).*?:"]
     ],
     "[css]": {
         "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[dockerfile]": {
+        "editor.defaultFormatter": "docker.docker"
     },
     "[tailwindcss]": {
         "editor.defaultFormatter": "biomejs.biome"
     },
     "[toml]": {
-        "editor.defaultFormatter": "tamasfe.even-better-toml",
+        "editor.defaultFormatter": "Shellomo.enhanced-toml",
         "editor.formatOnSave": false
     },
     "[markdown]": {

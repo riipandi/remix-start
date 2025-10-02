@@ -2,37 +2,46 @@
 
 # Arguments with default value (for build).
 ARG PLATFORM=linux/amd64
-ARG NODE_VERSION=20
+ARG DISTROLESS_TAG=nonroot
+ARG NODE_VERSION=22
 
-FROM busybox:1.37-glibc as glibc
-
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Base image with pnpm package manager.
-# -----------------------------------------------------------------------------
-FROM --platform=${PLATFORM} node:${NODE_VERSION}-bookworm-slim AS base
-ENV PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-ENV LEFTHOOK=0 CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
-RUN corepack enable && corepack prepare pnpm@latest-9 --activate
+# ------------------------------------------------------------------------------
+FROM --platform=${PLATFORM} node:${NODE_VERSION}-trixie AS base
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0 COREPACK_INTEGRITY_KEYS=0 PNPM_HOME="/pnpm"
+ENV CI=true LEFTHOOK=0 PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true PATH="$PNPM_HOME:$PATH"
+RUN corepack enable && corepack prepare pnpm@latest-10 --activate
+
+# Add tini for signal handling and zombie reaping
+RUN set -eux; \
+    TINI_DOWNLOAD_URL="https://github.com/krallin/tini/releases/download/v0.19.0" \
+    ARCH="$(dpkg --print-architecture)"; \
+    case "${ARCH}" in \
+      amd64|x86_64) TINI_BIN_URL="${TINI_DOWNLOAD_URL}/tini" ;; \
+      arm64|aarch64) TINI_BIN_URL="${TINI_DOWNLOAD_URL}/tini-arm64" ;; \
+      *) echo "unsupported architecture: ${ARCH}"; exit 1 ;; \
+    esac; \
+    curl -fsSL "${TINI_BIN_URL}" -o /usr/bin/tini; \
+    chmod +x /usr/bin/tini
+
 WORKDIR /srv
 
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Install dependencies and build the application.
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 FROM base AS builder
 
-# Install system dependencies.
-RUN apt-get update && apt-get -yqq --no-install-recommends install tini
-
 # Copy the source files
-COPY --link --chown=node:node . .
+COPY --chown=node:node . .
 
 # Install dependencies and build the application.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install \
-    --ignore-scripts && NODE_ENV=production pnpm build:app
+    --ignore-scripts --frozen-lockfile && NODE_ENV=production pnpm build:app
 
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Cleanup the builder stage and create data directory.
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 FROM base AS pruner
 
 # Copy output and necessary files from the builder stage.
@@ -52,40 +61,49 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod \
 RUN mkdir -p /srv/_data && chmod -R 0775 /srv/_data
 RUN rm -f /srv/.npmrc && chmod +x /srv/server.js
 
-# -----------------------------------------------------------------------------
+# Set permissions for the data directory and the server.js file.
+RUN chmod -R 0775 /srv/_data && chmod +x /srv/server.js
+
+# ------------------------------------------------------------------------------
 # Production image, copy build output files and run the application.
-# -----------------------------------------------------------------------------
-FROM --platform=${PLATFORM} gcr.io/distroless/nodejs${NODE_VERSION}-debian12
-LABEL org.opencontainers.image.source="https://github.com/riipandi/remix-start"
+# ------------------------------------------------------------------------------
+FROM --platform=${PLATFORM} busybox:stable-glibc AS glibc
+FROM --platform=${PLATFORM} gcr.io/distroless/nodejs${NODE_VERSION}-debian12:${DISTROLESS_TAG}
 
-# ----- Read application environment variables --------------------------------
-
-ARG DATABASE_URL SMTP_HOST SMTP_PORT SMTP_USERNAME SMTP_PASSWORD \
-    SMTP_USE_SSL SMTP_EMAIL_FROM
-
-# ----- Read application environment variables --------------------------------
+# Read application environment variables
+ARG APP_DOMAIN
+ARG APP_BASE_URL
+ARG APP_SECRET_KEY
+ARG APP_LOG_LEVEL
+ARG DATABASE_URL
+ARG SMTP_HOST
+ARG SMTP_PORT
+ARG SMTP_USERNAME
+ARG SMTP_PASSWORD
+ARG SMTP_EMAIL_FROM
 
 # Copy the build output files from the pruner stage.
 COPY --chown=nonroot:nonroot --from=pruner /srv /srv
 
-# Copy some necessary system utilities from previous stage (~7MB).
+# Copy some necessary system utilities from previous stage.
 # To enhance security, consider avoiding the copying of sysutils.
-COPY --from=builder /usr/bin/tini /usr/bin/tini
-COPY --from=glibc /bin/clear /bin/clear
-COPY --from=glibc /bin/mkdir /bin/mkdir
-COPY --from=glibc /bin/which /bin/which
-COPY --from=glibc /bin/cat /bin/cat
-COPY --from=glibc /bin/ls /bin/ls
-COPY --from=glibc /bin/sh /bin/sh
+COPY --from=base /usr/bin/tini /usr/bin/tini
+COPY --from=glibc /bin/hostname /bin/hostname
+
+# @ref: https://www.akamas.io/resources/tuning-nodejs-v8-performance-efficiency
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+ENV NODE_OPTIONS=$NODE_OPTIONS NODE_ENV=production
 
 # Define the host and port to listen on.
-ARG NODE_ENV=production HOST=0.0.0.0 PORT=3000
-ENV NODE_ENV=$NODE_ENV HOST=$HOST PORT=$PORT
+ARG HOST=0.0.0.0 PORT=3000
+ENV HOST=$HOST PORT=$PORT
 ENV TINI_SUBREAPER=true
+ENV PATH="/nodejs/bin:$PATH"
 
 WORKDIR /srv
 USER nonroot:nonroot
-EXPOSE $PORT
+VOLUME /srv/_data
+EXPOSE $PORT/tcp
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["/nodejs/bin/node", "/srv/server.js"]
+CMD ["node", "server.js"]

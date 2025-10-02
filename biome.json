@@ -1,13 +1,21 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-    "organizeImports": {
-        "enabled": true
-    },
+    "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
     "vcs": {
         "enabled": true,
         "clientKind": "git",
         "useIgnoreFile": true,
         "defaultBranch": "main"
+    },
+    "files": {
+        "ignoreUnknown": true,
+        "includes": ["**", "!**/dist", "!**/out", "!.react-router", "!.wrangler"]
+    },
+    "formatter": {
+        "enabled": true,
+        "formatWithErrors": false,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 100
     },
     "linter": {
         "enabled": true,
@@ -15,7 +23,9 @@
             "recommended": true,
             "a11y": {
                 "noSvgWithoutTitle": "off",
-                "useKeyWithClickEvents": "off"
+                "useKeyWithClickEvents": "off",
+                "useSemanticElements": "off",
+                "useValidAnchor": "off"
             },
             "complexity": {
                 "noBannedTypes": "off",
@@ -24,14 +34,20 @@
             "correctness": {
                 "noUnusedImports": {
                     "level": "off",
-                    "fix": "none"
+                    "fix": "none",
+                    "options": {}
                 },
                 "noUnusedVariables": {
                     "level": "warn",
-                    "fix": "none"
+                    "fix": "none",
+                    "options": {
+                        "ignoreRestSiblings": true
+                    }
                 },
+                "noChildrenProp": "off",
+                "noUnknownFunction": "off",
                 "useJsxKeyInIterable": "error",
-                "noUnknownFunction": "off"
+                "useParseIntRadix": "off"
             },
             "nursery": {
                 "useSortedClasses": {
@@ -39,7 +55,7 @@
                     "fix": "safe",
                     "options": {
                         "attributes": ["classList"],
-                        "functions": ["cn", "clx", "clsx", "cva", "tv", "tw"]
+                        "functions": ["clsx", "cn", "cx", "cva", "tv", "tw"]
                     }
                 }
             },
@@ -51,12 +67,25 @@
                 "noDangerouslySetInnerHtml": "off"
             },
             "style": {
+                "noNonNullAssertion": "off",
+                "noParameterAssign": "warn",
+                "useAsConstAssertion": "error",
+                "useDefaultParameterLast": "error",
+                "useEnumInitializers": "error",
+                "useSelfClosingElements": "error",
+                "useSingleVarDeclarator": "error",
                 "noUnusedTemplateLiteral": "off",
+                "useNumberNamespace": "error",
+                "noInferrableTypes": "error",
+                "noUselessElse": "error",
                 "useConsistentArrayType": "warn",
                 "useExportType": "warn",
                 "useImportType": {
                     "level": "off",
-                    "fix": "none"
+                    "fix": "none",
+                    "options": {
+                        "style": "auto"
+                    }
                 },
                 "useFilenamingConvention": {
                     "level": "off",
@@ -66,13 +95,10 @@
                 }
             },
             "suspicious": {
-                "noArrayIndexKey": "error",
+                "noArrayIndexKey": "warn",
                 "noAssignInExpressions": "off",
+                "noUnknownAtRules": "off",
                 "noCommentText": "off",
-                "noConsoleLog": {
-                    "level": "info",
-                    "fix": "none"
-                },
                 "noDebugger": "off",
                 "noExplicitAny": "off",
                 "noConsole": {
@@ -96,23 +122,6 @@
             }
         }
     },
-    "formatter": {
-        "enabled": true,
-        "formatWithErrors": false,
-        "indentStyle": "space",
-        "indentWidth": 4,
-        "lineWidth": 100,
-        "ignore": []
-    },
-    "css": {
-        "parser": {
-            "allowWrongLineComments": false
-        },
-        "formatter": {
-            "enabled": true,
-            "quoteStyle": "double"
-        }
-    },
     "javascript": {
         "formatter": {
             "indentWidth": 2,
@@ -126,15 +135,27 @@
             "bracketSameLine": false
         }
     },
+    "css": {
+        "parser": {
+            "allowWrongLineComments": false
+        },
+        "formatter": {
+            "enabled": true,
+            "quoteStyle": "double"
+        }
+    },
     "json": {
         "formatter": {
             "indentWidth": 4,
             "trailingCommas": "none"
         }
     },
-    "files": {
-        "ignoreUnknown": true,
-        "include": ["**/*.js", "**/*.mjs", "**/*.ts", "**/*.tsx", "**/*.css", "**/*.json"],
-        "ignore": [".github", ".output", ".temp", "dist", "public", "_data", "storybook-static"]
+    "assist": {
+        "enabled": true,
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
     }
 }

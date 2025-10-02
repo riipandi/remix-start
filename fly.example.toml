@@ -1,4 +1,5 @@
 # @ref: https://fly.io/docs/reference/configuration
+# @ref: # https://fly.io/docs/apps/deploy/#deployment-strategy
 
 app = "CHANGEME_APP_NAME"
 primary_region = "sjc"

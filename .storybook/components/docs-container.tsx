@@ -1,4 +1,4 @@
-import { DocsContainer as BaseContainer } from '@storybook/blocks'
+import { DocsContainer as BaseContainer } from '@storybook/addon-docs/blocks'
 import * as React from 'react'
 import { dark, light, listenToColorScheme } from '../themes'
 

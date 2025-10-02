@@ -1,12 +1,12 @@
 {
-	"lang": "en",
-	"dir": "ltr",
-	"name": "Remix Start",
-	"short_name": "remix-start",
+    "lang": "en",
+    "dir": "ltr",
+    "name": "Remix Start",
+    "short_name": "remix-start",
     "description": "An awesome Remix application",
     "theme_color": "#3730a3",
     "background_color": "#ffffff",
-	"start_url": "/?source=pwa",
+    "start_url": "/?source=pwa",
     "id": "/?source=pwa",
     "icons": [
         {
@@ -46,6 +46,6 @@
             "density": "4.0"
         }
     ],
-	"display": "standalone",
-	"orientation": "natural"
+    "display": "standalone",
+    "orientation": "natural"
 }

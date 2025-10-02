@@ -1,4 +1,4 @@
-import type { Decorator } from '@storybook/react'
+import type { Decorator } from '@storybook/react-vite'
 import * as React from 'react'
 import { MemoryRouter } from 'react-router'
 

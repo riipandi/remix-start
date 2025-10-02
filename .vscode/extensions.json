@@ -5,7 +5,7 @@
         "EditorConfig.EditorConfig",
         "foxundermoon.shell-format",
         "ms-playwright.playwright",
-        "tamasfe.even-better-toml",
+        "Shellomo.enhanced-toml",
         "unifiedjs.vscode-mdx"
     ],
     "unwantedRecommendations": []

@@ -4,8 +4,7 @@ import './styles/globals.css'
 import './styles/colors.css'
 
 import * as React from 'react'
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
-import { isRouteErrorResponse } from 'react-router'
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 import InternalError from '#/components/errors/boundary'
 import type { Route } from './+types/root'
 

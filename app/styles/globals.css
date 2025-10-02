@@ -70,10 +70,11 @@
     --sidebar-width-icon: 3rem;
 
     /* Typography */
-    --font-sans: "Inter Variable", Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial,
-        sans-serif;
-    --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
-        Consolas, "DejaVu Sans Mono", monospace;
+    --font-sans:
+        "Inter Variable", Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial, sans-serif;
+    --font-mono:
+        "JetBrains Mono Variable", ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
+        "DejaVu Sans Mono", monospace;
 
     /* Animation */
     --animate-accordion-down: accordion-down 0.2s ease-out;

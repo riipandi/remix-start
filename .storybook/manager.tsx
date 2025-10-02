@@ -1,9 +1,9 @@
 /* @ref: https://storybook.js.org/docs/configure/user-interface/theming/ */
 
-import { addons } from '@storybook/manager-api'
-import * as React from 'react'
 import type { CSSProperties } from 'react'
-import { type Theme, dark, light, listenToColorScheme } from './themes'
+import * as React from 'react'
+import { addons } from 'storybook/manager-api'
+import { dark, light, listenToColorScheme, type Theme } from './themes'
 
 type BadgeConfig = {
   style: CSSProperties

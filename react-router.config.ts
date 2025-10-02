@@ -1,5 +1,5 @@
+import { resolve } from 'node:path'
 import type { Config } from '@react-router/dev/config'
-import { resolve } from 'pathe'
 
 export default {
   buildDirectory: resolve('dist'),

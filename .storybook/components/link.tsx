@@ -1,5 +1,4 @@
 import LinkTo from '@storybook/addon-links/react'
-import * as React from 'react'
 import type { AnchorHTMLAttributes } from 'react'
 
 const LINK_PREFIXES = ['/', 'http', 'mailto', '#', 'tel']

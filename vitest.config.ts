@@ -1,4 +1,4 @@
-import { resolve } from 'pathe'
+import { resolve } from 'node:path'
 import { isCI } from 'std-env'
 import { defineConfig } from 'vitest/config'
 
