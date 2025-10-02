@@ -58,11 +58,11 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod \
     "**/codecov*" "!**/@libsql/**"
 
 # Create the data directory and set permissions.
-RUN mkdir -p /srv/_data && chmod -R 0775 /srv/_data
+RUN mkdir -p /srv/storage && chmod -R 0775 /srv/storage
 RUN rm -f /srv/.npmrc && chmod +x /srv/server.js
 
 # Set permissions for the data directory and the server.js file.
-RUN chmod -R 0775 /srv/_data && chmod +x /srv/server.js
+RUN chmod -R 0775 /srv/storage && chmod +x /srv/server.js
 
 # ------------------------------------------------------------------------------
 # Production image, copy build output files and run the application.
@@ -102,7 +102,7 @@ ENV PATH="/nodejs/bin:$PATH"
 
 WORKDIR /srv
 USER nonroot:nonroot
-VOLUME /srv/_data
+VOLUME /srv/storage
 EXPOSE $PORT/tcp
 
 ENTRYPOINT ["/usr/bin/tini", "--"]

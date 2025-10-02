@@ -1,86 +1,133 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
+name: remix-start
+
 services:
   pgsql:
-    image: postgres:${PGSQL_VERSION:-17-alpine}
-    container_name: remix_start_pgsql
+    image: postgres:${POSTGRES_VERSION:-18-alpine}
     hostname: postgres
     restart: unless-stopped
-    ports:
-      - 5432:5432
+    ports: ['5432:5432']
     volumes:
       - pgsql_data:/var/lib/postgresql/data
-      - ./scripts/pgsql-multidb.sh:/docker-entrypoint-initdb.d/multidb.sh
+      - ./scripts/pg-multidb.sh:/docker-entrypoint-initdb.d/multidb.sh
     environment:
-      POSTGRES_DB: remixdb
-      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_USER: pgadmin
       POSTGRES_PASSWORD: securedb
-      POSTGRES_EXTRA_DB: extradb1,extradb2
-      POSTGRES_SCHEMAS: remixdb:internal,extradb1:analytics
+      PG_DATABASES: remix_start,test_db
     command: ['postgres', '-c', 'wal_level=logical']
-    # set shared memory limit when using docker-compose
-    shm_size: 128mb
+    shm_size: 128m # set shared memory limit
+    mem_limit: 256m # set memory limit
+    cpus: 1.0 # set CPUs limit
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d remixdb']
-      interval: 30s
-      timeout: 20s
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 3s
+      timeout: 5s
       retries: 3
+    extra_hosts: ['host.docker.internal:host-gateway']
+    networks: ['remix_start_network']
 
   pgweb:
     image: sosedoff/pgweb:latest
-    container_name: remix_start_pgweb
-    restart: always
-    ports:
-      - 54321:8081
+    restart: unless-stopped
+    ports: ['54321:54321']
     environment:
-      PGWEB_DATABASE_URL: 'postgres://postgres:securedb@pgsql:5432/remixdb?sslmode=disable'
+      PGWEB_DATABASE_URL: 'postgresql://pgadmin:securedb@pgsql:5432/remix_start?sslmode=disable'
+    command: ["/usr/bin/pgweb", "--bind=0.0.0.0", "--listen=54321"]
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "127.0.0.1", "54321"]
+      interval: 3s
+      timeout: 5s
+      retries: 3
+    extra_hosts: ['host.docker.internal:host-gateway']
+    networks: ['remix_start_network']
     depends_on:
-      pgsql:
-        condition: service_started
+      pgsql: { condition: service_healthy }
 
   mailpit:
     image: axllent/mailpit:latest
-    container_name: remix_start_mailpit
     restart: unless-stopped
-    volumes:
-      - mailpit_data:/data
-    ports:
-      - 1025:1025 # port the SMTP server should be accessible on
-      - 8025:8025 # port the web interface should be accessible on
+    volumes: ['mailpit_data:/data']
+    ports: ['1025:1025', '8025:8025']
+    # @ref: https://github.com/axllent/mailpit/wiki/Runtime-options
     environment:
-      # https://github.com/axllent/mailpit/wiki/Runtime-options
-      # MP_UI_AUTH: 'user1:password1 user2:password2'
       TZ: Asia/Jakarta
+    extra_hosts: ['host.docker.internal:host-gateway']
+    networks: ['remix_start_network']
 
   # ALLOW_EMPTY_PASSWORD is recommended only for development.
   # For better performance, consider `host` mode instead `port` to avoid docker NAT.
   # Notice: Docker `host` mode is NOT currently supported in Swarm Mode.
-  # @ref: https://docs.docker.com/compose/compose-file/compose-file-v3/#network_mode
-  valkey:
-    image: valkey/valkey:8-alpine
-    container_name: remix_start_valkey
-    hostname: valkey
-    restart: always
+  redis:
+    image: redis:${REDIS_VERSION:-8-alpine}
+    hostname: redis
+    restart: unless-stopped
+    ports: ['6379:6379']
+    volumes: ['redis_data:/data:rw']
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - VALKEY_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - 6379:6379
-    # network_mode: "host"
-    volumes:
-      - valkey_data:/data:rw
-      # - ../scripts/valkey.conf:/etc/valkey.conf:ro
-    # command: 'valkey-server /etc/valkey.conf --server-threads 2'
+      ALLOW_EMPTY_PASSWORD: 'no'
+      REDIS_DISABLE_COMMANDS: FLUSHDB,FLUSHALL
+    command: '--appendonly yes --appendfsync everysec --requirepass securedb'
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli --no-auth-warning -a securedb ping | grep PONG']
+      interval: 1s
+      timeout: 3s
+      retries: 5
     ulimits:
       memlock: -1
       nofile:
         soft: 262144
         hard: 262144
+    extra_hosts: ['host.docker.internal:host-gateway']
+    networks: ['remix_start_network']
+
+  # @ref: https://github.com/versity/versitygw/wiki/Quickstart
+  # export AWS_ACCESS_KEY_ID=myS3AccessKey
+  # export AWS_SECRET_ACCESS_KEY=myS3SecretKey
+  # export AWS_ENDPOINT_URL=http://127.0.0.1:7070
+  # aws s3 mb s3://devbucket
+  # aws s3 cp public/favicon.svg s3://devbucket/images/favicon.svg
+  # aws --no-verify-ssl --endpoint-url http://127.0.0.1:7070 s3 ls s3://
+  locals3:
+    image: ghcr.io/versity/versitygw:latest
+    restart: unless-stopped
+    hostname: locals3
+    ports: ['7070:7070']
+    volumes: ['./temp/s3data:/srv:rw']
+    command: --port 0.0.0.0:7070 posix /srv
+    environment:
+      ROOT_ACCESS_KEY: ${remix_start_S3_ACCESS_KEY_ID:-myS3AccessKey}
+      ROOT_SECRET_KEY: ${remix_start_S3_SECRET_ACCESS_KEY:-myS3SecretKey}
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "127.0.0.1", "7070"]
+      interval: 3s
+      timeout: 5s
+      retries: 3
+    extra_hosts: ['host.docker.internal:host-gateway']
+    networks: ['remix_start_network']
+
+  localcdn:
+    image: joseluisq/static-web-server:2
+    restart: unless-stopped
+    ports: ['7080:80', '7443:443']
+    environment:
+      SERVER_ROOT: /srv
+      SERVER_DIRECTORY_LISTING: true
+      SERVER_IGNORE_HIDDEN_FILES: true
+    volumes: ['./temp/s3data/devbucket:/srv:ro']
+    extra_hosts: ['host.docker.internal:host-gateway']
+    networks: ['remix_start_network']
 
 volumes:
   pgsql_data:
     driver: local
   mailpit_data:
     driver: local
-  valkey_data:
+  redis_data:
     driver: local
+
+networks:
+  remix_start_network:
+    name: remix_start_network
+    driver: bridge

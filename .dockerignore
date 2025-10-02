@@ -1,6 +1,7 @@
 build/
 dist/
-_data/
+storage/
+temp/
 .data
 .dist
 .build

@@ -29,9 +29,10 @@ $RECYCLE.BIN/
 *.db
 
 # Projects
-_data/
-build/
 dist/
+build/
+storage/
+temp/
 .data
 .dist
 .cache
